@@ -17,6 +17,7 @@
     "db:sync-permissions": "tsx prisma/sync-permissions.ts",
     "db:studio": "prisma studio",
     "seed:historical": "tsx --env-file=.env --conditions=react-server scripts/seed-historical-invoices.ts",
+    "rollback:historical": "tsx --env-file=.env --conditions=react-server scripts/rollback-historical-invoices.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {
