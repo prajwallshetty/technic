@@ -237,11 +237,14 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
   const company = await getCompanyProfile(invoice.firmId);
   const { lines, discountExTax } = salesDocLines(invoice.lines, isGst, false);
 
-  const taxable = num(invoice.taxableAmount);
+  const taxable = num(invoice.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
+  const discount = isGst
+    ? (discountExTax > 0 ? discountExTax : num(invoice.discountAmount))
+    : num(invoice.discountAmount);
   const totals = {
     // GST documents print ex-tax figures: gross = taxable value + discount.
-    gross: isGst ? taxable + discountExTax : num(invoice.subtotal),
-    discount: isGst ? discountExTax : num(invoice.discountAmount),
+    gross: isGst ? taxable + discount : num(invoice.subtotal),
+    discount,
     taxable,
     cgst: num(invoice.cgstAmount),
     sgst: num(invoice.sgstAmount),

@@ -364,6 +364,7 @@ export async function createSalesOrder(
         expectedDate: input.validUntil ?? null,
         subtotal: summary.subtotal,
         discountAmount: summary.discountAmount,
+        discountRemarks: input.discountRemarks ?? null,
         taxableAmount: summary.taxableAmount,
         cgstAmount: summary.cgstAmount,
         sgstAmount: summary.sgstAmount,
