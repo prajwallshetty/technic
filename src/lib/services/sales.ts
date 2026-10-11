@@ -414,6 +414,7 @@ export interface InvoiceInput {
   dueDate?: Date | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   /** Immediate payment, if any. */
   paymentAmount?: number;
   paymentMethod?: "CASH" | "UPI" | "CARD" | "BANK_TRANSFER" | "CHEQUE" | "OTHER";
@@ -522,6 +523,7 @@ export async function createInvoice(input: InvoiceInput) {
         amountDue: summary.totalAmount,
         notes: input.notes ?? null,
         terms: input.terms ?? null,
+        discountRemarks: input.discountRemarks ?? null,
         createdById: input.userId ?? null,
         lines: {
           create: enriched.map(({ line, product, variant }, index) => ({
@@ -822,6 +824,7 @@ export interface UpdateInvoiceInput {
   placeOfSupply?: string | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   dispatchThrough?: string | null;
   vehicleNumber?: string | null;
   ewayBillNumber?: string | null;
@@ -954,6 +957,7 @@ export async function updateInvoice(input: UpdateInvoiceInput) {
       placeOfSupply: supplyState,
       notes: input.notes !== undefined ? input.notes : invoice.notes,
       terms: input.terms !== undefined ? input.terms : invoice.terms,
+      discountRemarks: input.discountRemarks !== undefined ? input.discountRemarks : invoice.discountRemarks,
       dispatchThrough: input.dispatchThrough !== undefined ? input.dispatchThrough : invoice.dispatchThrough,
       vehicleNumber: input.vehicleNumber !== undefined ? input.vehicleNumber : invoice.vehicleNumber,
       ewayBillNumber: input.ewayBillNumber !== undefined ? input.ewayBillNumber : invoice.ewayBillNumber,

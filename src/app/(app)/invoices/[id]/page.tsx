@@ -204,7 +204,17 @@ export default async function InvoiceDetailPage({
             <div className="space-y-1.5 px-4 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="numeric">{formatCurrency(invoice.subtotal)}</span></div>
               {Number(invoice.discountAmount) > 0 ? (
-                <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span className="numeric">-{formatCurrency(invoice.discountAmount)}</span></div>
+                <div className="flex justify-between">
+                  <div>
+                    <span className="text-muted-foreground">Discount</span>
+                    {invoice.discountRemarks ? (
+                      <span className="ml-2 text-xs text-muted-foreground font-normal">
+                        ({invoice.discountRemarks})
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="numeric">-{formatCurrency(invoice.discountAmount)}</span>
+                </div>
               ) : null}
               {isTaxInvoice ? (
                 <>

@@ -84,6 +84,7 @@ export function PosTerminal({
   const [customerId, setCustomerId] = useState<string>("");
   const [billDiscount, setBillDiscount] = useState("");
   const [billDiscountType, setBillDiscountType] = useState<DiscountType>("%");
+  const [discountRemarks, setDiscountRemarks] = useState("");
   const [roundOff, setRoundOff] = useState("");
   const [isManualRoundOff, setIsManualRoundOff] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
@@ -216,12 +217,14 @@ export function PosTerminal({
         manualRoundOff: totals.roundOff,
         paymentAmount: canCollectPayment ? Number(paymentAmount) || undefined : undefined,
         paymentMethod: paymentMethod as never,
+        discountRemarks: discountRemarks || undefined,
         taxMode: mode,
       });
       if (result.ok) {
         toast.success(`Invoice ${result.data.invoiceNumber} created`);
         setCart([]);
         setBillDiscount("");
+        setDiscountRemarks("");
         setPaymentAmount("");
         router.push(`/invoices/${result.data.invoiceId}`);
       } else {
@@ -457,7 +460,7 @@ export function PosTerminal({
 
           {cart.length > 0 ? (
             <>
-              <div className="rounded-lg border border-border bg-muted/20 p-2.5">
+              <div className="space-y-2 rounded-lg border border-border bg-muted/20 p-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
                     <Tag className="size-3.5 text-primary" />
@@ -507,6 +510,19 @@ export function PosTerminal({
                     />
                   </div>
                 </div>
+                {parseNumericInput(billDiscount) > 0 ? (
+                  <div className="space-y-1 border-t border-border/40 pt-1.5">
+                    <label className="text-[11px] text-muted-foreground">
+                      Discount remarks / reason (why discount is given)
+                    </label>
+                    <Input
+                      className="h-8 text-xs"
+                      placeholder="e.g. Festival offer, clearance, loyal customer..."
+                      value={discountRemarks}
+                      onChange={(event) => setDiscountRemarks(event.target.value)}
+                    />
+                  </div>
+                ) : null}
               </div>
 
               {canSwitchMode && (

@@ -673,6 +673,7 @@ CREATE TABLE "invoices" (
     "dueDate" TIMESTAMP(3),
     "subtotal" DECIMAL(12,2) NOT NULL DEFAULT 0,
     "discountAmount" DECIMAL(12,2) NOT NULL DEFAULT 0,
+    "discountRemarks" TEXT,
     "taxableAmount" DECIMAL(12,2) NOT NULL DEFAULT 0,
     "cgstAmount" DECIMAL(12,2) NOT NULL DEFAULT 0,
     "sgstAmount" DECIMAL(12,2) NOT NULL DEFAULT 0,

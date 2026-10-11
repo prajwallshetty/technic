@@ -44,6 +44,7 @@ export interface SalesDocLine {
   rate: number;
   discountPercent: number;
   taxable: number;
+  netTaxable?: number;
   gstRate: number;
   amount: number;
 }
@@ -81,6 +82,8 @@ export interface SalesDocData {
   signatoryFor: string;
   preparedBy?: string | null;
   notes?: string | null;
+  discountRemarks?: string | null;
+  showLineDiscount?: boolean;
   cancelledReason?: string | null;
 }
 
@@ -139,27 +142,46 @@ interface Col {
   align: "left" | "center" | "right";
 }
 
-function columnsFor(isGst: boolean): Col[] {
+function columnsFor(isGst: boolean, showLineDiscount = false): Col[] {
   return isGst
-    ? [
-        { id: "sl", header: "Sl", frac: 0.045, align: "center" },
-        { id: "desc", header: "Description of Goods", frac: 0.295, align: "left" },
-        { id: "hsn", header: "HSN", frac: 0.09, align: "center" },
-        { id: "qty", header: "Qty", frac: 0.06, align: "center" },
-        { id: "rate", header: "Rate (₹)", frac: 0.115, align: "right" },
-        { id: "disc", header: "Disc %", frac: 0.06, align: "center" },
-        { id: "taxable", header: "Taxable Value (₹)", frac: 0.13, align: "right" },
-        { id: "gst", header: "GST %", frac: 0.055, align: "center" },
-        { id: "amount", header: "Amount (₹)", frac: 0.15, align: "right" },
-      ]
-    : [
-        { id: "sl", header: "Sl", frac: 0.06, align: "center" },
-        { id: "desc", header: "Description of Goods", frac: 0.47, align: "left" },
-        { id: "qty", header: "Qty", frac: 0.09, align: "center" },
-        { id: "rate", header: "Rate (₹)", frac: 0.14, align: "right" },
-        { id: "disc", header: "Disc %", frac: 0.08, align: "center" },
-        { id: "amount", header: "Amount (₹)", frac: 0.16, align: "right" },
-      ];
+    ? showLineDiscount
+      ? [
+          { id: "sl", header: "Sl", frac: 0.045, align: "center" },
+          { id: "desc", header: "Description of Goods", frac: 0.295, align: "left" },
+          { id: "hsn", header: "HSN", frac: 0.09, align: "center" },
+          { id: "qty", header: "Qty", frac: 0.06, align: "center" },
+          { id: "rate", header: "Rate (₹)", frac: 0.115, align: "right" },
+          { id: "disc", header: "Disc %", frac: 0.06, align: "center" },
+          { id: "taxable", header: "Taxable Value (₹)", frac: 0.13, align: "right" },
+          { id: "gst", header: "GST %", frac: 0.055, align: "center" },
+          { id: "amount", header: "Amount (₹)", frac: 0.15, align: "right" },
+        ]
+      : [
+          { id: "sl", header: "Sl", frac: 0.045, align: "center" },
+          { id: "desc", header: "Description of Goods", frac: 0.355, align: "left" },
+          { id: "hsn", header: "HSN", frac: 0.09, align: "center" },
+          { id: "qty", header: "Qty", frac: 0.06, align: "center" },
+          { id: "rate", header: "Rate (₹)", frac: 0.115, align: "right" },
+          { id: "taxable", header: "Taxable Value (₹)", frac: 0.13, align: "right" },
+          { id: "gst", header: "GST %", frac: 0.055, align: "center" },
+          { id: "amount", header: "Amount (₹)", frac: 0.15, align: "right" },
+        ]
+    : showLineDiscount
+      ? [
+          { id: "sl", header: "Sl", frac: 0.06, align: "center" },
+          { id: "desc", header: "Description of Goods", frac: 0.47, align: "left" },
+          { id: "qty", header: "Qty", frac: 0.09, align: "center" },
+          { id: "rate", header: "Rate (₹)", frac: 0.14, align: "right" },
+          { id: "disc", header: "Disc %", frac: 0.08, align: "center" },
+          { id: "amount", header: "Amount (₹)", frac: 0.16, align: "right" },
+        ]
+      : [
+          { id: "sl", header: "Sl", frac: 0.06, align: "center" },
+          { id: "desc", header: "Description of Goods", frac: 0.55, align: "left" },
+          { id: "qty", header: "Qty", frac: 0.09, align: "center" },
+          { id: "rate", header: "Rate (₹)", frac: 0.14, align: "right" },
+          { id: "amount", header: "Amount (₹)", frac: 0.16, align: "right" },
+        ];
 }
 
 function cellValue(col: Col, line: SalesDocLine, index: number): string {
@@ -195,8 +217,9 @@ function hsnSummary(data: SalesDocData): HsnRow[] {
   for (const l of data.lines) {
     const key = `${l.hsn ?? ""}|${l.gstRate}`;
     const row = map.get(key) ?? { hsn: l.hsn || "—", rate: l.gstRate, taxable: 0, cgst: 0, sgst: 0, igst: 0 };
-    const tax = (l.taxable * l.gstRate) / 100;
-    row.taxable += l.taxable;
+    const taxableVal = l.netTaxable !== undefined ? l.netTaxable : l.taxable;
+    const tax = (taxableVal * l.gstRate) / 100;
+    row.taxable += taxableVal;
     if (interState) row.igst += tax;
     else {
       row.cgst += tax / 2;
@@ -227,9 +250,22 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
   const hsnH = data.isGst ? 12 + hsnRowH * (hsnRows.length + 2) + 4 : 0;
   const leftA = 6 + 11 + wordsH + 8 + hsnH;
 
-  const lines: { label: string; value: string; strong?: boolean; head?: boolean }[] = [];
+  interface TotalsLine {
+    label: string;
+    value: string;
+    subText?: string;
+    strong?: boolean;
+    head?: boolean;
+  }
+  const lines: TotalsLine[] = [];
   lines.push({ label: "Gross Amount", value: rupees(t.gross) });
-  if (t.discount > 0) lines.push({ label: "Less: Discount", value: `- ${rupees(t.discount)}` });
+  if (t.discount > 0) {
+    lines.push({
+      label: "Less: Discount",
+      value: `- ${rupees(t.discount)}`,
+      subText: data.discountRemarks?.trim() ? `Reason: ${data.discountRemarks.trim()}` : undefined,
+    });
+  }
   if (data.isGst) {
     lines.push({ label: "Taxable Value", value: rupees(t.taxable) });
     if (t.cgst > 0) lines.push({ label: "CGST", value: rupees(t.cgst) });
@@ -242,7 +278,15 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
   const extra: typeof lines = [];
   if (t.received !== undefined) extra.push({ label: "Amount Received", value: rupees(t.received) });
   if (t.due !== undefined) extra.push({ label: "Balance Due", value: rupees(t.due), strong: true });
-  const rightA = 4 + lines.length * lineH + totalH + extra.length * lineH + 4;
+  const valW = rightW - PAD * 2;
+  const measureLineH = (l: TotalsLine) => {
+    let h = lineH;
+    if (l.subText) {
+      h += heightOf(doc, l.subText, { w: valW, size: 7.5 }) + 3;
+    }
+    return h;
+  };
+  const rightA = 4 + lines.reduce((s, l) => s + measureLineH(l), 0) + totalH + extra.reduce((s, l) => s + measureLineH(l), 0) + 4;
   const hA = Math.max(leftA, rightA, 60);
 
   // --- Row B: bank + terms | signatory --------------------------------------
@@ -304,11 +348,14 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
 
   let ry = y + 4;
   const valX = rx + PAD;
-  const valW = rightW - PAD * 2;
   for (const l of lines) {
     put(doc, l.label, valX, ry + 3, { w: valW, size: 8.5 });
     put(doc, l.value, valX, ry + 3, { w: valW, size: 8.5, align: "right" });
     ry += lineH;
+    if (l.subText) {
+      const subH = put(doc, l.subText, valX, ry, { w: valW, size: 7.5, color: C.muted });
+      ry += subH + 3;
+    }
   }
   doc.rect(rx, ry, rightW, totalH).fill(C.head);
   put(doc, data.totalLabel, valX, ry + 7, { w: valW, size: 8.5, bold: true, color: C.headText });
@@ -458,7 +505,7 @@ export async function renderSalesDocument(data: SalesDocData, title: string): Pr
   doc.registerFont(FONT, path.join(process.cwd(), "public", "fonts", "DejaVuSans.ttf"));
   doc.registerFont(FONT_BOLD, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
 
-  const cols = columnsFor(data.isGst);
+  const cols = columnsFor(data.isGst, data.showLineDiscount ?? false);
   const widths = cols.map((c) => c.frac * W);
   const descIdx = cols.findIndex((c) => c.id === "desc");
   const descW = widths[descIdx] - PAD * 2;
@@ -543,7 +590,7 @@ export async function renderSalesDocument(data: SalesDocData, title: string): Pr
   cols.forEach((col, i) => {
     if (col.id === "desc") put(doc, "Total", tx + PAD, y + 5, { w: widths[i] - PAD * 2, size: 8.5, bold: true, align: "right" });
     if (col.id === "qty") put(doc, String(totalQty), tx + 2, y + 5, { w: widths[i] - 4, size: 8.5, bold: true, align: "center" });
-    if (col.id === "taxable") put(doc, money(data.totals.taxable), tx + 2, y + 5, { w: widths[i] - 6, size: 8.5, bold: true, align: "right" });
+    if (col.id === "taxable") put(doc, money(data.lines.reduce((s, l) => s + l.taxable, 0)), tx + 2, y + 5, { w: widths[i] - 6, size: 8.5, bold: true, align: "right" });
     if (col.id === "amount") put(doc, money(data.lines.reduce((s, l) => s + l.amount, 0)), tx + 2, y + 5, { w: widths[i] - 6, size: 8.5, bold: true, align: "right" });
     tx += widths[i];
   });

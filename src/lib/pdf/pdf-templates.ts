@@ -175,7 +175,7 @@ interface SalesLineSource {
  * is the GST-inclusive shelf price, so the printed Rate is shown ex-tax and
  * the Taxable Value column carries the discounted, tax-exclusive amount.
  */
-function salesDocLines(lines: SalesLineSource[], isGst: boolean) {
+function salesDocLines(lines: SalesLineSource[], isGst: boolean, showLineDiscount = true) {
   let discountExTax = 0;
   const mapped = lines.map((line) => {
     const gst = isGst ? num(line.gstRate as number) : 0;
@@ -184,13 +184,23 @@ function salesDocLines(lines: SalesLineSource[], isGst: boolean) {
     const disc = num(line.discountPercent as number);
     const lineTotal = num(line.lineTotal as number);
     const rateExTax = gst > 0 ? unit / (1 + gst / 100) : unit;
-    const taxable = line.taxableValue != null ? num(line.taxableValue as number) : gst > 0 ? lineTotal / (1 + gst / 100) : lineTotal;
+    const netTaxable = line.taxableValue != null ? num(line.taxableValue as number) : gst > 0 ? lineTotal / (1 + gst / 100) : lineTotal;
     discountExTax += rateExTax * qty * (disc / 100);
     const serials = Array.isArray(line.serialNumbers)
       ? line.serialNumbers
       : (line.serialNumbers ?? "").split("\n");
     // Prefer the live product name/sub name; fall back to the saved snapshot.
     const name = line.product?.name ?? line.description;
+
+    // When line discount is hidden, line items show undiscounted rate & gross amounts,
+    // and the discount is deducted only at the bottom in the totals block.
+    const taxable = showLineDiscount ? netTaxable : rateExTax * qty;
+    const amount = showLineDiscount
+      ? lineTotal
+      : isGst
+        ? (rateExTax * qty) * (1 + gst / 100)
+        : unit * qty;
+
     return {
       name,
       subName: line.product?.subName ?? null,
@@ -200,8 +210,9 @@ function salesDocLines(lines: SalesLineSource[], isGst: boolean) {
       rate: rateExTax,
       discountPercent: disc,
       taxable,
+      netTaxable,
       gstRate: gst,
-      amount: lineTotal,
+      amount,
     };
   });
   return { lines: mapped, discountExTax };
@@ -224,7 +235,7 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
 
   const isGst = invoice.kind === "TAX_INVOICE";
   const company = await getCompanyProfile(invoice.firmId);
-  const { lines, discountExTax } = salesDocLines(invoice.lines, isGst);
+  const { lines, discountExTax } = salesDocLines(invoice.lines, isGst, false);
 
   const taxable = num(invoice.taxableAmount);
   const totals = {
@@ -277,6 +288,8 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
       bankDetails: company.bankDetails || undefined,
       terms: invoice.terms || company.termsConditions,
       notes: invoice.notes,
+      discountRemarks: invoice.discountRemarks,
+      showLineDiscount: false,
       signatoryFor: company.name,
       preparedBy: invoice.createdBy?.name,
       cancelledReason: invoice.status === "CANCELLED" ? invoice.cancellationReason || "Cancelled" : null,

@@ -97,6 +97,7 @@ export interface InvoiceProp {
   vehicleNumber?: string | null;
   ewayBillNumber?: string | null;
   buyerOrderNo?: string | null;
+  discountRemarks?: string | null;
   customerId: string;
   customer?: {
     id?: string;
@@ -188,6 +189,7 @@ export function EditInvoiceButton({
   const initialDiscount = Number((invoice as any).discountAmount) > 0 ? String(Number((invoice as any).discountAmount)) : "";
   const [billDiscount, setBillDiscount] = useState(initialDiscount);
   const [billDiscountType, setBillDiscountType] = useState<DiscountType>("₹");
+  const [discountRemarks, setDiscountRemarks] = useState(invoice.discountRemarks ?? "");
   const initialRoundOff = (invoice as any).roundOff != null && Number((invoice as any).roundOff) !== 0 ? String(Number((invoice as any).roundOff)) : "";
   const [roundOff, setRoundOff] = useState(initialRoundOff);
   const [isManualRoundOff, setIsManualRoundOff] = useState(Boolean(initialRoundOff));
@@ -398,6 +400,7 @@ export function EditInvoiceButton({
         vehicleNumber: vehicleNumber || null,
         ewayBillNumber: ewayBillNumber || null,
         buyerOrderNo: buyerOrderNo || null,
+        discountRemarks: discountRemarks || null,
         manualRoundOff: totals.roundOff,
         lines: hasReturns
           ? undefined
@@ -661,7 +664,7 @@ export function EditInvoiceButton({
 
             {/* Bill discount box */}
             {!hasReturns && validLines.length > 0 ? (
-              <div className="rounded-lg border border-border bg-muted/20 p-2.5">
+              <div className="space-y-2 rounded-lg border border-border bg-muted/20 p-2.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
                     <Tag className="size-3.5 text-primary" />
@@ -708,6 +711,19 @@ export function EditInvoiceButton({
                     />
                   </div>
                 </div>
+                {parseNumericInput(billDiscount) > 0 ? (
+                  <div className="space-y-1 border-t border-border/40 pt-1.5">
+                    <Label className="text-[11px] text-muted-foreground">
+                      Discount remarks / reason (why discount is given)
+                    </Label>
+                    <Input
+                      className="h-8 text-xs"
+                      placeholder="e.g. Festival offer, bulk purchase discount, management approval..."
+                      value={discountRemarks}
+                      onChange={(e) => setDiscountRemarks(e.target.value)}
+                    />
+                  </div>
+                ) : null}
               </div>
             ) : null}
 

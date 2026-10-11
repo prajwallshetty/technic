@@ -138,6 +138,7 @@ export async function updateInvoiceAction(input: {
   placeOfSupply?: string | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   dispatchThrough?: string | null;
   vehicleNumber?: string | null;
   ewayBillNumber?: string | null;
@@ -187,6 +188,7 @@ export async function updateInvoiceAction(input: {
       placeOfSupply: clean(input.placeOfSupply),
       notes: clean(input.notes),
       terms: clean(input.terms),
+      discountRemarks: clean(input.discountRemarks),
       dispatchThrough: clean(input.dispatchThrough),
       vehicleNumber: input.vehicleNumber !== undefined ? clean(input.vehicleNumber)?.toUpperCase() ?? null : undefined,
       ewayBillNumber: clean(input.ewayBillNumber),
