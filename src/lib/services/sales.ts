@@ -43,6 +43,7 @@ export interface QuotationInput {
   validUntil?: Date | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   lines: SaleLineInput[];
   userId?: string | null;
   manualRoundOff?: number | null;
@@ -130,6 +131,7 @@ export async function createQuotation(input: QuotationInput) {
         totalAmount: summary.totalAmount,
         notes: input.notes ?? null,
         terms: input.terms ?? null,
+        discountRemarks: input.discountRemarks ?? null,
         createdById: input.userId ?? null,
         status: "DRAFT",
         lines: {
@@ -192,6 +194,7 @@ export interface UpdateQuotationInput {
   validUntil?: Date | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   status?: "DRAFT" | "SENT" | "ACCEPTED" | "REJECTED" | "EXPIRED";
   lines?: SaleLineInput[];
   userId?: string | null;
@@ -238,6 +241,7 @@ export async function updateQuotation(input: UpdateQuotationInput) {
         validUntil: input.validUntil !== undefined ? input.validUntil : quotation.validUntil,
         notes: input.notes !== undefined ? input.notes : quotation.notes,
         terms: input.terms !== undefined ? input.terms : quotation.terms,
+        discountRemarks: input.discountRemarks !== undefined ? input.discountRemarks : quotation.discountRemarks,
         status: input.status ?? quotation.status,
         subtotal: summary.subtotal,
         discountAmount: summary.discountAmount,
@@ -1356,6 +1360,7 @@ export async function convertQuotationToInvoice(
     quotationId: quotation.id,
     notes: quotation.notes,
     terms: quotation.terms,
+    discountRemarks: quotation.discountRemarks,
     paymentAmount: options.paymentAmount,
     paymentMethod: options.paymentMethod,
     userId: options.userId,

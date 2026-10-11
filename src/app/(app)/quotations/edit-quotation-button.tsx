@@ -78,6 +78,7 @@ export interface QuotationProp {
   totalAmount?: number | string | unknown;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   customerId: string;
   customer?: { id?: string; name: string; phone?: string | null };
   lines: Array<{
@@ -143,6 +144,7 @@ export function EditQuotationButton({
   const initialDiscount = Number(quotation.discountAmount) > 0 ? String(Number(quotation.discountAmount)) : "";
   const [billDiscount, setBillDiscount] = useState(initialDiscount);
   const [billDiscountType, setBillDiscountType] = useState<DiscountType>("₹");
+  const [discountRemarks, setDiscountRemarks] = useState(quotation.discountRemarks ?? "");
   const initialRoundOff = (quotation as any).roundOff != null && Number((quotation as any).roundOff) !== 0 ? String(Number((quotation as any).roundOff)) : "";
   const [roundOff, setRoundOff] = useState(initialRoundOff);
   const [isManualRoundOff, setIsManualRoundOff] = useState(Boolean(initialRoundOff));
@@ -320,6 +322,7 @@ export function EditQuotationButton({
         validUntil: validUntil || null,
         notes: notes || null,
         terms: terms || null,
+        discountRemarks: discountRemarks || null,
         status,
         manualRoundOff: totals.roundOff,
         lines: validLines.map((line, index) => {
@@ -642,6 +645,19 @@ export function EditQuotationButton({
                   />
                 </div>
               </div>
+              {parseNumericInput(billDiscount) > 0 ? (
+                <div className="space-y-1 border-t border-border/40 pt-1.5">
+                  <label className="text-[11px] text-muted-foreground">
+                    Discount remarks / reason (why discount is given)
+                  </label>
+                  <Input
+                    className="h-8 text-xs"
+                    placeholder="e.g. Festival offer, bulk purchase discount, management approval..."
+                    value={discountRemarks}
+                    onChange={(e) => setDiscountRemarks(e.target.value)}
+                  />
+                </div>
+              ) : null}
             </div>
           ) : null}
 

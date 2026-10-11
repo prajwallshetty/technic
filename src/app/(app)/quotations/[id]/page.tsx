@@ -158,7 +158,17 @@ export default async function QuotationDetailPage({
             <div className="space-y-1.5 px-4 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="numeric">{formatCurrency(quotation.subtotal)}</span></div>
               {Number(quotation.discountAmount) > 0 ? (
-                <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span className="numeric">-{formatCurrency(quotation.discountAmount)}</span></div>
+                <div className="flex justify-between">
+                  <div>
+                    <span className="text-muted-foreground">Discount</span>
+                    {quotation.discountRemarks ? (
+                      <span className="ml-2 text-xs text-muted-foreground font-normal">
+                        ({quotation.discountRemarks})
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="numeric">-{formatCurrency(quotation.discountAmount)}</span>
+                </div>
               ) : null}
               {isGst ? (
                 <>

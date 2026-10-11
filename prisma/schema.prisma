@@ -1074,6 +1074,7 @@ model Quotation {
 
   subtotal       Decimal @default(0) @db.Decimal(12, 2)
   discountAmount Decimal @default(0) @db.Decimal(12, 2)
+  discountRemarks String?
   taxableAmount  Decimal @default(0) @db.Decimal(12, 2)
   cgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   sgstAmount     Decimal @default(0) @db.Decimal(12, 2)
@@ -1143,6 +1144,7 @@ model SalesOrder {
 
   subtotal       Decimal @default(0) @db.Decimal(12, 2)
   discountAmount Decimal @default(0) @db.Decimal(12, 2)
+  discountRemarks String?
   taxableAmount  Decimal @default(0) @db.Decimal(12, 2)
   cgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   sgstAmount     Decimal @default(0) @db.Decimal(12, 2)

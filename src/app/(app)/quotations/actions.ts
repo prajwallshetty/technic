@@ -12,6 +12,8 @@ export async function createQuotationAction(input: {
   taxMode: "GST" | "NON_GST";
   validUntil?: string | null;
   notes?: string | null;
+  terms?: string | null;
+  discountRemarks?: string | null;
   lines: {
     productId: string;
     variantId?: string | null;
@@ -39,6 +41,8 @@ export async function createQuotationAction(input: {
       taxMode: input.taxMode,
       validUntil: input.validUntil ? new Date(input.validUntil) : null,
       notes: input.notes ?? null,
+      terms: input.terms ?? null,
+      discountRemarks: input.discountRemarks?.trim() || null,
       lines: input.lines,
       userId: user.id,
       manualRoundOff: input.manualRoundOff,
@@ -60,6 +64,7 @@ export async function updateQuotationAction(input: {
   validUntil?: string | null;
   notes?: string | null;
   terms?: string | null;
+  discountRemarks?: string | null;
   status?: "DRAFT" | "SENT" | "ACCEPTED" | "REJECTED" | "EXPIRED";
   lines: {
     productId: string;
@@ -91,8 +96,9 @@ export async function updateQuotationAction(input: {
       taxMode: input.taxMode,
       quotationDate: input.quotationDate ? new Date(input.quotationDate) : undefined,
       validUntil: input.validUntil ? new Date(input.validUntil) : null,
-      notes: input.notes ?? null,
-      terms: input.terms ?? null,
+      notes: input.notes !== undefined ? input.notes?.trim() || null : undefined,
+      terms: input.terms !== undefined ? input.terms?.trim() || null : undefined,
+      discountRemarks: input.discountRemarks !== undefined ? input.discountRemarks?.trim() || null : undefined,
       status: input.status,
       lines: input.lines,
       userId: user.id,

@@ -320,13 +320,16 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
 
   const isGst = quotation.taxMode === "GST";
   const company = await getCompanyProfile(quotation.firmId);
-  const { lines, discountExTax } = salesDocLines(quotation.lines, isGst);
+  const { lines, discountExTax } = salesDocLines(quotation.lines, isGst, false);
 
-  const taxable = lines.reduce((sum, line) => sum + line.taxable, 0);
+  const taxable = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
+  const discount = isGst
+    ? (discountExTax > 0 ? discountExTax : num(quotation.discountAmount))
+    : num(quotation.discountAmount);
   const totals = {
-    gross: isGst ? taxable + discountExTax : num(quotation.subtotal),
-    discount: isGst ? discountExTax : num(quotation.discountAmount),
-    taxable: isGst ? num(quotation.taxableAmount) || taxable : num(quotation.taxableAmount),
+    gross: isGst ? taxable + discount : num(quotation.subtotal),
+    discount,
+    taxable,
     cgst: num(quotation.cgstAmount),
     sgst: num(quotation.sgstAmount),
     igst: num(quotation.igstAmount),
@@ -369,6 +372,8 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       bankDetails: company.bankDetails || undefined,
       terms: quotation.terms || company.termsConditions,
       notes: quotation.notes,
+      discountRemarks: quotation.discountRemarks,
+      showLineDiscount: false,
       signatoryFor: company.name,
       preparedBy: quotation.createdBy?.name,
     },

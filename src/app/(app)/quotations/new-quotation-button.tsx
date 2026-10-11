@@ -87,6 +87,7 @@ export function NewQuotationButton({
   const [notes, setNotes] = useState("");
   const [billDiscount, setBillDiscount] = useState("");
   const [billDiscountType, setBillDiscountType] = useState<DiscountType>("%");
+  const [discountRemarks, setDiscountRemarks] = useState("");
   const [roundOff, setRoundOff] = useState("");
   const [isManualRoundOff, setIsManualRoundOff] = useState(false);
   const [lines, setLines] = useState<Line[]>([{ key: 0, productId: "", quantity: "1", unitPrice: "0", trackSerials: false, serials: [] }]);
@@ -189,6 +190,7 @@ export function NewQuotationButton({
         taxMode,
         validUntil: validUntil || null,
         notes: notes || null,
+        discountRemarks: discountRemarks || null,
         manualRoundOff: totals.roundOff,
         lines: validLines.map((line, index) => {
           const product = productById.get(line.productId);
@@ -208,6 +210,7 @@ export function NewQuotationButton({
         setLines([{ key: (lineKey += 1), productId: "", quantity: "1", unitPrice: "0", trackSerials: false, serials: [] }]);
         setCustomerId("");
         setBillDiscount("");
+        setDiscountRemarks("");
         setRoundOff("");
         setIsManualRoundOff(false);
         setValidUntil("");
@@ -436,6 +439,19 @@ export function NewQuotationButton({
                   />
                 </div>
               </div>
+              {parseNumericInput(billDiscount) > 0 ? (
+                <div className="space-y-1 border-t border-border/40 pt-1.5">
+                  <label className="text-[11px] text-muted-foreground">
+                    Discount remarks / reason (why discount is given)
+                  </label>
+                  <Input
+                    className="h-8 text-xs"
+                    placeholder="e.g. Festival offer, bulk purchase discount, management approval..."
+                    value={discountRemarks}
+                    onChange={(e) => setDiscountRemarks(e.target.value)}
+                  />
+                </div>
+              ) : null}
             </div>
           ) : null}
 

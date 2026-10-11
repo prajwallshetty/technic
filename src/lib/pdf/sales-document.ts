@@ -104,6 +104,7 @@ interface TextOpts {
   bold?: boolean;
   color?: string;
   align?: "left" | "center" | "right";
+  lineBreak?: boolean;
 }
 
 function heightOf(doc: Doc, value: string, o: TextOpts): number {
@@ -115,7 +116,7 @@ function put(doc: Doc, value: string, x: number, y: number, o: TextOpts): number
     .font(o.bold ? FONT_BOLD : FONT)
     .fontSize(o.size ?? 8.5)
     .fillColor(o.color ?? C.ink)
-    .text(value, x, y, { width: o.w, align: o.align, lineBreak: true });
+    .text(value, x, y, { width: o.w, align: o.align, lineBreak: o.lineBreak ?? true });
   return heightOf(doc, value, o);
 }
 
@@ -313,18 +314,21 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
     const gw = leftW - PAD * 2;
     put(doc, "Tax Summary", gx, ly, { w: gw, size: 7.5, color: C.muted });
     ly += 12;
-    const widths = hsnCols.map((_, i) => (i === 0 ? 0.2 : (1 - 0.2) / (hsnCols.length - 1)) * gw);
+    const hsnFractions = interState
+      ? [0.13, 0.27, 0.12, 0.24, 0.24]
+      : [0.11, 0.23, 0.09, 0.145, 0.09, 0.145, 0.19];
+    const widths = hsnFractions.map((f) => f * gw);
     doc.rect(gx, ly, gw, hsnRowH).fill(C.tint);
     let cx = gx;
     hsnCols.forEach((h, i) => {
-      put(doc, h, cx + 2, ly + 3, { w: widths[i] - 4, size: 6.5, bold: true, align: i === 0 ? "left" : "right" });
+      put(doc, h, cx + 1, ly + 3.5, { w: widths[i] - 2, size: 6, bold: true, align: i === 0 ? "left" : "right", lineBreak: false });
       cx += widths[i];
     });
     ly += hsnRowH;
     const writeRow = (cells: string[], bold = false) => {
       let x = gx;
       cells.forEach((c, i) => {
-        put(doc, c, x + 2, ly + 3, { w: widths[i] - 4, size: 6.5, bold, align: i === 0 ? "left" : "right" });
+        put(doc, c, x + 1, ly + 3.5, { w: widths[i] - 2, size: 6, bold, align: i === 0 ? "left" : "right", lineBreak: false });
         x += widths[i];
       });
       hline(doc, gx, gx + gw, ly + hsnRowH, C.light, 0.4);
