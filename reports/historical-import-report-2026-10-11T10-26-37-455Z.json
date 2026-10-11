@@ -1,0 +1,4052 @@
+{
+  "startedAt": "2026-10-11T10:26:34.015Z",
+  "completedAt": "2026-10-11T10:26:37.455Z",
+  "mode": "DRY_RUN",
+  "sourceFiles": {
+    "invoicesPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoices.csv",
+    "itemsPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoice_items.csv",
+    "customersPath": "E:\\growthbridge\\technic\\data\\historical-csv\\customers.csv",
+    "reviewRequiredPath": "E:\\growthbridge\\technic\\data\\historical-csv\\review_required.csv"
+  },
+  "totalCustomersProcessed": 15,
+  "customersMatched": 14,
+  "customersCreated": 1,
+  "customersFailed": 0,
+  "totalInvoicesInCsv": 81,
+  "invoicesFlaggedForReview": 81,
+  "invoicesMissingNumber": 81,
+  "invoicesWithDiscrepancies": 30,
+  "invoicesValidForImport": 0,
+  "invoicesActuallyImported": 0,
+  "invoicesSkippedAsDuplicate": 0,
+  "invoicesRejected": 81,
+  "totalLineItemsProcessed": 233,
+  "lineItemsMatchedToProduct": 0,
+  "lineItemsUnresolvedProduct": 233,
+  "lineItemsImported": 0,
+  "invoices": [
+    {
+      "sourcePdf": "136.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9448142881 E - Way No.",
+      "totalAmount": 32155,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "137.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "Self",
+      "totalAmount": 968,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB MTZ7L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MCB MTZ7L",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "138.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 13904,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹13904) differs from calculated total (₹20027.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 13904,
+            "calculatedTotalPreRound": 20027.66,
+            "diff": -6123.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "139.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 13428,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹13428) differs from calculated total (₹19955.14) by > ₹2.00.",
+          "details": {
+            "headerTotal": 13428,
+            "calculatedTotalPreRound": 19955.14,
+            "diff": -6527.14
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "140.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 11703,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹11703) differs from calculated total (₹16013.96) by > ₹2.00.",
+          "details": {
+            "headerTotal": 11703,
+            "calculatedTotalPreRound": 16013.96,
+            "diff": -4310.96
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "141.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5851,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5851) differs from calculated total (₹8006.99) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5851,
+            "calculatedTotalPreRound": 8006.99,
+            "diff": -2155.99
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "142.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964355954 E - Way No.",
+      "totalAmount": 11200,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹11200) differs from calculated total (₹17938.96) by > ₹2.00.",
+          "details": {
+            "headerTotal": 11200,
+            "calculatedTotalPreRound": 17938.96,
+            "diff": -6738.96
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "143.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 12735,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "144.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 82500,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 210AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 210AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 160 AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "LAIKON 160 AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "145 Y PRISTAGE.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 51633,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item '.5HP 5STAGE BOOSTER PUMP(24LTR TANK) PRIMIUM' (HSN: 841370101). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": ".5HP 5STAGE BOOSTER PUMP(24LTR TANK) PRIMIUM",
+            "hsn": "841370101"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item '.0HP OPENWELL SUBMERCIBLE HAVY' (HSN: 841370101). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": ".0HP OPENWELL SUBMERCIBLE HAVY",
+            "hsn": "841370101"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹51633) differs from calculated total (₹76164.36) by > ₹2.00.",
+          "details": {
+            "headerTotal": 51633,
+            "calculatedTotalPreRound": 76164.36,
+            "diff": -24531.36
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "146.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14415,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14415) differs from calculated total (₹20105.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14415,
+            "calculatedTotalPreRound": 20105.66,
+            "diff": -5690.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "147 ms bat.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14415,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14415) differs from calculated total (₹20105.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14415,
+            "calculatedTotalPreRound": 20105.66,
+            "diff": -5690.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "148.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5068,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5068) differs from calculated total (₹7323.06) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5068,
+            "calculatedTotalPreRound": 7323.06,
+            "diff": -2255.06
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "149 shah.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 40000,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'CM 4000E 3.2 KW GENSET' (HSN: 85030010). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "CM 4000E 3.2 KW GENSET",
+            "hsn": "85030010"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "150 ms batt.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 22195,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹22195) differs from calculated total (₹30294.1) by > ₹2.00.",
+          "details": {
+            "headerTotal": 22195,
+            "calculatedTotalPreRound": 30294.1,
+            "diff": -8099.1
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "151.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 151000,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 210AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 210AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "152 ms.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 4314,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹4314) differs from calculated total (₹6320.77) by > ₹2.00.",
+          "details": {
+            "headerTotal": 4314,
+            "calculatedTotalPreRound": 6320.77,
+            "diff": -2006.77
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "153 ms.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5671,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA DIN65LH 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5671) differs from calculated total (₹8359.15) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5671,
+            "calculatedTotalPreRound": 8359.15,
+            "diff": -2688.15
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "154 ms.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12900,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 210AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 210AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12900) differs from calculated total (₹23662.7) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12900,
+            "calculatedTotalPreRound": 23662.7,
+            "diff": -10762.7
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "155 ms.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12753,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "156 ms.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 6440,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "157.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12024,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "158.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 102936,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20R 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 55B24L 52AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA 55B24L 52AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 8,
+            "description": "YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 9,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 10,
+            "description": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 11,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 12,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 13,
+            "description": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 14,
+            "description": "YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 15,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 16,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 17,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 18,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 19,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 20,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹102936) differs from calculated total (₹98518.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 102936,
+            "calculatedTotalPreRound": 98518.24,
+            "diff": 4417.76
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "159.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 111108,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLAR BATTERY 160AH C20' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "160.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 38529,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹38529) differs from calculated total (₹39539.14) by > ₹2.00.",
+          "details": {
+            "headerTotal": 38529,
+            "calculatedTotalPreRound": 39539.14,
+            "diff": -1010.14
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "161.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 88872,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 160 AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 160 AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLAR BATTERY 160AH C20' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 210AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "LAIKON 210AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "162.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 43141,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB MTZ7L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MCB MTZ7L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX90 9AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA MTX90 9AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹43141) differs from calculated total (₹44271.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 43141,
+            "calculatedTotalPreRound": 44271.24,
+            "diff": -1130.24
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "163.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 116782,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 8,
+            "description": "YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 9,
+            "description": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 10,
+            "description": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 11,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 12,
+            "description": "YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 13,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 14,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 15,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN55LH 55AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 16,
+            "description": "YOKOHAMA DIN55LH 55AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 17,
+            "description": "YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹116782) differs from calculated total (₹107183.73) by > ₹2.00.",
+          "details": {
+            "headerTotal": 116782,
+            "calculatedTotalPreRound": 107183.73,
+            "diff": 9598.27
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "164.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 27304,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LUMINOUS 1050D INVERTOR' (HSN: 85044010). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LUMINOUS 1050D INVERTOR",
+            "hsn": "85044010"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'INVERTOR HAVY TROLLY SINGLE BATTERY' (HSN: 39231090). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "INVERTOR HAVY TROLLY SINGLE BATTERY",
+            "hsn": "39231090"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'INVERTOR HAVY TROLLY DOUBLE BATTERY' (HSN: 39231090). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "INVERTOR HAVY TROLLY DOUBLE BATTERY",
+            "hsn": "39231090"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹27304) differs from calculated total (₹16407.38) by > ₹2.00.",
+          "details": {
+            "headerTotal": 27304,
+            "calculatedTotalPreRound": 16407.38,
+            "diff": 10896.62
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "165.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 26059,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'INVERTOR HAVY TROLLY SINGLE BATTERY' (HSN: 39231090). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "INVERTOR HAVY TROLLY SINGLE BATTERY",
+            "hsn": "39231090"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹26059) differs from calculated total (₹17492.05) by > ₹2.00.",
+          "details": {
+            "headerTotal": 26059,
+            "calculatedTotalPreRound": 17492.05,
+            "diff": 8566.95
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "166.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 25237,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "167.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 24774,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹24774) differs from calculated total (₹13968.92) by > ₹2.00.",
+          "details": {
+            "headerTotal": 24774,
+            "calculatedTotalPreRound": 13968.92,
+            "diff": 10805.08
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "168.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 19514,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "169.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 7000,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LUMINOUS 1050D INVERTOR' (HSN: 85044010). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LUMINOUS 1050D INVERTOR",
+            "hsn": "85044010"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'INVERTOR HAVY TROLLY SINGLE BATTERY' (HSN: 39231090). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "INVERTOR HAVY TROLLY SINGLE BATTERY",
+            "hsn": "39231090"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "170.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 52549,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLAR BATTERY 160AH C20' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹52549) differs from calculated total (₹52999.03) by > ₹2.00.",
+          "details": {
+            "headerTotal": 52549,
+            "calculatedTotalPreRound": 52999.03,
+            "diff": -450.03
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "171.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 32359,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'INVERTOR HAVY TROLLY SINGLE BATTERY' (HSN: 39231090). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "INVERTOR HAVY TROLLY SINGLE BATTERY",
+            "hsn": "39231090"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹32359) differs from calculated total (₹18453.07) by > ₹2.00.",
+          "details": {
+            "headerTotal": 32359,
+            "calculatedTotalPreRound": 18453.07,
+            "diff": 13905.93
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "172.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 39999,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 160 AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 160 AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LUMINOUS EVO -D2300/24V INVERTOR 2KW' (HSN: 85044010). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "LUMINOUS EVO -D2300/24V INVERTOR 2KW",
+            "hsn": "85044010"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹39999) differs from calculated total (₹45508.37) by > ₹2.00.",
+          "details": {
+            "headerTotal": 39999,
+            "calculatedTotalPreRound": 45508.37,
+            "diff": -5509.37
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "173.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 38612,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20R 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "174.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 52008,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLAR BATTERY 160AH C20' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "175.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 34544,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLAR BATTERY 160AH C20' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX90 9AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTX90 9AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "176.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 10800,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LUMINOUS EVO -D2300/24V INVERTOR 2KW' (HSN: 85044010). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LUMINOUS EVO -D2300/24V INVERTOR 2KW",
+            "hsn": "85044010"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "177.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 26607,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "178.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9448257106 E - Way No.",
+      "totalAmount": 35716,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "179.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 27975,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "180.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 15900,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "181.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9632269313 E - Way No.",
+      "totalAmount": 41300,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "182.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 20075,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "183.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 34020,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20R 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "184.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 4328,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "185.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 5782,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "186.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 9873,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB MTZ7L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MCB MTZ7L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹9873) differs from calculated total (₹10221.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 9873,
+            "calculatedTotalPreRound": 10221.24,
+            "diff": -348.24
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "187.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 201781,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN55LH 55AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA DIN55LH 55AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 8,
+            "description": "YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 9,
+            "description": "YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 55B24L 52AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 10,
+            "description": "YOKOHAMA 55B24L 52AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 11,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 12,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 13,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 14,
+            "description": "YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 15,
+            "description": "YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 16,
+            "description": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 17,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹201781) differs from calculated total (₹185239.56) by > ₹2.00.",
+          "details": {
+            "headerTotal": 201781,
+            "calculatedTotalPreRound": 185239.56,
+            "diff": 16541.44
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "188.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 29438,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "189.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14500,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'LAIKON 160 AH TUBLER BATTERY' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "LAIKON 160 AH TUBLER BATTERY",
+            "hsn": "85072000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "190.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 33900,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "191.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 19730,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹19730) differs from calculated total (₹14899.49) by > ₹2.00.",
+          "details": {
+            "headerTotal": 19730,
+            "calculatedTotalPreRound": 14899.49,
+            "diff": 4830.51
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "192.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 41736,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA M42 60B20L 40AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA M42 60B20L 40AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2' (HSN: 85072000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+            "hsn": "85072000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹41736) differs from calculated total (₹42275.06) by > ₹2.00.",
+          "details": {
+            "headerTotal": 41736,
+            "calculatedTotalPreRound": 42275.06,
+            "diff": -539.06
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "193.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 22347,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "194.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 5782,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "195.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6360,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "196.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 14898,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14898) differs from calculated total (₹14421.8) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14898,
+            "calculatedTotalPreRound": 14421.8,
+            "diff": 476.2
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "197.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9148834224 E - Way No.",
+      "totalAmount": 9208,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "198.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 62300,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "199.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 36535,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20R 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "200.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 36567,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA N55-80B24L 50AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA N55-80B24L 50AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "201.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 33529,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20L 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "202.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7618766636 E - Way No.",
+      "totalAmount": 7548,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "203.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6118,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "204.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 24486,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹24486) differs from calculated total (₹20150.42) by > ₹2.00.",
+          "details": {
+            "headerTotal": 24486,
+            "calculatedTotalPreRound": 20150.42,
+            "diff": 4335.58
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "205.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 19526,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 4,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCB MTZ7L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 5,
+            "description": "YOKOHAMA MCB MTZ7L",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 6,
+            "description": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX90 9AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 7,
+            "description": "YOKOHAMA MTX90 9AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 8,
+            "description": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "206.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9448257106 E - Way No.",
+      "totalAmount": 12613,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2036B20R 32AH (WARRENTY18+6)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12613) differs from calculated total (₹12830.73) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12613,
+            "calculatedTotalPreRound": 12830.73,
+            "diff": -217.73
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "207.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6550,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "208.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 6566,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "209.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 6258,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTX50 5AH (WARRENTY 24+24)' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "210.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 6876,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 3,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "211.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 20138,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ5LA' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA MTZ5LA",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA MTZ4L' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA MTZ4L",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "212.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 6106,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 2,
+            "description": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "213.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 29000,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "214.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6550,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "215.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 4106,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "PRODUCT_UNRESOLVED",
+          "message": "No matching product with SKU or mapped identifier found for item 'YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM' (HSN: 85071000). Schema requires Product relation; manual catalog mapping required.",
+          "details": {
+            "itemIndex": 1,
+            "description": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+            "hsn": "85071000"
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "216.pdf",
+      "invoiceNumber": "",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 32194,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "MISSING_INVOICE_NUMBER",
+          "message": "Invoice number is missing or was not extracted."
+        },
+        {
+          "type": "NO_LINE_ITEMS",
+          "message": "Invoice contains no line items."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    }
+  ]
+}

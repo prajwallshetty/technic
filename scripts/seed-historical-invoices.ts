@@ -15,7 +15,31 @@
  *   npx tsx scripts/seed-historical-invoices.ts --import --confirm
  */
 
+import fs from "node:fs";
 import path from "node:path";
+
+// Ensure .env is loaded so Prisma connects to the intended Postgres database rather than PGlite fallback
+if (typeof (process as any).loadEnvFile === "function") {
+  try {
+    (process as any).loadEnvFile(".env");
+  } catch {}
+} else if (fs.existsSync(".env")) {
+  const content = fs.readFileSync(".env", "utf8");
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const idx = trimmed.indexOf("=");
+    if (idx !== -1) {
+      const key = trimmed.slice(0, idx).trim();
+      let val = trimmed.slice(idx + 1).trim();
+      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+        val = val.slice(1, -1);
+      }
+      process.env[key] = val;
+    }
+  }
+}
+
 import { HistoricalImporter } from "../src/lib/historical-seeder/historical-importer";
 import type { SeederOptions } from "../src/lib/historical-seeder/types";
 
@@ -26,7 +50,7 @@ function parseArgs(): SeederOptions {
     dryRun: true,
     confirm: false,
     firmId: "firm_technic_main",
-    branchId: "cmurcotog007vmovr2xc4nszf",
+    branchId: "",
     sampleTest: false,
   };
 

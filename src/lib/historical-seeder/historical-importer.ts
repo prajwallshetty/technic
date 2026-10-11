@@ -77,6 +77,24 @@ export class HistoricalImporter {
 
     // 2. Initialize Matchers & Pre-load Caches
     console.log(`\nInitializing matchers and pre-loading existing records...`);
+
+    // Auto-resolve active branch in this database if branchId is empty or not in current DB
+    const branchInDb = await prisma.branch.findFirst({
+      where: { firmId: this.options.firmId, isActive: true },
+      select: { id: true, name: true, code: true },
+    });
+    if (branchInDb) {
+      const explicitBranchExists = this.options.branchId
+        ? await prisma.branch.findFirst({
+            where: { id: this.options.branchId, firmId: this.options.firmId },
+          })
+        : null;
+      if (!explicitBranchExists) {
+        this.options.branchId = branchInDb.id;
+        console.log(`  • Resolved active branch: ${branchInDb.name} (${branchInDb.id})`);
+      }
+    }
+
     const customerMatcher = new CustomerMatcher(this.options.firmId, this.options.branchId);
     await customerMatcher.init();
 

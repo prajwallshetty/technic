@@ -1,0 +1,1640 @@
+{
+  "startedAt": "2026-10-11T10:26:52.606Z",
+  "completedAt": "2026-10-11T10:29:30.155Z",
+  "mode": "IMPORT",
+  "sourceFiles": {
+    "invoicesPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoices.csv",
+    "itemsPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoice_items.csv",
+    "customersPath": "E:\\growthbridge\\technic\\data\\historical-csv\\customers.csv",
+    "reviewRequiredPath": "E:\\growthbridge\\technic\\data\\historical-csv\\review_required.csv"
+  },
+  "totalCustomersProcessed": 15,
+  "customersMatched": 14,
+  "customersCreated": 1,
+  "customersFailed": 0,
+  "totalInvoicesInCsv": 81,
+  "invoicesFlaggedForReview": 81,
+  "invoicesMissingNumber": 0,
+  "invoicesWithDiscrepancies": 35,
+  "invoicesValidForImport": 81,
+  "invoicesActuallyImported": 81,
+  "invoicesSkippedAsDuplicate": 0,
+  "invoicesRejected": 0,
+  "totalLineItemsProcessed": 233,
+  "lineItemsMatchedToProduct": 242,
+  "lineItemsUnresolvedProduct": 0,
+  "lineItemsImported": 242,
+  "invoices": [
+    {
+      "sourcePdf": "136.pdf",
+      "invoiceNumber": "136",
+      "customerNameCandidate": "PHONE :9448142881 E - Way No.",
+      "totalAmount": 32155,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "137.pdf",
+      "invoiceNumber": "137",
+      "customerNameCandidate": "Self",
+      "totalAmount": 968,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "138.pdf",
+      "invoiceNumber": "138",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 13904,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹13904) differs from calculated total (₹20027.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 13904,
+            "calculatedTotalPreRound": 20027.66,
+            "diff": -6123.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "139.pdf",
+      "invoiceNumber": "139",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 13428,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹13428) differs from calculated total (₹19955.14) by > ₹2.00.",
+          "details": {
+            "headerTotal": 13428,
+            "calculatedTotalPreRound": 19955.14,
+            "diff": -6527.14
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "140.pdf",
+      "invoiceNumber": "140",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 11703,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹11703) differs from calculated total (₹16013.96) by > ₹2.00.",
+          "details": {
+            "headerTotal": 11703,
+            "calculatedTotalPreRound": 16013.96,
+            "diff": -4310.96
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "141.pdf",
+      "invoiceNumber": "141",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5851,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5851) differs from calculated total (₹8006.99) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5851,
+            "calculatedTotalPreRound": 8006.99,
+            "diff": -2155.99
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "142.pdf",
+      "invoiceNumber": "142",
+      "customerNameCandidate": "PHONE :9964355954 E - Way No.",
+      "totalAmount": 11200,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹11200) differs from calculated total (₹17938.96) by > ₹2.00.",
+          "details": {
+            "headerTotal": 11200,
+            "calculatedTotalPreRound": 17938.96,
+            "diff": -6738.96
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "143.pdf",
+      "invoiceNumber": "143",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 12735,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12735) differs from calculated total (₹17112.04) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12735,
+            "calculatedTotalPreRound": 17112.04,
+            "diff": -4377.04
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "144.pdf",
+      "invoiceNumber": "144",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 82500,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "145 Y PRISTAGE.pdf",
+      "invoiceNumber": "145",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 51633,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹51633) differs from calculated total (₹76164.36) by > ₹2.00.",
+          "details": {
+            "headerTotal": 51633,
+            "calculatedTotalPreRound": 76164.36,
+            "diff": -24531.36
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "146.pdf",
+      "invoiceNumber": "146",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14415,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14415) differs from calculated total (₹20105.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14415,
+            "calculatedTotalPreRound": 20105.66,
+            "diff": -5690.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "147 ms bat.pdf",
+      "invoiceNumber": "147",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14415,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14415) differs from calculated total (₹20105.66) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14415,
+            "calculatedTotalPreRound": 20105.66,
+            "diff": -5690.66
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "148.pdf",
+      "invoiceNumber": "148",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5068,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5068) differs from calculated total (₹7323.06) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5068,
+            "calculatedTotalPreRound": 7323.06,
+            "diff": -2255.06
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "149 shah.pdf",
+      "invoiceNumber": "149",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 40000,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "150 ms batt.pdf",
+      "invoiceNumber": "150",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 22195,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹22195) differs from calculated total (₹30294.1) by > ₹2.00.",
+          "details": {
+            "headerTotal": 22195,
+            "calculatedTotalPreRound": 30294.1,
+            "diff": -8099.1
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "151.pdf",
+      "invoiceNumber": "151",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 151000,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "152 ms.pdf",
+      "invoiceNumber": "152",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 4314,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹4314) differs from calculated total (₹6320.77) by > ₹2.00.",
+          "details": {
+            "headerTotal": 4314,
+            "calculatedTotalPreRound": 6320.77,
+            "diff": -2006.77
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "153 ms.pdf",
+      "invoiceNumber": "153",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 5671,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹5671) differs from calculated total (₹8359.15) by > ₹2.00.",
+          "details": {
+            "headerTotal": 5671,
+            "calculatedTotalPreRound": 8359.15,
+            "diff": -2688.15
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "154 ms.pdf",
+      "invoiceNumber": "154",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12900,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12900) differs from calculated total (₹23662.7) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12900,
+            "calculatedTotalPreRound": 23662.7,
+            "diff": -10762.7
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "155 ms.pdf",
+      "invoiceNumber": "155",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12753,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12753) differs from calculated total (₹16669.02) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12753,
+            "calculatedTotalPreRound": 16669.02,
+            "diff": -3916.02
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "156 ms.pdf",
+      "invoiceNumber": "156",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 6440,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹6440) differs from calculated total (₹8344.18) by > ₹2.00.",
+          "details": {
+            "headerTotal": 6440,
+            "calculatedTotalPreRound": 8344.18,
+            "diff": -1904.18
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "157.pdf",
+      "invoiceNumber": "157",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 12024,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "158.pdf",
+      "invoiceNumber": "158",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 102936,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹102936) differs from calculated total (₹98518.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 102936,
+            "calculatedTotalPreRound": 98518.24,
+            "diff": 4417.76
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "159.pdf",
+      "invoiceNumber": "159",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 111108,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "160.pdf",
+      "invoiceNumber": "160",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 38529,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹38529) differs from calculated total (₹39539.14) by > ₹2.00.",
+          "details": {
+            "headerTotal": 38529,
+            "calculatedTotalPreRound": 39539.14,
+            "diff": -1010.14
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "161.pdf",
+      "invoiceNumber": "161",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 88872,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "162.pdf",
+      "invoiceNumber": "162",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 43141,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹43141) differs from calculated total (₹44271.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 43141,
+            "calculatedTotalPreRound": 44271.24,
+            "diff": -1130.24
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "163.pdf",
+      "invoiceNumber": "163",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 116782,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹116782) differs from calculated total (₹107183.73) by > ₹2.00.",
+          "details": {
+            "headerTotal": 116782,
+            "calculatedTotalPreRound": 107183.73,
+            "diff": 9598.27
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "164.pdf",
+      "invoiceNumber": "164",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 27304,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹27304) differs from calculated total (₹16407.38) by > ₹2.00.",
+          "details": {
+            "headerTotal": 27304,
+            "calculatedTotalPreRound": 16407.38,
+            "diff": 10896.62
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "165.pdf",
+      "invoiceNumber": "165",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 26059,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹26059) differs from calculated total (₹17492.05) by > ₹2.00.",
+          "details": {
+            "headerTotal": 26059,
+            "calculatedTotalPreRound": 17492.05,
+            "diff": 8566.95
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "166.pdf",
+      "invoiceNumber": "166",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 25237,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "167.pdf",
+      "invoiceNumber": "167",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 24774,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹24774) differs from calculated total (₹13968.92) by > ₹2.00.",
+          "details": {
+            "headerTotal": 24774,
+            "calculatedTotalPreRound": 13968.92,
+            "diff": 10805.08
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "168.pdf",
+      "invoiceNumber": "168",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 19514,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "169.pdf",
+      "invoiceNumber": "169",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 7000,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "170.pdf",
+      "invoiceNumber": "170",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 52549,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹52549) differs from calculated total (₹52999.03) by > ₹2.00.",
+          "details": {
+            "headerTotal": 52549,
+            "calculatedTotalPreRound": 52999.03,
+            "diff": -450.03
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "171.pdf",
+      "invoiceNumber": "171",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 32359,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹32359) differs from calculated total (₹18453.07) by > ₹2.00.",
+          "details": {
+            "headerTotal": 32359,
+            "calculatedTotalPreRound": 18453.07,
+            "diff": 13905.93
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "172.pdf",
+      "invoiceNumber": "172",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 39999,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹39999) differs from calculated total (₹45508.37) by > ₹2.00.",
+          "details": {
+            "headerTotal": 39999,
+            "calculatedTotalPreRound": 45508.37,
+            "diff": -5509.37
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "173.pdf",
+      "invoiceNumber": "173",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 38612,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "174.pdf",
+      "invoiceNumber": "174",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 52008,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "175.pdf",
+      "invoiceNumber": "175",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 34544,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "176.pdf",
+      "invoiceNumber": "176",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 10800,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "177.pdf",
+      "invoiceNumber": "177",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 26607,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "178.pdf",
+      "invoiceNumber": "178",
+      "customerNameCandidate": "PHONE :9448257106 E - Way No.",
+      "totalAmount": 35716,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "179.pdf",
+      "invoiceNumber": "179",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 27975,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "180.pdf",
+      "invoiceNumber": "180",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 15900,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "181.pdf",
+      "invoiceNumber": "181",
+      "customerNameCandidate": "PHONE :9632269313 E - Way No.",
+      "totalAmount": 41300,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "182.pdf",
+      "invoiceNumber": "182",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 20075,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "183.pdf",
+      "invoiceNumber": "183",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 34020,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "184.pdf",
+      "invoiceNumber": "184",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 4328,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "185.pdf",
+      "invoiceNumber": "185",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 5782,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "186.pdf",
+      "invoiceNumber": "186",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 9873,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹9873) differs from calculated total (₹10221.24) by > ₹2.00.",
+          "details": {
+            "headerTotal": 9873,
+            "calculatedTotalPreRound": 10221.24,
+            "diff": -348.24
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "187.pdf",
+      "invoiceNumber": "187",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 201781,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹201781) differs from calculated total (₹185239.56) by > ₹2.00.",
+          "details": {
+            "headerTotal": 201781,
+            "calculatedTotalPreRound": 185239.56,
+            "diff": 16541.44
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "188.pdf",
+      "invoiceNumber": "188",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 29438,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "189.pdf",
+      "invoiceNumber": "189",
+      "customerNameCandidate": "TECHNIC TECHNOLOGY",
+      "totalAmount": 14500,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "190.pdf",
+      "invoiceNumber": "190",
+      "customerNameCandidate": "PHONE :8971412530 E - Way No.",
+      "totalAmount": 33900,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "191.pdf",
+      "invoiceNumber": "191",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 19730,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹19730) differs from calculated total (₹14899.49) by > ₹2.00.",
+          "details": {
+            "headerTotal": 19730,
+            "calculatedTotalPreRound": 14899.49,
+            "diff": 4830.51
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "192.pdf",
+      "invoiceNumber": "192",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 41736,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹41736) differs from calculated total (₹42275.06) by > ₹2.00.",
+          "details": {
+            "headerTotal": 41736,
+            "calculatedTotalPreRound": 42275.06,
+            "diff": -539.06
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "193.pdf",
+      "invoiceNumber": "193",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 22347,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "194.pdf",
+      "invoiceNumber": "194",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 5782,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "195.pdf",
+      "invoiceNumber": "195",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6360,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "196.pdf",
+      "invoiceNumber": "196",
+      "customerNameCandidate": "PHONE :9677777879 E - Way No.",
+      "totalAmount": 14898,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹14898) differs from calculated total (₹14421.8) by > ₹2.00.",
+          "details": {
+            "headerTotal": 14898,
+            "calculatedTotalPreRound": 14421.8,
+            "diff": 476.2
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "197.pdf",
+      "invoiceNumber": "197",
+      "customerNameCandidate": "PHONE :9148834224 E - Way No.",
+      "totalAmount": 9208,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "198.pdf",
+      "invoiceNumber": "198",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 62300,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "199.pdf",
+      "invoiceNumber": "199",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 36535,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "200.pdf",
+      "invoiceNumber": "200",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 36567,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "201.pdf",
+      "invoiceNumber": "201",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 33529,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "202.pdf",
+      "invoiceNumber": "202",
+      "customerNameCandidate": "PHONE :7618766636 E - Way No.",
+      "totalAmount": 7548,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "203.pdf",
+      "invoiceNumber": "203",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6118,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "204.pdf",
+      "invoiceNumber": "204",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 24486,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹24486) differs from calculated total (₹20150.42) by > ₹2.00.",
+          "details": {
+            "headerTotal": 24486,
+            "calculatedTotalPreRound": 20150.42,
+            "diff": 4335.58
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "205.pdf",
+      "invoiceNumber": "205",
+      "customerNameCandidate": "PHONE :9035556144 E - Way No.",
+      "totalAmount": 19526,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "206.pdf",
+      "invoiceNumber": "206",
+      "customerNameCandidate": "PHONE :9448257106 E - Way No.",
+      "totalAmount": 12613,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹12613) differs from calculated total (₹12830.73) by > ₹2.00.",
+          "details": {
+            "headerTotal": 12613,
+            "calculatedTotalPreRound": 12830.73,
+            "diff": -217.73
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "207.pdf",
+      "invoiceNumber": "207",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6550,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "208.pdf",
+      "invoiceNumber": "208",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 6566,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "209.pdf",
+      "invoiceNumber": "209",
+      "customerNameCandidate": "PHONE :7338175866 E - Way No.",
+      "totalAmount": 6258,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "210.pdf",
+      "invoiceNumber": "210",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 6876,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "211.pdf",
+      "invoiceNumber": "211",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 20138,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "212.pdf",
+      "invoiceNumber": "212",
+      "customerNameCandidate": "PHONE :9164195516 E - Way No.",
+      "totalAmount": 6106,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "213.pdf",
+      "invoiceNumber": "213",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 29000,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹29000) differs from calculated total (₹40011.07) by > ₹2.00.",
+          "details": {
+            "headerTotal": 29000,
+            "calculatedTotalPreRound": 40011.07,
+            "diff": -11011.07
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    },
+    {
+      "sourcePdf": "214.pdf",
+      "invoiceNumber": "214",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 6550,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "215.pdf",
+      "invoiceNumber": "215",
+      "customerNameCandidate": "PHONE :9964012918 E - Way No.",
+      "totalAmount": 4106,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted"
+      ]
+    },
+    {
+      "sourcePdf": "216.pdf",
+      "invoiceNumber": "216",
+      "customerNameCandidate": "PHONE :9008919195 E - Way No.",
+      "totalAmount": 32194,
+      "isValidForImport": true,
+      "issues": [
+        {
+          "type": "REVIEW_FLAGGED",
+          "message": "Invoice is flagged for manual review in source CSV."
+        },
+        {
+          "type": "TOTAL_DISCREPANCY",
+          "message": "Header total (₹32194) differs from calculated total (₹43887.29) by > ₹2.00.",
+          "details": {
+            "headerTotal": 32194,
+            "calculatedTotalPreRound": 43887.29,
+            "diff": -11693.29
+          }
+        }
+      ],
+      "reviewNotes": [
+        "Invoice number not extracted; No product rows matched parser"
+      ]
+    }
+  ]
+}
