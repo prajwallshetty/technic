@@ -485,6 +485,12 @@ export function NewQuotationButton({
                       <span className="numeric">{formatCurrency(totals.sgstTotal)}</span>
                     </div>
                   ) : null}
+                  {(totals as any).igstTotal > 0 ? (
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>IGST</span>
+                      <span className="numeric">{formatCurrency((totals as any).igstTotal)}</span>
+                    </div>
+                  ) : null}
                 </>
               ) : null}
               <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">

@@ -60,7 +60,7 @@ export default async function ConvertQuotationPage({ params }: { params: Promise
             </TableBody>
           </Table>
           <div className="flex justify-between border-t border-border px-4 pt-3 text-base font-semibold">
-            <span>Total</span>
+            <span>Quotation total</span>
             <span className="numeric">{formatCurrency(quotation.totalAmount)}</span>
           </div>
           <div className="px-4 pt-2">

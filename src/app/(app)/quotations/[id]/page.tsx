@@ -155,12 +155,29 @@ export default async function QuotationDetailPage({
 
             <Separator className="my-4" />
 
-            <div className="space-y-1.5 px-4 text-sm">
-              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="numeric">{formatCurrency(quotation.subtotal)}</span></div>
+            <div className="space-y-1.5 px-4 text-sm font-medium">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Items subtotal</span>
+                <span className="numeric">{formatCurrency(quotation.subtotal)}</span>
+              </div>
               {Number(quotation.discountAmount) > 0 ? (
-                <div className="flex justify-between">
+                <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
                   <div>
-                    <span className="text-muted-foreground">Discount</span>
+                    <span>
+                      Bill discount (
+                      {(() => {
+                        const sub = Number(quotation.subtotal);
+                        const disc = Number(quotation.discountAmount);
+                        if (sub > 0) {
+                          const pct = (disc / sub) * 100;
+                          if (Math.abs(pct - Math.round(pct)) < 0.01) {
+                            return `${Math.round(pct)}%`;
+                          }
+                        }
+                        return "flat";
+                      })()}
+                      )
+                    </span>
                     {quotation.discountRemarks ? (
                       <span className="ml-2 text-xs text-muted-foreground font-normal">
                         ({quotation.discountRemarks})
@@ -172,20 +189,43 @@ export default async function QuotationDetailPage({
               ) : null}
               {isGst ? (
                 <>
-                  <div className="flex justify-between"><span className="text-muted-foreground">Taxable value</span><span className="numeric">{formatCurrency(quotation.taxableAmount)}</span></div>
-                  {Number(quotation.cgstAmount) > 0 ? <div className="flex justify-between"><span className="text-muted-foreground">CGST</span><span className="numeric">{formatCurrency(quotation.cgstAmount)}</span></div> : null}
-                  {Number(quotation.sgstAmount) > 0 ? <div className="flex justify-between"><span className="text-muted-foreground">SGST</span><span className="numeric">{formatCurrency(quotation.sgstAmount)}</span></div> : null}
-                  {Number(quotation.igstAmount) > 0 ? <div className="flex justify-between"><span className="text-muted-foreground">IGST</span><span className="numeric">{formatCurrency(quotation.igstAmount)}</span></div> : null}
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Taxable value</span>
+                    <span className="numeric">{formatCurrency(quotation.taxableAmount)}</span>
+                  </div>
+                  {Number(quotation.cgstAmount) > 0 ? (
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>CGST</span>
+                      <span className="numeric">{formatCurrency(quotation.cgstAmount)}</span>
+                    </div>
+                  ) : null}
+                  {Number(quotation.sgstAmount) > 0 ? (
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>SGST</span>
+                      <span className="numeric">{formatCurrency(quotation.sgstAmount)}</span>
+                    </div>
+                  ) : null}
+                  {Number(quotation.igstAmount) > 0 ? (
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>IGST</span>
+                      <span className="numeric">{formatCurrency(quotation.igstAmount)}</span>
+                    </div>
+                  ) : null}
                 </>
               ) : null}
-              {Number(quotation.roundOff) !== 0 ? (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Round off</span>
-                  <span className="numeric">{formatCurrency(quotation.roundOff)}</span>
-                </div>
-              ) : null}
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Round off</span>
+                <span className="numeric">
+                  {Number(quotation.roundOff) === 0
+                    ? "0.00"
+                    : Number(quotation.roundOff) > 0
+                    ? `+${formatCurrency(quotation.roundOff)}`
+                    : formatCurrency(quotation.roundOff)}
+                </span>
+              </div>
               <div className="flex justify-between border-t border-border pt-2 text-base font-semibold">
-                <span>Total</span><span className="numeric">{formatCurrency(quotation.totalAmount)}</span>
+                <span>Quotation total</span>
+                <span className="numeric">{formatCurrency(quotation.totalAmount)}</span>
               </div>
             </div>
           </CardContent>

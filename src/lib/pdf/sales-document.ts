@@ -60,6 +60,13 @@ export interface SalesDocTotals {
   total: number;
   received?: number;
   due?: number;
+  customLines?: {
+    label: string;
+    value: string;
+    subText?: string;
+    strong?: boolean;
+    color?: string;
+  }[];
 }
 
 export interface SalesDocData {
@@ -92,9 +99,9 @@ const M = 24; // page margin == outer border inset
 const W = A4.w - M * 2;
 const PAD = 5;
 
-const nf = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const money = (v: number) => nf.format(Math.round((v + Number.EPSILON) * 100) / 100);
-const rupees = (v: number) => `₹ ${money(v)}`;
+export const nf = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+export const money = (v: number) => nf.format(Math.round((v + Number.EPSILON) * 100) / 100);
+export const rupees = (v: number) => `₹ ${money(v)}`;
 
 type Doc = InstanceType<typeof PDFDocument>;
 
@@ -257,23 +264,28 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
     subText?: string;
     strong?: boolean;
     head?: boolean;
+    color?: string;
   }
   const lines: TotalsLine[] = [];
-  lines.push({ label: "Gross Amount", value: rupees(t.gross) });
-  if (t.discount > 0) {
-    lines.push({
-      label: "Less: Discount",
-      value: `- ${rupees(t.discount)}`,
-      subText: data.discountRemarks?.trim() ? `Reason: ${data.discountRemarks.trim()}` : undefined,
-    });
+  if (t.customLines && t.customLines.length > 0) {
+    lines.push(...t.customLines);
+  } else {
+    lines.push({ label: "Gross Amount", value: rupees(t.gross) });
+    if (t.discount > 0) {
+      lines.push({
+        label: "Less: Discount",
+        value: `- ${rupees(t.discount)}`,
+        subText: data.discountRemarks?.trim() ? `Reason: ${data.discountRemarks.trim()}` : undefined,
+      });
+    }
+    if (data.isGst) {
+      lines.push({ label: "Taxable Value", value: rupees(t.taxable) });
+      if (t.cgst > 0) lines.push({ label: "CGST", value: rupees(t.cgst) });
+      if (t.sgst > 0) lines.push({ label: "SGST", value: rupees(t.sgst) });
+      if (t.igst > 0) lines.push({ label: "IGST", value: rupees(t.igst) });
+    }
+    if (t.roundOff !== 0) lines.push({ label: "Round Off", value: `${t.roundOff < 0 ? "- " : ""}${rupees(Math.abs(t.roundOff))}` });
   }
-  if (data.isGst) {
-    lines.push({ label: "Taxable Value", value: rupees(t.taxable) });
-    if (t.cgst > 0) lines.push({ label: "CGST", value: rupees(t.cgst) });
-    if (t.sgst > 0) lines.push({ label: "SGST", value: rupees(t.sgst) });
-    if (t.igst > 0) lines.push({ label: "IGST", value: rupees(t.igst) });
-  }
-  if (t.roundOff !== 0) lines.push({ label: "Round Off", value: `${t.roundOff < 0 ? "- " : ""}${rupees(Math.abs(t.roundOff))}` });
   const lineH = 16;
   const totalH = 24;
   const extra: typeof lines = [];
@@ -353,8 +365,8 @@ function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number 
   let ry = y + 4;
   const valX = rx + PAD;
   for (const l of lines) {
-    put(doc, l.label, valX, ry + 3, { w: valW, size: 8.5 });
-    put(doc, l.value, valX, ry + 3, { w: valW, size: 8.5, align: "right" });
+    put(doc, l.label, valX, ry + 3, { w: valW, size: 8.5, color: l.color });
+    put(doc, l.value, valX, ry + 3, { w: valW, size: 8.5, align: "right", color: l.color });
     ry += lineH;
     if (l.subText) {
       const subH = put(doc, l.subText, valX, ry, { w: valW, size: 7.5, color: C.muted });

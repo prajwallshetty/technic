@@ -11,7 +11,7 @@ import {
   type PDFTableRow,
   type SummaryLine,
 } from "./pdf-builder";
-import { renderSalesDocument } from "./sales-document";
+import { renderSalesDocument, rupees } from "./sales-document";
 
 /**
  * Technic Technologies document templates. One generator per business
@@ -323,21 +323,90 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
 
   const isGst = quotation.taxMode === "GST";
   const company = await getCompanyProfile(quotation.firmId);
-  const { lines, discountExTax } = salesDocLines(quotation.lines, isGst, false);
+  const { lines } = salesDocLines(quotation.lines, isGst, false);
 
-  const taxable = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
-  const discount = isGst
-    ? (discountExTax > 0 ? discountExTax : num(quotation.discountAmount))
-    : num(quotation.discountAmount);
+  const subtotalVal = num(quotation.subtotal);
+  const discountVal = num(quotation.discountAmount);
+  const taxableVal = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
+  const cgstVal = num(quotation.cgstAmount);
+  const sgstVal = num(quotation.sgstAmount);
+  const igstVal = num(quotation.igstAmount);
+  const roundOffVal = num(quotation.roundOff);
+  const totalVal = num(quotation.totalAmount);
+
+  let discountLabel = "Bill discount (flat)";
+  if (subtotalVal > 0 && discountVal > 0) {
+    const pct = (discountVal / subtotalVal) * 100;
+    if (Math.abs(pct - Math.round(pct)) < 0.01) {
+      discountLabel = `Bill discount (${Math.round(pct)}%)`;
+    }
+  }
+
+  const customLines: { label: string; value: string; subText?: string; color?: string }[] = [];
+
+  // 1. Items subtotal
+  customLines.push({
+    label: "Items subtotal",
+    value: rupees(subtotalVal),
+  });
+
+  // 2. Bill discount
+  if (discountVal > 0) {
+    customLines.push({
+      label: discountLabel,
+      value: `- ${rupees(discountVal)}`,
+      subText: quotation.discountRemarks?.trim() ? `Reason: ${quotation.discountRemarks.trim()}` : undefined,
+      color: "#059669",
+    });
+  }
+
+  // 3. Taxable value, CGST, SGST, IGST (if GST mode)
+  if (isGst) {
+    customLines.push({
+      label: "Taxable value",
+      value: rupees(taxableVal),
+    });
+    if (cgstVal > 0) {
+      customLines.push({
+        label: "CGST",
+        value: rupees(cgstVal),
+      });
+    }
+    if (sgstVal > 0) {
+      customLines.push({
+        label: "SGST",
+        value: rupees(sgstVal),
+      });
+    }
+    if (igstVal > 0) {
+      customLines.push({
+        label: "IGST",
+        value: rupees(igstVal),
+      });
+    }
+  }
+
+  // 4. Round off
+  const roundOffStr =
+    roundOffVal === 0
+      ? "0.00"
+      : `${roundOffVal < 0 ? "- " : "+ "}${rupees(Math.abs(roundOffVal))}`;
+
+  customLines.push({
+    label: "Round off",
+    value: roundOffStr,
+  });
+
   const totals = {
-    gross: isGst ? taxable + discount : num(quotation.subtotal),
-    discount,
-    taxable,
-    cgst: num(quotation.cgstAmount),
-    sgst: num(quotation.sgstAmount),
-    igst: num(quotation.igstAmount),
-    roundOff: num(quotation.roundOff),
-    total: num(quotation.totalAmount),
+    gross: subtotalVal,
+    discount: discountVal,
+    taxable: taxableVal,
+    cgst: cgstVal,
+    sgst: sgstVal,
+    igst: igstVal,
+    roundOff: roundOffVal,
+    total: totalVal,
+    customLines,
   };
 
   const customer = quotation.customer;
@@ -371,7 +440,7 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       ],
       lines,
       totals,
-      totalLabel: "Quotation Total",
+      totalLabel: "Quotation total",
       bankDetails: company.bankDetails || undefined,
       terms: quotation.terms || company.termsConditions,
       notes: quotation.notes,
