@@ -16,8 +16,11 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:sync-permissions": "tsx prisma/sync-permissions.ts",
     "db:studio": "prisma studio",
+    "build:historical-pipeline": "node scripts/build-historical-pipeline.cjs",
+    "seed:historical-products": "tsx --env-file=.env --conditions=react-server scripts/seed-historical-products.ts",
     "seed:historical": "tsx --env-file=.env --conditions=react-server scripts/seed-historical-invoices.ts",
     "rollback:historical": "tsx --env-file=.env --conditions=react-server scripts/rollback-historical-invoices.ts",
+    "verify:audit": "tsx --env-file=.env --conditions=react-server scripts/verify-audit.ts",
     "postinstall": "prisma generate"
   },
   "prisma": {
@@ -45,6 +48,7 @@
     "lucide-react": "^1.45.0",
     "next": "^16.3.4",
     "next-auth": "^5.0.0-beta.32",
+    "pdf-parse": "^1.1.1",
     "pdfkit": "^0.20.2",
     "pg": "^8.16.3",
     "react": "^19.3.0",
