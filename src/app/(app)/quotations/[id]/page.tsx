@@ -44,6 +44,7 @@ export default async function QuotationDetailPage({
   if (quotation.firmId !== user.activeFirmId) notFound();
 
   const isGst = quotation.taxMode === "GST";
+  const hasLineDiscount = Number(quotation.discountAmount) > 0 || quotation.lines.some((l) => Number(l.discountPercent) > 0);
   const canConvert = quotation.status !== "CONVERTED" && user.permissions.includes("quotation.convert");
   const canEdit =
     quotation.status !== "CONVERTED" &&
@@ -123,32 +124,63 @@ export default async function QuotationDetailPage({
                   <TableRow>
                     <TableHead className="pl-4">#</TableHead>
                     <TableHead>Item</TableHead>
+                    {isGst ? <TableHead className="hidden sm:table-cell">HSN</TableHead> : null}
                     <TableHead className="text-right">Qty</TableHead>
                     <TableHead className="text-right">Rate</TableHead>
+                    {hasLineDiscount ? <TableHead className="text-right">Disc %</TableHead> : null}
+                    {isGst ? <TableHead className="hidden text-right sm:table-cell">Taxable</TableHead> : null}
+                    {isGst ? <TableHead className="hidden text-right sm:table-cell">GST</TableHead> : null}
                     <TableHead className="pr-4 text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {quotation.lines.map((line, index) => (
-                    <TableRow key={line.id}>
-                      <TableCell className="pl-4 numeric">{index + 1}</TableCell>
-                      <TableCell>
-                        <p className="font-medium">{line.description}</p>
-                        {line.product?.subName ? <p className="text-xs text-muted-foreground">{line.product.subName}</p> : null}
-                        {line.serialNumbers ? (
-                          <p className="text-xs text-muted-foreground">SN: {Array.isArray(line.serialNumbers) ? line.serialNumbers.join(", ") : line.serialNumbers}</p>
+                  {quotation.lines.map((line, index) => {
+                    const gross = Math.round((line.quantity * Number(line.unitPrice) + Number.EPSILON) * 100) / 100;
+                    const discPct = Number(line.discountPercent || 0);
+                    const discAmount = Math.round(((gross * discPct) / 100 + Number.EPSILON) * 100) / 100;
+                    const netGross = Math.round((gross - discAmount + Number.EPSILON) * 100) / 100;
+                    const gstRate = Number(line.gstRate || 0);
+                    const taxableValue = isGst && gstRate > 0
+                      ? Math.round((netGross / (1 + gstRate / 100) + Number.EPSILON) * 100) / 100
+                      : netGross;
+                    const gstAmount = Math.round((netGross - taxableValue + Number.EPSILON) * 100) / 100;
+
+                    return (
+                      <TableRow key={line.id}>
+                        <TableCell className="pl-4 numeric">{index + 1}</TableCell>
+                        <TableCell>
+                          <p className="font-medium">{line.description}</p>
+                          {line.product?.subName ? <p className="text-xs text-muted-foreground">{line.product.subName}</p> : null}
+                          {line.serialNumbers && (Array.isArray(line.serialNumbers) ? line.serialNumbers.length > 0 : String(line.serialNumbers).trim()) ? (
+                            <p className="text-xs text-muted-foreground">SN: {Array.isArray(line.serialNumbers) ? line.serialNumbers.join(", ") : line.serialNumbers}</p>
+                          ) : null}
+                        </TableCell>
+                        {isGst ? (
+                          <TableCell className="hidden numeric sm:table-cell">{line.hsnCode || "—"}</TableCell>
                         ) : null}
-                      </TableCell>
-                      {isGst ? (
-                        <TableCell className="hidden numeric sm:table-cell">{line.hsnCode || "—"}</TableCell>
-                      ) : null}
-                      <TableCell className="text-right numeric">{line.quantity}</TableCell>
-                      <TableCell className="text-right numeric">{formatCurrency(line.unitPrice)}</TableCell>
-                      <TableCell className="pr-4 text-right numeric font-medium">
-                        {formatCurrency(line.lineTotal)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        <TableCell className="text-right numeric">{line.quantity}</TableCell>
+                        <TableCell className="text-right numeric">{formatCurrency(line.unitPrice)}</TableCell>
+                        {hasLineDiscount ? (
+                          <TableCell className="text-right numeric">
+                            {discPct > 0 ? `${discPct}%` : "—"}
+                          </TableCell>
+                        ) : null}
+                        {isGst ? (
+                          <TableCell className="hidden text-right numeric sm:table-cell">
+                            {formatCurrency(taxableValue)}
+                          </TableCell>
+                        ) : null}
+                        {isGst ? (
+                          <TableCell className="hidden text-right numeric sm:table-cell">
+                            {formatCurrency(gstAmount)}
+                          </TableCell>
+                        ) : null}
+                        <TableCell className="pr-4 text-right numeric font-medium">
+                          {formatCurrency(line.lineTotal)}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>

@@ -191,7 +191,7 @@ export function NewQuotationButton({
         validUntil: validUntil || null,
         notes: notes || null,
         discountRemarks: discountRemarks || null,
-        manualRoundOff: totals.roundOff,
+        manualRoundOff: isManualRoundOff ? parseNumericInput(roundOff) : null,
         lines: validLines.map((line, index) => {
           const product = productById.get(line.productId);
           return {

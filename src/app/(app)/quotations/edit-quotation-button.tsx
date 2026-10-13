@@ -324,7 +324,7 @@ export function EditQuotationButton({
         terms: terms || null,
         discountRemarks: discountRemarks || null,
         status,
-        manualRoundOff: totals.roundOff,
+        manualRoundOff: isManualRoundOff ? parseNumericInput(roundOff) : null,
         lines: validLines.map((line, index) => {
           const product = productById.get(line.productId);
           return {

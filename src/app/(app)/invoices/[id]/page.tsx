@@ -47,6 +47,7 @@ export default async function InvoiceDetailPage({
   if (invoice.firmId !== user.activeFirmId) notFound();
 
   const isTaxInvoice = invoice.kind === "TAX_INVOICE";
+  const hasDiscount = Number(invoice.discountAmount) > 0 || invoice.lines.some((l) => Number(l.discountPercent) > 0);
   const canCancel = invoice.status !== "CANCELLED" && user.permissions.includes("invoice.cancel");
   const canReturn =
     invoice.status !== "CANCELLED" && user.permissions.includes("sales_return.create");
@@ -157,6 +158,7 @@ export default async function InvoiceDetailPage({
                     {isTaxInvoice ? <TableHead className="hidden sm:table-cell">HSN</TableHead> : null}
                     <TableHead className="text-right">Qty</TableHead>
                     <TableHead className="text-right">Rate</TableHead>
+                    {hasDiscount ? <TableHead className="text-right">Disc %</TableHead> : null}
                     {isTaxInvoice ? <TableHead className="hidden text-right sm:table-cell">Taxable</TableHead> : null}
                     {isTaxInvoice ? <TableHead className="hidden text-right sm:table-cell">GST</TableHead> : null}
                     <TableHead className="pr-4 text-right">Amount</TableHead>
@@ -178,6 +180,11 @@ export default async function InvoiceDetailPage({
                       ) : null}
                       <TableCell className="text-right numeric">{line.quantity}</TableCell>
                       <TableCell className="text-right numeric">{formatCurrency(line.unitPrice)}</TableCell>
+                      {hasDiscount ? (
+                        <TableCell className="text-right numeric">
+                          {Number(line.discountPercent) > 0 ? `${Number(line.discountPercent)}%` : "—"}
+                        </TableCell>
+                      ) : null}
                       {isTaxInvoice ? (
                         <TableCell className="hidden text-right numeric sm:table-cell">
                           {formatCurrency(line.taxableValue)}

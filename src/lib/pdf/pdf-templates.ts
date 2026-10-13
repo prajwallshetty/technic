@@ -185,7 +185,7 @@ function salesDocLines(lines: SalesLineSource[], isGst: boolean, showLineDiscoun
     const lineTotal = num(line.lineTotal as number);
     const rateExTax = gst > 0 ? unit / (1 + gst / 100) : unit;
     const netTaxable = line.taxableValue != null ? num(line.taxableValue as number) : gst > 0 ? lineTotal / (1 + gst / 100) : lineTotal;
-    discountExTax += rateExTax * qty * (disc / 100);
+    discountExTax += Math.max(0, (rateExTax * qty) - netTaxable);
     const serials = Array.isArray(line.serialNumbers)
       ? line.serialNumbers
       : (line.serialNumbers ?? "").split("\n");
@@ -215,7 +215,7 @@ function salesDocLines(lines: SalesLineSource[], isGst: boolean, showLineDiscoun
       amount,
     };
   });
-  return { lines: mapped, discountExTax };
+  return { lines: mapped, discountExTax: Math.round((discountExTax + Number.EPSILON) * 100) / 100 };
 }
 
 export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: Buffer; fileName: string }> {
@@ -235,7 +235,8 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
 
   const isGst = invoice.kind === "TAX_INVOICE";
   const company = await getCompanyProfile(invoice.firmId);
-  const { lines, discountExTax } = salesDocLines(invoice.lines, isGst, false);
+  const hasLineDiscount = num(invoice.discountAmount) > 0 || invoice.lines.some((l) => num(l.discountPercent) > 0);
+  const { lines, discountExTax } = salesDocLines(invoice.lines, isGst, hasLineDiscount);
 
   const taxable = num(invoice.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
   const discount = isGst
@@ -292,7 +293,7 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
       terms: invoice.terms || company.termsConditions,
       notes: invoice.notes,
       discountRemarks: invoice.discountRemarks,
-      showLineDiscount: false,
+      showLineDiscount: hasLineDiscount,
       signatoryFor: company.name,
       preparedBy: invoice.createdBy?.name,
       cancelledReason: invoice.status === "CANCELLED" ? invoice.cancellationReason || "Cancelled" : null,
@@ -323,90 +324,23 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
 
   const isGst = quotation.taxMode === "GST";
   const company = await getCompanyProfile(quotation.firmId);
-  const { lines } = salesDocLines(quotation.lines, isGst, false);
+  const hasLineDiscount = num(quotation.discountAmount) > 0 || quotation.lines.some((l) => num(l.discountPercent) > 0);
+  const { lines, discountExTax } = salesDocLines(quotation.lines, isGst, hasLineDiscount);
 
-  const subtotalVal = num(quotation.subtotal);
-  const discountVal = num(quotation.discountAmount);
-  const taxableVal = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
-  const cgstVal = num(quotation.cgstAmount);
-  const sgstVal = num(quotation.sgstAmount);
-  const igstVal = num(quotation.igstAmount);
-  const roundOffVal = num(quotation.roundOff);
-  const totalVal = num(quotation.totalAmount);
-
-  let discountLabel = "Bill discount (flat)";
-  if (subtotalVal > 0 && discountVal > 0) {
-    const pct = (discountVal / subtotalVal) * 100;
-    if (Math.abs(pct - Math.round(pct)) < 0.01) {
-      discountLabel = `Bill discount (${Math.round(pct)}%)`;
-    }
-  }
-
-  const customLines: { label: string; value: string; subText?: string; color?: string }[] = [];
-
-  // 1. Items subtotal
-  customLines.push({
-    label: "Items subtotal",
-    value: rupees(subtotalVal),
-  });
-
-  // 2. Bill discount
-  if (discountVal > 0) {
-    customLines.push({
-      label: discountLabel,
-      value: `- ${rupees(discountVal)}`,
-      subText: quotation.discountRemarks?.trim() ? `Reason: ${quotation.discountRemarks.trim()}` : undefined,
-      color: "#059669",
-    });
-  }
-
-  // 3. Taxable value, CGST, SGST, IGST (if GST mode)
-  if (isGst) {
-    customLines.push({
-      label: "Taxable value",
-      value: rupees(taxableVal),
-    });
-    if (cgstVal > 0) {
-      customLines.push({
-        label: "CGST",
-        value: rupees(cgstVal),
-      });
-    }
-    if (sgstVal > 0) {
-      customLines.push({
-        label: "SGST",
-        value: rupees(sgstVal),
-      });
-    }
-    if (igstVal > 0) {
-      customLines.push({
-        label: "IGST",
-        value: rupees(igstVal),
-      });
-    }
-  }
-
-  // 4. Round off
-  const roundOffStr =
-    roundOffVal === 0
-      ? "0.00"
-      : `${roundOffVal < 0 ? "- " : "+ "}${rupees(Math.abs(roundOffVal))}`;
-
-  customLines.push({
-    label: "Round off",
-    value: roundOffStr,
-  });
+  const taxable = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
+  const discount = isGst
+    ? (discountExTax > 0 ? discountExTax : num(quotation.discountAmount))
+    : num(quotation.discountAmount);
 
   const totals = {
-    gross: subtotalVal,
-    discount: discountVal,
-    taxable: taxableVal,
-    cgst: cgstVal,
-    sgst: sgstVal,
-    igst: igstVal,
-    roundOff: roundOffVal,
-    total: totalVal,
-    customLines,
+    gross: isGst ? taxable + discount : num(quotation.subtotal),
+    discount,
+    taxable,
+    cgst: num(quotation.cgstAmount),
+    sgst: num(quotation.sgstAmount),
+    igst: num(quotation.igstAmount),
+    roundOff: num(quotation.roundOff),
+    total: num(quotation.totalAmount),
   };
 
   const customer = quotation.customer;
@@ -430,7 +364,7 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
             ? [[customer.addressLine, customer.city, customer.state, customer.pincode].filter(Boolean).join(", ")]
             : []),
           ...(customer.gstin ? [`GSTIN: ${customer.gstin}`] : []),
-          `Ph: ${customer.phone}`,
+          ...(customer.phone ? [`Ph: ${customer.phone}`] : []),
         ],
       },
       sideHeading: "Quotation Details",
@@ -445,7 +379,7 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       terms: quotation.terms || company.termsConditions,
       notes: quotation.notes,
       discountRemarks: quotation.discountRemarks,
-      showLineDiscount: false,
+      showLineDiscount: hasLineDiscount,
       signatoryFor: company.name,
       preparedBy: quotation.createdBy?.name,
     },

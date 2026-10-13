@@ -102,7 +102,13 @@ async function buildLinesWithTax(
 // ---------------------------------------------------------------------------
 
 export async function createQuotation(input: QuotationInput) {
-  const sameState = isSameState(null, null); // quotations are indicative only
+  const customer = await prisma.customer.findUnique({
+    where: { id: input.customerId },
+    select: { state: true, city: true },
+  });
+  const sellerState = await sellerStateFor(input.firmId, input.branchId);
+  const supplyState = input.taxMode === "GST" ? (customer?.state ?? customer?.city ?? null) : null;
+  const sameState = isSameState(sellerState, supplyState);
   const { enriched, summary } = await buildLinesWithTax(input.lines, input.taxMode, sameState, input.manualRoundOff);
 
   const quotationNumber = await nextDocumentNumber(
@@ -213,6 +219,13 @@ export async function updateQuotation(input: UpdateQuotationInput) {
 
   const targetCustomerId = input.customerId ?? quotation.customerId;
   const targetTaxMode = input.taxMode ?? quotation.taxMode;
+  const customer = await prisma.customer.findUnique({
+    where: { id: targetCustomerId },
+    select: { state: true, city: true },
+  });
+  const sellerState = await sellerStateFor(input.firmId, quotation.branchId);
+  const supplyState = targetTaxMode === "GST" ? (customer?.state ?? customer?.city ?? null) : null;
+  const sameState = isSameState(sellerState, supplyState);
   const linesToUse = input.lines ?? quotation.lines.map((l) => ({
     productId: l.productId,
     variantId: l.variantId,
@@ -224,7 +237,6 @@ export async function updateQuotation(input: UpdateQuotationInput) {
     descriptionOverride: l.description,
   }));
 
-  const sameState = isSameState(null, null);
   const { enriched, summary } = await buildLinesWithTax(linesToUse, targetTaxMode, sameState, input.manualRoundOff);
 
   return prisma.$transaction(async (tx) => {
@@ -1362,6 +1374,7 @@ export async function convertQuotationToInvoice(
     notes: quotation.notes,
     terms: quotation.terms,
     discountRemarks: quotation.discountRemarks,
+    manualRoundOff: quotation.roundOff != null ? Number(quotation.roundOff) : undefined,
     paymentAmount: options.paymentAmount,
     paymentMethod: options.paymentMethod,
     userId: options.userId,
