@@ -16,6 +16,22 @@ import type {
   ValidatedInvoice,
 } from "./types";
 
+async function withRetry<T>(fn: () => Promise<T>, attempts = 4, delayMs = 1000): Promise<T> {
+  let lastError: any;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      lastError = err;
+      if (i < attempts - 1) {
+        console.warn(`Database connection retry (${i + 1}/${attempts}): ${err?.message || err}`);
+        await new Promise((resolve) => setTimeout(resolve, delayMs * (i + 1)));
+      }
+    }
+  }
+  throw lastError;
+}
+
 export class HistoricalImporter {
   private options: SeederOptions;
 
@@ -79,15 +95,19 @@ export class HistoricalImporter {
     console.log(`\nInitializing matchers and pre-loading existing records...`);
 
     // Auto-resolve active branch in this database if branchId is empty or not in current DB
-    const branchInDb = await prisma.branch.findFirst({
-      where: { firmId: this.options.firmId, isActive: true },
-      select: { id: true, name: true, code: true },
-    });
+    const branchInDb = await withRetry(() =>
+      prisma.branch.findFirst({
+        where: { firmId: this.options.firmId, isActive: true },
+        select: { id: true, name: true, code: true },
+      })
+    );
     if (branchInDb) {
       const explicitBranchExists = this.options.branchId
-        ? await prisma.branch.findFirst({
-            where: { id: this.options.branchId, firmId: this.options.firmId },
-          })
+        ? await withRetry(() =>
+            prisma.branch.findFirst({
+              where: { id: this.options.branchId, firmId: this.options.firmId },
+            })
+          )
         : null;
       if (!explicitBranchExists) {
         this.options.branchId = branchInDb.id;
@@ -102,10 +122,12 @@ export class HistoricalImporter {
     await productMatcher.init(this.options.dataDir);
 
     // Load existing invoice numbers in firm
-    const existingInvoices = await prisma.invoice.findMany({
-      where: { firmId: this.options.firmId },
-      select: { invoiceNumber: true },
-    });
+    const existingInvoices = await withRetry(() =>
+      prisma.invoice.findMany({
+        where: { firmId: this.options.firmId },
+        select: { invoiceNumber: true },
+      })
+    );
     const existingInvoiceNumbers = new Set(existingInvoices.map((i) => i.invoiceNumber));
     console.log(`  • Existing invoices in database: ${existingInvoiceNumbers.size}`);
 
@@ -175,9 +197,9 @@ export class HistoricalImporter {
           continue;
         }
 
-        // Bounded database transaction per invoice
-        await prisma.$transaction(async (tx) => {
-          const created = await tx.invoice.create({
+        // Bounded database write per invoice with retry
+        await withRetry(async () => {
+          await prisma.invoice.create({
             data: {
               firmId: this.options.firmId,
               branchId: this.options.branchId,
@@ -223,7 +245,12 @@ export class HistoricalImporter {
           invoicesActuallyImported++;
           lineItemsImported += inv.lines.length;
         });
+
+        if (invoicesActuallyImported % 10 === 0) {
+          console.log(`  • Imported ${invoicesActuallyImported} invoices...`);
+        }
       }
+      console.log(`  • Import complete: ${invoicesActuallyImported} invoices, ${lineItemsImported} line items inserted.`);
     }
 
     // 8. Run sample verification test if requested

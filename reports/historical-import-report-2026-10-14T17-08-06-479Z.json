@@ -1,0 +1,854 @@
+{
+  "startedAt": "2026-10-14T17:05:04.091Z",
+  "completedAt": "2026-10-14T17:08:06.479Z",
+  "mode": "IMPORT",
+  "sourceFiles": {
+    "invoicesPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoices.csv",
+    "itemsPath": "E:\\growthbridge\\technic\\data\\historical-csv\\invoice_items.csv",
+    "customersPath": "E:\\growthbridge\\technic\\data\\historical-csv\\customers.csv",
+    "reviewRequiredPath": "E:\\growthbridge\\technic\\data\\historical-csv\\review_required.csv"
+  },
+  "totalCustomersProcessed": 16,
+  "customersMatched": 16,
+  "customersCreated": 0,
+  "customersFailed": 0,
+  "totalInvoicesInCsv": 81,
+  "invoicesFlaggedForReview": 0,
+  "invoicesMissingNumber": 0,
+  "invoicesWithDiscrepancies": 0,
+  "invoicesValidForImport": 69,
+  "invoicesActuallyImported": 69,
+  "invoicesSkippedAsDuplicate": 0,
+  "invoicesRejected": 12,
+  "totalLineItemsProcessed": 262,
+  "lineItemsMatchedToProduct": 262,
+  "lineItemsUnresolvedProduct": 0,
+  "lineItemsImported": 242,
+  "invoices": [
+    {
+      "sourcePdf": "136.pdf",
+      "invoiceNumber": "136",
+      "customerNameCandidate": "MH AUTOMOBILES (9448142881)",
+      "totalAmount": 32155,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '136' already exists in the database.",
+          "details": {
+            "invoiceNumber": "136"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "137.pdf",
+      "invoiceNumber": "137",
+      "customerNameCandidate": "MH AUTOMOBILES (9448142881)",
+      "totalAmount": 968,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '137' already exists in the database.",
+          "details": {
+            "invoiceNumber": "137"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "138.pdf",
+      "invoiceNumber": "138",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 13904,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '138' already exists in the database.",
+          "details": {
+            "invoiceNumber": "138"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "139.pdf",
+      "invoiceNumber": "139",
+      "customerNameCandidate": "EVERGREEN TRADERS (9677777879)",
+      "totalAmount": 13428,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '139' already exists in the database.",
+          "details": {
+            "invoiceNumber": "139"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "140.pdf",
+      "invoiceNumber": "140",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 11703,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '140' already exists in the database.",
+          "details": {
+            "invoiceNumber": "140"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "141.pdf",
+      "invoiceNumber": "141",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 5851,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '141' already exists in the database.",
+          "details": {
+            "invoiceNumber": "141"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "142.pdf",
+      "invoiceNumber": "142",
+      "customerNameCandidate": "RE CARE (9964355954)",
+      "totalAmount": 11200,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '142' already exists in the database.",
+          "details": {
+            "invoiceNumber": "142"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "143.pdf",
+      "invoiceNumber": "143",
+      "customerNameCandidate": "EVERGREEN TRADERS (9677777879)",
+      "totalAmount": 12735,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '143' already exists in the database.",
+          "details": {
+            "invoiceNumber": "143"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "144.pdf",
+      "invoiceNumber": "144",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 82500,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '144' already exists in the database.",
+          "details": {
+            "invoiceNumber": "144"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "145 Y PRISTAGE.pdf",
+      "invoiceNumber": "145",
+      "customerNameCandidate": "YOUR PRESTIGE (9008919195)",
+      "totalAmount": 51633,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '145' already exists in the database.",
+          "details": {
+            "invoiceNumber": "145"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "146.pdf",
+      "invoiceNumber": "146",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 14415,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '146' already exists in the database.",
+          "details": {
+            "invoiceNumber": "146"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "147 ms bat.pdf",
+      "invoiceNumber": "147",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 14415,
+      "isValidForImport": false,
+      "issues": [
+        {
+          "type": "DUPLICATE_INVOICE_NUMBER",
+          "message": "Invoice number '147' already exists in the database.",
+          "details": {
+            "invoiceNumber": "147"
+          }
+        }
+      ],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "148.pdf",
+      "invoiceNumber": "148",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 5068,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "149 shah.pdf",
+      "invoiceNumber": "149",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 40000,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "150 ms batt.pdf",
+      "invoiceNumber": "150",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 22195,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "151.pdf",
+      "invoiceNumber": "151",
+      "customerNameCandidate": "CILICON MOBILE (8971412530)",
+      "totalAmount": 151000,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "152 ms.pdf",
+      "invoiceNumber": "152",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 4314,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "153 ms.pdf",
+      "invoiceNumber": "153",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 5671,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "154 ms.pdf",
+      "invoiceNumber": "154",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 12900,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "155 ms.pdf",
+      "invoiceNumber": "155",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 12753,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "156 ms.pdf",
+      "invoiceNumber": "156",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 6440,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "157.pdf",
+      "invoiceNumber": "157",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 12024,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "158.pdf",
+      "invoiceNumber": "158",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 102936,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "159.pdf",
+      "invoiceNumber": "159",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 111108,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "160.pdf",
+      "invoiceNumber": "160",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 38529,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "161.pdf",
+      "invoiceNumber": "161",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 88872,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "162.pdf",
+      "invoiceNumber": "162",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 43141,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "163.pdf",
+      "invoiceNumber": "163",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 116782,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "164.pdf",
+      "invoiceNumber": "164",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 27304,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "165.pdf",
+      "invoiceNumber": "165",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 26059,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "166.pdf",
+      "invoiceNumber": "166",
+      "customerNameCandidate": "SAMRUDDHI ENTERPRISES (9845012342)",
+      "totalAmount": 25237,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "167.pdf",
+      "invoiceNumber": "167",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 24774,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "168.pdf",
+      "invoiceNumber": "168",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 19514,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "169.pdf",
+      "invoiceNumber": "169",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 7000,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "170.pdf",
+      "invoiceNumber": "170",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 52549,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "171.pdf",
+      "invoiceNumber": "171",
+      "customerNameCandidate": "CILICON MOBILE (8971412530)",
+      "totalAmount": 32359,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "172.pdf",
+      "invoiceNumber": "172",
+      "customerNameCandidate": "CILICON MOBILE (8971412530)",
+      "totalAmount": 39999,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "173.pdf",
+      "invoiceNumber": "173",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 38612,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "174.pdf",
+      "invoiceNumber": "174",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 52008,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "175.pdf",
+      "invoiceNumber": "175",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 34544,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "176.pdf",
+      "invoiceNumber": "176",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 10800,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "177.pdf",
+      "invoiceNumber": "177",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 26607,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "178.pdf",
+      "invoiceNumber": "178",
+      "customerNameCandidate": "SOORYA ENTERPRISES (9448257106)",
+      "totalAmount": 35716,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "179.pdf",
+      "invoiceNumber": "179",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 27975,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "180.pdf",
+      "invoiceNumber": "180",
+      "customerNameCandidate": "CILICON MOBILE (8971412530)",
+      "totalAmount": 15900,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "181.pdf",
+      "invoiceNumber": "181",
+      "customerNameCandidate": "CREATIVE TOUCH (9632269313)",
+      "totalAmount": 41300,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "182.pdf",
+      "invoiceNumber": "182",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 20075,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "183.pdf",
+      "invoiceNumber": "183",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 34020,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "184.pdf",
+      "invoiceNumber": "184",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 4328,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "185.pdf",
+      "invoiceNumber": "185",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 5782,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "186.pdf",
+      "invoiceNumber": "186",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 9873,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "187.pdf",
+      "invoiceNumber": "187",
+      "customerNameCandidate": "M S AUTO ELECTRICALS WORKS (9845012341)",
+      "totalAmount": 201781,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "188.pdf",
+      "invoiceNumber": "188",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 29438,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "189.pdf",
+      "invoiceNumber": "189",
+      "customerNameCandidate": "APOLLO ELECTRICALS (9845012343)",
+      "totalAmount": 14500,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "190.pdf",
+      "invoiceNumber": "190",
+      "customerNameCandidate": "CILICON MOBILE (8971412530)",
+      "totalAmount": 33900,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "191.pdf",
+      "invoiceNumber": "191",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 19730,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "192.pdf",
+      "invoiceNumber": "192",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 41736,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "193.pdf",
+      "invoiceNumber": "193",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 22347,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "194.pdf",
+      "invoiceNumber": "194",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 5782,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "195.pdf",
+      "invoiceNumber": "195",
+      "customerNameCandidate": "NEW WELCOME AUTO WORKS AND SPARES (9964012918)",
+      "totalAmount": 6360,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "196.pdf",
+      "invoiceNumber": "196",
+      "customerNameCandidate": "EVERGREEN TRADERS (9677777879)",
+      "totalAmount": 14898,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "197.pdf",
+      "invoiceNumber": "197",
+      "customerNameCandidate": "ASIAN POWER SYSTEM (9148834224)",
+      "totalAmount": 9208,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "198.pdf",
+      "invoiceNumber": "198",
+      "customerNameCandidate": "YOUR PRESTIGE (9008919195)",
+      "totalAmount": 62300,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "199.pdf",
+      "invoiceNumber": "199",
+      "customerNameCandidate": "SILICON ENTERPRISES (9035556144)",
+      "totalAmount": 36535,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "200.pdf",
+      "invoiceNumber": "200",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 36567,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "201.pdf",
+      "invoiceNumber": "201",
+      "customerNameCandidate": "SILICON ENTERPRISES (9035556144)",
+      "totalAmount": 33529,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "202.pdf",
+      "invoiceNumber": "202",
+      "customerNameCandidate": "TVS KADABA ADIGA MOTORS (7618766636)",
+      "totalAmount": 7548,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "203.pdf",
+      "invoiceNumber": "203",
+      "customerNameCandidate": "NEW WELCOME AUTO WORKS AND SPARES (9964012918)",
+      "totalAmount": 6118,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "204.pdf",
+      "invoiceNumber": "204",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 24486,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "205.pdf",
+      "invoiceNumber": "205",
+      "customerNameCandidate": "SILICON ENTERPRISES (9035556144)",
+      "totalAmount": 19526,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "206.pdf",
+      "invoiceNumber": "206",
+      "customerNameCandidate": "SOORYA ENTERPRISES (9448257106)",
+      "totalAmount": 12613,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "207.pdf",
+      "invoiceNumber": "207",
+      "customerNameCandidate": "NEW WELCOME AUTO WORKS AND SPARES (9964012918)",
+      "totalAmount": 6550,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "208.pdf",
+      "invoiceNumber": "208",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 6566,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "209.pdf",
+      "invoiceNumber": "209",
+      "customerNameCandidate": "MA UNIVERSAL BATTERY (7338175866)",
+      "totalAmount": 6258,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "210.pdf",
+      "invoiceNumber": "210",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 6876,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "211.pdf",
+      "invoiceNumber": "211",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 20138,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "212.pdf",
+      "invoiceNumber": "212",
+      "customerNameCandidate": "SHAH ENTERPRISES (9164195516)",
+      "totalAmount": 6106,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "213.pdf",
+      "invoiceNumber": "213",
+      "customerNameCandidate": "YOUR PRESTIGE (9008919195)",
+      "totalAmount": 29000,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "214.pdf",
+      "invoiceNumber": "214",
+      "customerNameCandidate": "NEW WELCOME AUTO WORKS AND SPARES (9964012918)",
+      "totalAmount": 6550,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "215.pdf",
+      "invoiceNumber": "215",
+      "customerNameCandidate": "NEW WELCOME AUTO WORKS AND SPARES (9964012918)",
+      "totalAmount": 4106,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    },
+    {
+      "sourcePdf": "216.pdf",
+      "invoiceNumber": "216",
+      "customerNameCandidate": "YOUR PRESTIGE (9008919195)",
+      "totalAmount": 32194,
+      "isValidForImport": true,
+      "issues": [],
+      "reviewNotes": []
+    }
+  ]
+}
