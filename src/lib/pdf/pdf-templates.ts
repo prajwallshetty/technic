@@ -11,7 +11,7 @@ import {
   type PDFTableRow,
   type SummaryLine,
 } from "./pdf-builder";
-import { renderSalesDocument, rupees } from "./sales-document";
+import { renderSalesDocument } from "./sales-document";
 
 /**
  * Technic Technologies document templates. One generator per business
@@ -171,52 +171,51 @@ interface SalesLineSource {
 }
 
 /**
- * Maps saved lines to document lines. On GST documents the stored unit price
- * is the GST-inclusive shelf price, so the printed Rate is shown ex-tax and
- * the Taxable Value column carries the discounted, tax-exclusive amount.
+ * Maps saved lines to document lines. Matching the printed form, GST
+ * documents show the ex-tax Rate and Amount = Qty x Rate; the discount is
+ * taken once in the totals panel, and `taxable` (after discount) feeds the
+ * GST slab summary.
  */
-function salesDocLines(lines: SalesLineSource[], isGst: boolean, showLineDiscount = true) {
-  let discountExTax = 0;
-  const mapped = lines.map((line) => {
+function salesDocLines(lines: SalesLineSource[], isGst: boolean) {
+  return lines.map((line) => {
     const gst = isGst ? num(line.gstRate as number) : 0;
     const unit = num(line.unitPrice as number);
-    const qty = line.quantity;
-    const disc = num(line.discountPercent as number);
     const lineTotal = num(line.lineTotal as number);
     const rateExTax = gst > 0 ? unit / (1 + gst / 100) : unit;
-    const netTaxable = line.taxableValue != null ? num(line.taxableValue as number) : gst > 0 ? lineTotal / (1 + gst / 100) : lineTotal;
-    discountExTax += Math.max(0, (rateExTax * qty) - netTaxable);
-    const serials = Array.isArray(line.serialNumbers)
-      ? line.serialNumbers
-      : (line.serialNumbers ?? "").split("\n");
-    // Prefer the live product name/sub name; fall back to the saved snapshot.
-    const name = line.product?.name ?? line.description;
-
-    // When line discount is hidden, line items show undiscounted rate & gross amounts,
-    // and the discount is deducted only at the bottom in the totals block.
-    const taxable = showLineDiscount ? netTaxable : rateExTax * qty;
-    const amount = showLineDiscount
-      ? lineTotal
-      : isGst
-        ? (rateExTax * qty) * (1 + gst / 100)
-        : unit * qty;
-
+    const taxable =
+      line.taxableValue != null ? num(line.taxableValue as number) : gst > 0 ? lineTotal / (1 + gst / 100) : lineTotal;
+    const serials = Array.isArray(line.serialNumbers) ? line.serialNumbers : (line.serialNumbers ?? "").split("\n");
     return {
-      name,
+      // Prefer the live product name/sub name; fall back to the saved snapshot.
+      name: line.product?.name ?? line.description,
       subName: line.product?.subName ?? null,
       serials: serials.filter(Boolean),
       hsn: line.hsnCode,
-      quantity: qty,
+      quantity: line.quantity,
       rate: rateExTax,
-      discountPercent: disc,
+      discountPercent: num(line.discountPercent as number),
       taxable,
-      netTaxable,
       gstRate: gst,
-      amount,
+      amount: rateExTax * line.quantity,
     };
   });
-  return { lines: mapped, discountExTax: Math.round((discountExTax + Number.EPSILON) * 100) / 100 };
 }
+
+function salesTotals(
+  lines: ReturnType<typeof salesDocLines>,
+  taxable: number,
+  tax: { cgst: number; sgst: number; igst: number },
+  roundOff: number,
+  total: number,
+) {
+  const gross = lines.reduce((sum, line) => sum + line.amount, 0);
+  return { gross, discount: Math.max(0, gross - taxable), taxable, ...tax, roundOff, total };
+}
+
+const addressLines = (c: { addressLine?: string | null; city?: string | null; state?: string | null; pincode?: string | null }) => {
+  const joined = [c.addressLine, c.city, c.state, c.pincode].filter(Boolean).join(", ");
+  return joined ? [joined] : [];
+};
 
 export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: Buffer; fileName: string }> {
   const invoice = await prisma.invoice.findUnique({
@@ -225,9 +224,6 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
       customer: true,
       branch: true,
       lines: { include: { product: { select: { name: true, subName: true } } } },
-      createdBy: { select: { name: true } },
-      salesOrder: { select: { orderNumber: true } },
-      quotation: { select: { quotationNumber: true } },
     },
   });
 
@@ -235,67 +231,48 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
 
   const isGst = invoice.kind === "TAX_INVOICE";
   const company = await getCompanyProfile(invoice.firmId);
-  const hasLineDiscount = num(invoice.discountAmount) > 0 || invoice.lines.some((l) => num(l.discountPercent) > 0);
-  const { lines, discountExTax } = salesDocLines(invoice.lines, isGst, hasLineDiscount);
+  const lines = salesDocLines(invoice.lines, isGst);
+  const totals = salesTotals(
+    lines,
+    isGst ? num(invoice.taxableAmount) : num(invoice.totalAmount) - num(invoice.roundOff),
+    { cgst: num(invoice.cgstAmount), sgst: num(invoice.sgstAmount), igst: num(invoice.igstAmount) },
+    num(invoice.roundOff),
+    num(invoice.totalAmount),
+  );
 
-  const taxable = num(invoice.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
-  const discount = isGst
-    ? (discountExTax > 0 ? discountExTax : num(invoice.discountAmount))
-    : num(invoice.discountAmount);
-  const totals = {
-    // GST documents print ex-tax figures: gross = taxable value + discount.
-    gross: isGst ? taxable + discount : num(invoice.subtotal),
-    discount,
-    taxable,
-    cgst: num(invoice.cgstAmount),
-    sgst: num(invoice.sgstAmount),
-    igst: num(invoice.igstAmount),
-    roundOff: num(invoice.roundOff),
-    total: num(invoice.totalAmount),
-    received: num(invoice.amountPaid),
-    due: num(invoice.amountDue),
-  };
-
-  const toLines = [
-    ...(invoice.billToAddress ? [invoice.billToAddress] : []),
-    ...(invoice.billToGstin ? [`GSTIN: ${invoice.billToGstin}`] : []),
-    ...(invoice.billToPhone ? [`Ph: ${invoice.billToPhone}`] : []),
+  const meta: [string, string][] = [
+    ["Invoice No. :", invoice.invoiceNumber],
+    ["Invoice Date :", formatDate(invoice.invoiceDate)],
+    // Credit when money is still owed, otherwise a cash/settled sale.
+    ["Invoice Type :", num(invoice.amountDue) > 0 ? "CREDIT" : "CASH"],
+    ["Despatched Through", invoice.dispatchThrough || ""],
+    ["E - Way No.", invoice.ewayBillNumber || ""],
   ];
+  if (invoice.vehicleNumber) meta.push(["Vehicle No.", invoice.vehicleNumber]);
+  if (invoice.buyerOrderNo) meta.push(["Buyer's Order No.", invoice.buyerOrderNo]);
 
   const buffer = await renderSalesDocument(
     {
-      title: isGst ? "TAX INVOICE" : "INVOICE",
-      titleNote: "ORIGINAL FOR RECIPIENT",
+      title: isGst ? "TAX INVOICE" : "NON-TAX INVOICE",
       isGst,
       company,
       branch: branchProfile(invoice.branch),
-      meta: [
-        ["Invoice No.", invoice.invoiceNumber],
-        ["Date", formatDate(invoice.invoiceDate)],
-        ["Type", isGst ? "Tax Invoice" : "Non-Tax Invoice"],
-        ["Place of Supply", invoice.placeOfSupply || invoice.customer?.state || "—"],
-        ["Due Date", invoice.dueDate ? formatDate(invoice.dueDate) : "—"],
-        ...(invoice.quotation ? ([["Quotation Ref.", invoice.quotation.quotationNumber]] as [string, string][]) : []),
-        ...(invoice.salesOrder ? ([["Sales Order", invoice.salesOrder.orderNumber]] as [string, string][]) : []),
-      ],
-      to: { name: invoice.billToName, lines: toLines },
-      sideHeading: "Dispatch & E-Way Details",
-      side: [
-        ["Dispatched Through", invoice.dispatchThrough || "—"],
-        ["Vehicle No.", invoice.vehicleNumber || "—"],
-        ["E-Way Bill No.", invoice.ewayBillNumber || "—"],
-        ["Buyer's Order No.", invoice.buyerOrderNo || "—"],
-      ],
+      meta,
+      to: {
+        name: invoice.billToName.toUpperCase(),
+        lines: [
+          ...(invoice.billToAddress ? [invoice.billToAddress] : []),
+          ...(invoice.billToGstin ? [`GSTIN : ${invoice.billToGstin}`] : []),
+          ...(invoice.billToPhone ? [`PHONE : ${invoice.billToPhone}`] : []),
+        ],
+      },
       lines,
       totals,
-      totalLabel: "Final Bill Amount",
       bankDetails: company.bankDetails || undefined,
       terms: invoice.terms || company.termsConditions,
       notes: invoice.notes,
       discountRemarks: invoice.discountRemarks,
-      showLineDiscount: hasLineDiscount,
       signatoryFor: company.name,
-      preparedBy: invoice.createdBy?.name,
       cancelledReason: invoice.status === "CANCELLED" ? invoice.cancellationReason || "Cancelled" : null,
     },
     `${isGst ? "Tax Invoice" : "Invoice"} ${invoice.invoiceNumber}`,
@@ -306,7 +283,7 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
 }
 
 // ---------------------------------------------------------------------------
-// Quotation
+// Quotation — same sheet as the invoice
 // ---------------------------------------------------------------------------
 
 export async function generateQuotationPDF(quotationId: string): Promise<{ buffer: Buffer; fileName: string }> {
@@ -316,7 +293,6 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       customer: true,
       branch: true,
       lines: { include: { product: { select: { name: true, subName: true } } } },
-      createdBy: { select: { name: true } },
     },
   });
 
@@ -324,24 +300,15 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
 
   const isGst = quotation.taxMode === "GST";
   const company = await getCompanyProfile(quotation.firmId);
-  const hasLineDiscount = num(quotation.discountAmount) > 0 || quotation.lines.some((l) => num(l.discountPercent) > 0);
-  const { lines, discountExTax } = salesDocLines(quotation.lines, isGst, hasLineDiscount);
-
-  const taxable = num(quotation.taxableAmount) || lines.reduce((sum, line) => sum + (line.netTaxable ?? line.taxable), 0);
-  const discount = isGst
-    ? (discountExTax > 0 ? discountExTax : num(quotation.discountAmount))
-    : num(quotation.discountAmount);
-
-  const totals = {
-    gross: isGst ? taxable + discount : num(quotation.subtotal),
-    discount,
+  const lines = salesDocLines(quotation.lines, isGst);
+  const taxable = isGst ? lines.reduce((sum, line) => sum + line.taxable, 0) : num(quotation.totalAmount);
+  const totals = salesTotals(
+    lines,
     taxable,
-    cgst: num(quotation.cgstAmount),
-    sgst: num(quotation.sgstAmount),
-    igst: num(quotation.igstAmount),
-    roundOff: num(quotation.roundOff),
-    total: num(quotation.totalAmount),
-  };
+    { cgst: num(quotation.cgstAmount), sgst: num(quotation.sgstAmount), igst: num(quotation.igstAmount) },
+    num(quotation.roundOff),
+    num(quotation.totalAmount),
+  );
 
   const customer = quotation.customer;
   const buffer = await renderSalesDocument(
@@ -351,37 +318,27 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       company,
       branch: branchProfile(quotation.branch),
       meta: [
-        ["Quotation No.", quotation.quotationNumber],
-        ["Date", formatDate(quotation.quotationDate)],
-        ["Type", isGst ? "GST (Tax)" : "Non-GST"],
-        ["Valid Until", quotation.validUntil ? formatDate(quotation.validUntil) : "—"],
+        ["Quotation No. :", quotation.quotationNumber],
+        ["Date :", formatDate(quotation.quotationDate)],
+        ["Valid Until :", quotation.validUntil ? formatDate(quotation.validUntil) : ""],
+        ["Type :", isGst ? "GST" : "NON-GST"],
       ],
       toHeading: "Quotation For",
       to: {
-        name: customer.name,
+        name: customer.name.toUpperCase(),
         lines: [
-          ...([customer.addressLine, customer.city, customer.state, customer.pincode].filter(Boolean).length
-            ? [[customer.addressLine, customer.city, customer.state, customer.pincode].filter(Boolean).join(", ")]
-            : []),
-          ...(customer.gstin ? [`GSTIN: ${customer.gstin}`] : []),
-          ...(customer.phone ? [`Ph: ${customer.phone}`] : []),
+          ...addressLines(customer),
+          ...(customer.gstin ? [`GSTIN : ${customer.gstin}`] : []),
+          `PHONE : ${customer.phone}`,
         ],
       },
-      sideHeading: "Quotation Details",
-      side: [
-        ["Status", quotation.status],
-        ["Prepared By", quotation.createdBy?.name || "—"],
-      ],
       lines,
       totals,
-      totalLabel: "Quotation total",
       bankDetails: company.bankDetails || undefined,
       terms: quotation.terms || company.termsConditions,
       notes: quotation.notes,
       discountRemarks: quotation.discountRemarks,
-      showLineDiscount: hasLineDiscount,
       signatoryFor: company.name,
-      preparedBy: quotation.createdBy?.name,
     },
     `Quotation ${quotation.quotationNumber}`,
   );

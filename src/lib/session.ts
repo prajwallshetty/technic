@@ -121,7 +121,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   let branchId = session.user.branchId;
   let branchName = session.user.branchName;
   let branchCode = session.user.branchCode;
-  if (activeFirmId && branchId) {
+  if (activeFirmId) {
     const resolved = await resolveWorkBranch(activeFirmId, branchId, session.user.role);
     if (resolved) {
       branchId = resolved.id;

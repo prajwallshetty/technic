@@ -95,7 +95,7 @@ export async function getCompanyProfile(firmId: string): Promise<CompanyProfile>
       "Thank you for your business. Goods once sold are subject to the warranty terms of the respective manufacturer.",
     termsConditions:
       map.get("document_terms") ||
-      "1. Goods once sold will not be taken back.\n2. Warranty as per the manufacturer's terms; subject to their service centre policy.\n3. Interest at 18% p.a. is charged on overdue balances.\n4. Subject to local jurisdiction only.",
+"1. Goods once sold will not be taken back.\n2. Subject to Mangalore Jurisdiction.",
     invoicePrefix: map.get("invoice_prefix") || "INV",
     quotationPrefix: map.get("quotation_prefix") || "QT",
     purchasePrefix: map.get("purchase_prefix") || "PO",
