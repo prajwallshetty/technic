@@ -20,11 +20,21 @@ import { formatDate } from "@/lib/dates";
 import { INVOICE_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/workflow";
 import { NotFoundError } from "@/lib/action-result";
 
+import { EditInvoiceButton } from "./edit-invoice-button";
+import { DeleteInvoiceButton } from "../delete-invoice-button";
+
 export const metadata = { title: "Invoice — Technic Technologies" };
 
-export default async function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function InvoiceDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<Record<string, string | undefined>>;
+}) {
   const user = await requirePermissionInFirm("invoice.view");
   const { id } = await params;
+  const sParams = searchParams ? await searchParams : {};
 
   let invoice;
   try {
@@ -37,6 +47,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
   if (invoice.firmId !== user.activeFirmId) notFound();
 
   const isTaxInvoice = invoice.kind === "TAX_INVOICE";
+  const hasDiscount = Number(invoice.discountAmount) > 0 || invoice.lines.some((l) => Number(l.discountPercent) > 0);
   const canCancel = invoice.status !== "CANCELLED" && user.permissions.includes("invoice.cancel");
   const canReturn =
     invoice.status !== "CANCELLED" && user.permissions.includes("sales_return.create");
@@ -44,6 +55,16 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
     invoice.status !== "CANCELLED" &&
     Number(invoice.amountDue) > 0 &&
     user.permissions.includes("payments.create");
+  const canEdit =
+    invoice.status !== "CANCELLED" &&
+    (user.permissions.includes("invoice.create") ||
+      user.permissions.includes("sales.edit") ||
+      user.permissions.includes("invoice.edit"));
+  const canDelete =
+    invoice.salesReturns.length === 0 &&
+    (user.permissions.includes("invoice.delete") ||
+      user.permissions.includes("sales.edit") ||
+      user.permissions.includes("invoice.edit"));
 
   return (
     <div className="space-y-4">
@@ -64,6 +85,12 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
               documentNumber={invoice.invoiceNumber}
               customerPhone={invoice.billToPhone || undefined}
             />
+            {canEdit ? (
+              <EditInvoiceButton
+                invoice={invoice}
+                defaultOpen={sParams.edit === "true"}
+              />
+            ) : null}
             {canRecordPayment ? (
               <RecordInvoicePaymentButton invoiceId={invoice.id} amountDue={Number(invoice.amountDue)} />
             ) : null}
@@ -92,6 +119,14 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
               />
             ) : null}
             {canCancel ? <CancelInvoiceButton invoiceId={invoice.id} /> : null}
+            {canDelete ? (
+              <DeleteInvoiceButton
+                invoiceId={invoice.id}
+                invoiceNumber={invoice.invoiceNumber}
+                isCancelled={invoice.status === "CANCELLED"}
+                redirectOnDelete
+              />
+            ) : null}
           </>
         }
       />
@@ -123,6 +158,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
                     {isTaxInvoice ? <TableHead className="hidden sm:table-cell">HSN</TableHead> : null}
                     <TableHead className="text-right">Qty</TableHead>
                     <TableHead className="text-right">Rate</TableHead>
+                    {hasDiscount ? <TableHead className="text-right">Disc %</TableHead> : null}
                     {isTaxInvoice ? <TableHead className="hidden text-right sm:table-cell">Taxable</TableHead> : null}
                     {isTaxInvoice ? <TableHead className="hidden text-right sm:table-cell">GST</TableHead> : null}
                     <TableHead className="pr-4 text-right">Amount</TableHead>
@@ -144,6 +180,11 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
                       ) : null}
                       <TableCell className="text-right numeric">{line.quantity}</TableCell>
                       <TableCell className="text-right numeric">{formatCurrency(line.unitPrice)}</TableCell>
+                      {hasDiscount ? (
+                        <TableCell className="text-right numeric">
+                          {Number(line.discountPercent) > 0 ? `${Number(line.discountPercent)}%` : "—"}
+                        </TableCell>
+                      ) : null}
                       {isTaxInvoice ? (
                         <TableCell className="hidden text-right numeric sm:table-cell">
                           {formatCurrency(line.taxableValue)}
@@ -170,7 +211,17 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
             <div className="space-y-1.5 px-4 text-sm">
               <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="numeric">{formatCurrency(invoice.subtotal)}</span></div>
               {Number(invoice.discountAmount) > 0 ? (
-                <div className="flex justify-between"><span className="text-muted-foreground">Discount</span><span className="numeric">-{formatCurrency(invoice.discountAmount)}</span></div>
+                <div className="flex justify-between">
+                  <div>
+                    <span className="text-muted-foreground">Discount</span>
+                    {invoice.discountRemarks ? (
+                      <span className="ml-2 text-xs text-muted-foreground font-normal">
+                        ({invoice.discountRemarks})
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className="numeric">-{formatCurrency(invoice.discountAmount)}</span>
+                </div>
               ) : null}
               {isTaxInvoice ? (
                 <>

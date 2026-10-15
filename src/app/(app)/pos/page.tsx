@@ -75,6 +75,7 @@ export default async function PosPage() {
         }))}
         customers={customers}
         canCollectPayment={user.permissions.includes("payments.create")}
+        canCreateCustomer={user.permissions.includes("customers.create")}
       />
     </div>
   );

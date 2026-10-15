@@ -73,6 +73,8 @@ export interface SalesDocData {
   bankDetails?: string;
   terms?: string;
   notes?: string | null;
+  /** Reason for the discount, printed under the Discount row. */
+  discountRemarks?: string | null;
   signatoryFor: string;
   cancelledReason?: string | null;
 }
@@ -85,6 +87,8 @@ const PAD = 4;
 
 const grouped = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const r2 = (v: number) => Math.round((v + Number.EPSILON) * 100) / 100;
+export const money = (v: number) => grouped.format(r2(v));
+export const rupees = (v: number) => `₹ ${money(v)}`;
 const plain = (v: number) => r2(v).toFixed(2);
 const group = (v: number) => grouped.format(r2(v));
 
@@ -266,7 +270,7 @@ function footer(doc: Doc, d: SalesDocData, y: number, draw: boolean): number {
   const words = wordsLine(t.total);
   const wordsH = Math.max(18, hOf(doc, words, { w: leftW - 100, size: 7.5, bold: true }) + 8);
   const terms = d.terms?.trim();
-  const notes = d.notes?.trim();
+  const notes = [d.discountRemarks?.trim() ? `Discount reason: ${d.discountRemarks.trim()}` : "", d.notes?.trim() ?? ""].filter(Boolean).join("\n");
   const termsH = terms ? 14 + hOf(doc, terms, { w: leftW - 16, size: 7.5 }) + 6 : 0;
   const notesH = notes ? 12 + hOf(doc, notes, { w: leftW - 16, size: 7.5 }) + 4 : 0;
   const leftH = sumH + bankH + wordsH + termsH + notesH;

@@ -1,0 +1,464 @@
+[
+  {
+    "sku": "HIST-YOKOHAMA-MTZ4L",
+    "name": "YOKOHAMA MTZ4L",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 600.85
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MTZ5LA",
+    "name": "YOKOHAMA MTZ5LA",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 740.68
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MCB-MTZ7L",
+    "name": "YOKOHAMA MCB MTZ7L",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 820.34
+  },
+  {
+    "sku": "HIST-YOKOHAMA-125E41L-100AH-W",
+    "name": "YOKOHAMA 125E41L 100AH(WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 8953.39
+  },
+  {
+    "sku": "HIST-YOKOHAMA-105D31L85AH-WAR",
+    "name": "YOKOHAMA 105D31L85AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7114.41
+  },
+  {
+    "sku": "HIST-YOKOHAMA-105D31R85AH-WAR",
+    "name": "YOKOHAMA 105D31R85AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7114.41
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MCBMTZ9R-8AH-WA",
+    "name": "YOKOHAMA MCBMTZ9R 8AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2028.81
+  },
+  {
+    "sku": "HIST-YOKOHAMA-115E41L90AH-WAR",
+    "name": "YOKOHAMA 115E41L90AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7361.86
+  },
+  {
+    "sku": "HIST-TRANSPORTATION",
+    "name": "TRANSPORTATION",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 500
+  },
+  {
+    "sku": "HIST-LAIKON-210AH-TUBLER-BATT",
+    "name": "LAIKON 210AH TUBLER BATTERY",
+    "hsn": "85072000",
+    "gst": 18,
+    "rate": 11440.68
+  },
+  {
+    "sku": "HIST-LAIKON-160-AH-TUBLER-BAT",
+    "name": "LAIKON 160 AH TUBLER BATTERY",
+    "hsn": "85072000",
+    "gst": 18,
+    "rate": 8898.31
+  },
+  {
+    "sku": "HIST-1-5HP-5STAGE-BOOSTER-PUM",
+    "name": "1.5HP 5STAGE BOOSTER PUMP(24LTR TANK) PRIMIUM",
+    "hsn": "84137010",
+    "gst": 18,
+    "rate": 57627.12
+  },
+  {
+    "sku": "HIST-DP-DISCOUNT",
+    "name": "DP DISCOUNT",
+    "hsn": "84137010",
+    "gst": 18,
+    "rate": 0
+  },
+  {
+    "sku": "HIST-1-0HP-OPENWELL-SUBMERCIB",
+    "name": "1.0HP OPENWELL SUBMERCIBLE HAVY",
+    "hsn": "84137010",
+    "gst": 18,
+    "rate": 10661.02
+  },
+  {
+    "sku": "HIST-YOKOHAMA-95D23LBH-68AH-W",
+    "name": "YOKOHAMA 95D23LBH 68AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 6550
+  },
+  {
+    "sku": "HIST-CM-4000E-3-2-KW-GENSET",
+    "name": "CM 4000E 3.2 KW GENSET",
+    "hsn": "85030010",
+    "gst": 18,
+    "rate": 33898.31
+  },
+  {
+    "sku": "HIST-YOKOHAMA-195G51L-150AH-W",
+    "name": "YOKOHAMA 195G51L 150AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 13454.24
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN45LH-45AH-WA",
+    "name": "YOKOHAMA DIN45LH 45AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 5662.71
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN65LH-60AH-WA",
+    "name": "YOKOHAMA DIN65LH 60AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7494.07
+  },
+  {
+    "sku": "HIST-YOKOHAMA-38B20L-35AH-WAR",
+    "name": "YOKOHAMA 38B20L 35AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2547.46
+  },
+  {
+    "sku": "HIST-YOKOHAMA-38B20R-35AH-WAR",
+    "name": "YOKOHAMA 38B20R 35AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2547.46
+  },
+  {
+    "sku": "HIST-YOKOHAMA-145F51L-130AH-W",
+    "name": "YOKOHAMA 145F51L 130AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7689.83
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN65LH-65AH-WA",
+    "name": "YOKOHAMA DIN65LH 65AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4713.56
+  },
+  {
+    "sku": "HIST-YOKOHAMA-B2036B20L-32AH-",
+    "name": "YOKOHAMA B2036B20L 32AH (WARRENTY18+6)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2170.34
+  },
+  {
+    "sku": "HIST-YOKOHAMA-B2036B20R-32AH-",
+    "name": "YOKOHAMA B2036B20R 32AH (WARRENTY18+6)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2170.34
+  },
+  {
+    "sku": "HIST-YOKOHAMA-55B24L-52AH-WAR",
+    "name": "YOKOHAMA 55B24L 52AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4335.59
+  },
+  {
+    "sku": "HIST-YOKOHAMA-BH40B20L-WARREN",
+    "name": "YOKOHAMA BH40B20L (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2898.31
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN60L-60AH-WAR",
+    "name": "YOKOHAMA DIN60L 60AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4611.86
+  },
+  {
+    "sku": "HIST-YOKOHAMA-D26-70D26L-60AH",
+    "name": "YOKOHAMA D26 70D26L 60AH (WARRENTY18+6)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 3424.58
+  },
+  {
+    "sku": "HIST-YOKOHAMA-90D26L-65AH-WAR",
+    "name": "YOKOHAMA 90D26L 65AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4406.78
+  },
+  {
+    "sku": "HIST-YOKOHAMA-D2680D26L60AH-W",
+    "name": "YOKOHAMA D2680D26L60AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 3667.8
+  },
+  {
+    "sku": "HIST-YOKOHAMA-D2680D26R60AH-W",
+    "name": "YOKOHAMA D2680D26R60AH (WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 3667.8
+  },
+  {
+    "sku": "HIST-YOKOHAMA-B20-3820L-35AH-",
+    "name": "YOKOHAMA B20 3820L 35AH(WARRENTY24+24)PREMIUM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2356.78
+  },
+  {
+    "sku": "HIST-YOKOHAMA-B2038B20R-35AH-",
+    "name": "YOKOHAMA B2038B20R 35AH (WARRENTY 24+24)PREM",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 2356.78
+  },
+  {
+    "sku": "HIST-YOKOHAMA-TALL-TUBLAR-BAT",
+    "name": "YOKOHAMA TALL TUBLAR BATTERY 160AH C20",
+    "hsn": "85072000",
+    "gst": 18,
+    "rate": 10016.95
+  },
+  {
+    "sku": "HIST-YOKOHAMA-TALL-TUBLER-BET",
+    "name": "YOKOHAMA TALL TUBLER BETTERY 210AH C20 W3+2",
+    "hsn": "85072000",
+    "gst": 18,
+    "rate": 12020.34
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MTX50-5AH-WARRE",
+    "name": "YOKOHAMA MTX50 5AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 817.8
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MCB2-5LC-2-5AH-",
+    "name": "YOKOHAMA MCB2.5LC 2.5AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 485.59
+  },
+  {
+    "sku": "HIST-YOKOHAMA-MTX90-9AH-WARRE",
+    "name": "YOKOHAMA MTX90 9AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 1349.15
+  },
+  {
+    "sku": "HIST-YOKOHAMA-90D26R-65AH-WAR",
+    "name": "YOKOHAMA 90D26R 65AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4406.78
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN55LH-55AH-WA",
+    "name": "YOKOHAMA DIN55LH 55AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4201.69
+  },
+  {
+    "sku": "HIST-LUMINOUS-1050D-INVERTOR",
+    "name": "LUMINOUS 1050D INVERTOR",
+    "hsn": "85044010",
+    "gst": 18,
+    "rate": 4485.59
+  },
+  {
+    "sku": "HIST-LUMINOUS-1050S-INVERTOR",
+    "name": "LUMINOUS 1050S INVERTOR",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 5027.97
+  },
+  {
+    "sku": "HIST-LUMINOUS-1250S-INVERTOR",
+    "name": "LUMINOUS 1250S INVERTOR",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 5868.64
+  },
+  {
+    "sku": "HIST-INVERTOR-HAVY-TROLLY-SIN",
+    "name": "INVERTOR HAVY TROLLY SINGLE BATTERY",
+    "hsn": "39231090",
+    "gst": 18,
+    "rate": 682.2
+  },
+  {
+    "sku": "HIST-INVERTOR-HAVY-TROLLY-DOU",
+    "name": "INVERTOR HAVY TROLLY DOUBLE BATTERY",
+    "hsn": "39231090",
+    "gst": 18,
+    "rate": 1224.58
+  },
+  {
+    "sku": "HIST-LUMINOUS-1550",
+    "name": "LUMINOUS 1550",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 8566.95
+  },
+  {
+    "sku": "HIST-LUMINOUS-1550-INVERTOR",
+    "name": "LUMINOUS 1550 INVERTOR",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 8566.95
+  },
+  {
+    "sku": "HIST-LUMINOUS-1250",
+    "name": "LUMINOUS 1250",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 5338.98
+  },
+  {
+    "sku": "HIST-LUMINOUS-EVO-D2300-24V-I",
+    "name": "LUMINOUS EVO -D2300/24V INVERTOR 2KW",
+    "hsn": "85044010",
+    "gst": 18,
+    "rate": 14830.51
+  },
+  {
+    "sku": "HIST-YOKOHAMA-DIN66L-66AH-WAR",
+    "name": "YOKOHAMA DIN66L 66AH (WARRENTY30+30)SUPREME",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 5109.32
+  },
+  {
+    "sku": "HIST-AMARON-QUANTA-200AH-TUBL",
+    "name": "AMARON QUANTA 200AH TUBLER BATTERY",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 13474.58
+  },
+  {
+    "sku": "HIST-3KVA-ALPHA-ONLINE-INVERT",
+    "name": "3KVA ALPHA ONLINE INVERTOR IGBT INCLUDING INS",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 35000
+  },
+  {
+    "sku": "HIST-AMARON-QUANTA-150AH-TUBL",
+    "name": "AMARON QUANTA 150AH TUBLER BATTERY",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 10847.46
+  },
+  {
+    "sku": "HIST-LUMINOUS-1650-INVERTOR",
+    "name": "LUMINOUS 1650 INVERTOR",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 7033.9
+  },
+  {
+    "sku": "HIST-AMARON-INVERTOR-1200",
+    "name": "AMARON INVERTOR 1200",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4830.51
+  },
+  {
+    "sku": "HIST-YOKOHAMA-M42-60B20L-40AH",
+    "name": "YOKOHAMA M42 60B20L 40AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 3482.2
+  },
+  {
+    "sku": "HIST-TRANSPORT-CHRG",
+    "name": "TRANSPORT CHRG",
+    "hsn": "85071000",
+    "gst": 5,
+    "rate": 476.19
+  },
+  {
+    "sku": "HIST-2HP-SEWAGE-PUMP-WITH-CUT",
+    "name": "2HP SEWAGE PUMP WITH CUTTER",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 52542.37
+  },
+  {
+    "sku": "HIST-DP-DISCOUNT-30",
+    "name": "DP DISCOUNT 30%",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 0
+  },
+  {
+    "sku": "HIST-2HP-SUBMERCIBLE-PUMP-HAV",
+    "name": "2HP SUBMERCIBLE PUMP HAVY DUPLEX",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 22881.36
+  },
+  {
+    "sku": "HIST-YOKOHAMA-N55-80B24L-50AH",
+    "name": "YOKOHAMA N55-80B24L 50AH (WARRENTY 24+24)",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4277.97
+  },
+  {
+    "sku": "HIST-YOKOHAMA-55BH24L",
+    "name": "YOKOHAMA 55BH24L",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 4335.59
+  },
+  {
+    "sku": "HIST-JJ-1HP-24LITER-4STAGE-PR",
+    "name": "JJ 1HP 24LITER 4STAGE PREMIUM PRESURE",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 0
+  },
+  {
+    "sku": "HIST-BOOSTER-PUMP",
+    "name": "BOOSTER PUMP",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 35587.29
+  },
+  {
+    "sku": "HIST-JJ-1HP-PRIMIUM-PRESURE-B",
+    "name": "JJ 1HP PRIMIUM PRESURE BOOSTER PUMP 24LTR TAN",
+    "hsn": "85071000",
+    "gst": 18,
+    "rate": 38976.27
+  }
+]

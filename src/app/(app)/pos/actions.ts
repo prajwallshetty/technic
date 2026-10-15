@@ -21,9 +21,11 @@ export interface CheckoutInput {
   paymentAmount?: number;
   paymentMethod?: "CASH" | "UPI" | "CARD" | "BANK_TRANSFER" | "CHEQUE" | "OTHER";
   notes?: string;
+  discountRemarks?: string;
   /** Requested tax treatment. Only users with GST billing permission may
    *  request "GST"; everyone else is always billed non-GST. */
   taxMode?: "GST" | "NON_GST";
+  manualRoundOff?: number | null;
 }
 
 /**
@@ -35,6 +37,9 @@ export async function checkoutAction(input: CheckoutInput) {
   return runAction(async () => {
     const user = await authorize("invoice.create");
     const firmId = requireFirmId(user);
+    // Resolve the work location through the same validated path as every
+    // other write — a stale session branch must never reach the ledger.
+    const branchId = await requireWriteBranch(user);
     const requested = input.taxMode === "GST";
     if (requested && !canBillGst(user)) {
       throw new AccessModeError("GST billing requires the GST reporting permission.");
@@ -47,14 +52,16 @@ export async function checkoutAction(input: CheckoutInput) {
 
     const invoice = await createInvoice({
       firmId,
-      branchId: await requireWriteBranch(user, null),
+      branchId,
       customerId: input.customerId,
       taxMode: mode,
       lines: input.lines as SaleLineInput[],
       paymentAmount: input.paymentAmount && input.paymentAmount > 0 ? input.paymentAmount : undefined,
       paymentMethod: input.paymentMethod,
       notes: input.notes ?? null,
+      discountRemarks: input.discountRemarks?.trim() || null,
       userId: user.id,
+      manualRoundOff: input.manualRoundOff,
     });
 
     revalidatePath("/invoices");

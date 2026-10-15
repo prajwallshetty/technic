@@ -85,3 +85,122 @@ export async function createUserAction(input: {
     return { name: user.name };
   });
 }
+
+export async function updateUserAction(input: {
+  id: string;
+  name: string;
+  email: string;
+  accessCode?: string;
+  role: string;
+  branchId: string;
+  status: "ACTIVE" | "SUSPENDED" | "INACTIVE";
+}) {
+  return runAction(async () => {
+    const actor = await authorize("users.manage");
+    const firmId = requireFirmId(actor);
+
+    const targetUser = await prisma.user.findFirst({
+      where: { id: input.id, firmId },
+    });
+    if (!targetUser) throw new BusinessRuleError("User not found in this organization");
+
+    // Access code validation
+    if (input.accessCode && input.accessCode.trim()) {
+      if (!/^\d{6}$/.test(input.accessCode.trim())) {
+        throw new BusinessRuleError("The login code must be exactly 6 digits");
+      }
+      const duplicateCode = await prisma.user.findFirst({
+        where: { accessCode: input.accessCode.trim(), id: { not: input.id } },
+        select: { id: true },
+      });
+      if (duplicateCode) {
+        throw new BusinessRuleError("That 6-digit login code is already in use by another user");
+      }
+    }
+
+    // Email uniqueness check
+    const duplicateEmail = await prisma.user.findFirst({
+      where: { email: input.email.trim().toLowerCase(), id: { not: input.id } },
+      select: { id: true },
+    });
+    if (duplicateEmail) {
+      throw new BusinessRuleError("A user with that email already exists");
+    }
+
+    // Role check
+    const isPlatformAdmin = targetUser.role === "PLATFORM_ADMIN";
+    const updatedRole = isPlatformAdmin ? targetUser.role : (input.role as UserRole);
+    if (!isPlatformAdmin && !ASSIGNABLE_ROLES.includes(updatedRole)) {
+      throw new BusinessRuleError("That role cannot be assigned here");
+    }
+
+    // Branch check
+    const branch = await prisma.branch.findFirst({
+      where: { id: input.branchId, firmId },
+      select: { id: true },
+    });
+    if (!branch) throw new BusinessRuleError("That branch does not belong to your firm");
+
+    const updated = await prisma.user.update({
+      where: { id: input.id },
+      data: {
+        name: input.name.trim(),
+        email: input.email.trim().toLowerCase(),
+        role: updatedRole,
+        branchId: branch.id,
+        status: input.status,
+        ...(input.accessCode && input.accessCode.trim() ? { accessCode: input.accessCode.trim() } : {}),
+      },
+      select: { id: true, name: true },
+    });
+
+    await recordAudit({
+      action: "USER_UPDATED",
+      entity: "User",
+      entityId: updated.id,
+      summary: `Updated user ${updated.name}`,
+      firmId,
+      userId: actor.id,
+    });
+
+    revalidatePath("/users");
+    return { name: updated.name };
+  });
+}
+
+export async function deleteUserAction(input: { id: string }) {
+  return runAction(async () => {
+    const actor = await authorize("users.manage");
+    const firmId = requireFirmId(actor);
+
+    if (actor.id === input.id) {
+      throw new BusinessRuleError("You cannot delete your own account");
+    }
+
+    const targetUser = await prisma.user.findFirst({
+      where: { id: input.id, firmId },
+    });
+    if (!targetUser) throw new BusinessRuleError("User not found in this organization");
+
+    if (targetUser.role === "PLATFORM_ADMIN") {
+      throw new BusinessRuleError("Platform administrator accounts cannot be deleted here");
+    }
+
+    await prisma.user.delete({
+      where: { id: input.id },
+    });
+
+    await recordAudit({
+      action: "USER_UPDATED",
+      entity: "User",
+      entityId: targetUser.id,
+      summary: `Deleted user ${targetUser.name} (${targetUser.email})`,
+      firmId,
+      userId: actor.id,
+    });
+
+    revalidatePath("/users");
+    return { deleted: true, name: targetUser.name };
+  });
+}
+

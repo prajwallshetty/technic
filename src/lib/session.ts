@@ -84,33 +84,33 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   const session = await auth();
   if (!session?.user?.id) return null;
 
-  const firmId = session.user.firmId ?? null;
-  if (firmId) {
-    // JWT sessions are stateless, so a firm deactivated after a user's
-    // token was issued would otherwise keep working until the token next
-    // refreshes. Re-verified on every request.
-    const firm = await prisma.firm.findUnique({ where: { id: firmId }, select: { status: true } });
-    if (!firm || firm.status !== "ACTIVE") return null;
-  }
-
-  // The firm actually being operated in. A switchable user (platform admin /
-  // admin) keeps their chosen firm in the token; if that firm has since been
-  // deleted or deactivated we degrade to "no firm selected" (the Firms page
-  // lets them pick again) instead of ejecting them from the app.
+  const ownFirmId = session.user.firmId ?? null;
   let activeFirmId = session.user.activeFirmId ?? null;
   let activeFirmName = session.user.activeFirmName ?? null;
-  if (activeFirmId) {
-    const active =
-      activeFirmId === firmId
-        ? { id: activeFirmId, name: activeFirmName, status: "ACTIVE" as const }
-        : await prisma.firm.findUnique({
-            where: { id: activeFirmId },
-            select: { id: true, name: true, status: true },
-          });
-    if (!active || active.status !== "ACTIVE") {
+  const watchedIds = [...new Set([ownFirmId, activeFirmId].filter(Boolean))] as string[];
+
+  if (watchedIds.length > 0) {
+    // JWT sessions are stateless, so a firm deactivated or moved to the trash
+    // after a user's token was issued would otherwise keep working until the
+    // token next refreshes. Re-verified on every request.
+    const firms = await prisma.firm.findMany({
+      where: { id: { in: watchedIds } },
+      select: { id: true, name: true, status: true, deletedAt: true },
+    });
+    const byId = new Map(firms.map((firm) => [firm.id, firm]));
+
+    const own = ownFirmId ? byId.get(ownFirmId) : undefined;
+    if (ownFirmId && (!own || own.status !== "ACTIVE" || own.deletedAt)) return null;
+
+    // The firm actually being operated in. A switchable user (platform admin /
+    // admin) keeps their chosen firm in the token; if that firm has since been
+    // trashed or deactivated we degrade to "no firm selected" (the Firms page
+    // lets them pick again) instead of ejecting them from the app.
+    const active = activeFirmId ? byId.get(activeFirmId) : undefined;
+    if (activeFirmId && (!active || active.status !== "ACTIVE" || active.deletedAt)) {
       activeFirmId = null;
       activeFirmName = null;
-    } else {
+    } else if (active) {
       activeFirmName = active.name ?? activeFirmName;
     }
   }
@@ -247,8 +247,16 @@ export function resolveBranchScope(
     return { branchId: user.branchId ?? "__no_branch__", canSeeAllBranches: false, firmId };
   }
 
-  if (requestedBranchId && requestedBranchId !== "all") {
+  if (requestedBranchId === "all") {
+    return { branchId: undefined, canSeeAllBranches: true, firmId };
+  }
+
+  if (requestedBranchId) {
     return { branchId: requestedBranchId, canSeeAllBranches: true, firmId };
+  }
+
+  if (user.branchId) {
+    return { branchId: user.branchId, canSeeAllBranches: true, firmId };
   }
 
   return { branchId: undefined, canSeeAllBranches: true, firmId };
@@ -291,18 +299,21 @@ export async function requireWriteBranch(
 
   if (isGlobalRole(user.role)) {
     const branchId = requestedBranchId ?? user.branchId;
-    if (!branchId) throw new AuthorizationError("A branch must be selected");
-    // Always validate: the session fallback can go stale after data resets.
-    const branch = await prisma.branch.findUnique({
-      where: { id: branchId },
-      select: { firmId: true },
-    });
-    if (branch && branch.firmId === firmId) return branchId;
+    if (branchId) {
+      // Always validate: the session fallback can go stale after data resets.
+      const branch = await prisma.branch.findUnique({
+        where: { id: branchId },
+        select: { firmId: true },
+      });
+      if (branch && branch.firmId === firmId) return branchId;
+    }
     if (requestedBranchId) {
       throw new AuthorizationError("That branch does not belong to your organization");
     }
-    // Stale saved location: recover by using the firm's first active branch
-    // rather than forcing the user to sign out and back in.
+    // No saved location (or a stale one) — recover by using the firm's first
+    // active branch rather than forcing the user to sign out and back in.
+    // An unselected-but-valid work location must not block a create the user
+    // is otherwise permitted to make.
     const fallback = await prisma.branch.findFirst({
       where: { firmId, isActive: true },
       orderBy: { createdAt: "asc" },

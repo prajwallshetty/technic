@@ -11,7 +11,13 @@ class PGliteClient {
     const res = await this.pglite.query(text, values || []);
     if (rowMode === "array") {
       const rows = res.rows.map((row: any) =>
-        res.fields.map((f: any) => row[f.name])
+        res.fields.map((f: any) => {
+          const val = row[f.name];
+          if (val !== null && typeof val === "object" && !(val instanceof Date) && !Buffer.isBuffer(val) && !Array.isArray(val)) {
+            return JSON.stringify(val);
+          }
+          return val;
+        })
       );
       return {
         rows,
@@ -19,8 +25,20 @@ class PGliteClient {
         rowCount: res.affectedRows ?? res.rows.length,
       };
     }
+    const rows = res.rows.map((row: any) => {
+      const normalized: Record<string, any> = {};
+      for (const f of res.fields) {
+        const val = row[f.name];
+        if (val !== null && typeof val === "object" && !(val instanceof Date) && !Buffer.isBuffer(val) && !Array.isArray(val)) {
+          normalized[f.name] = JSON.stringify(val);
+        } else {
+          normalized[f.name] = val;
+        }
+      }
+      return normalized;
+    });
     return {
-      rows: res.rows,
+      rows,
       fields: res.fields,
       rowCount: res.affectedRows ?? res.rows.length,
     };
@@ -90,6 +108,26 @@ export function getPGlitePool(): PGlitePool {
             }
           }
           console.log("[DB Setup] Schema initialized successfully!");
+        } else {
+          // Automatically apply incremental migrations
+          const migrationsDir = path.join(process.cwd(), "prisma", "migrations");
+          if (fs.existsSync(migrationsDir)) {
+            const dirs = fs.readdirSync(migrationsDir, { withFileTypes: true })
+              .filter((d) => d.isDirectory() && d.name !== "0_init")
+              .map((d) => d.name)
+              .sort();
+            for (const dir of dirs) {
+              const migFile = path.join(migrationsDir, dir, "migration.sql");
+              if (fs.existsSync(migFile)) {
+                try {
+                  const sql = fs.readFileSync(migFile, "utf8");
+                  await pglite.exec(sql);
+                } catch {
+                  // Ignore if statements inside migration are already applied or duplicated
+                }
+              }
+            }
+          }
         }
       } catch (err) {
         console.error("[DB Setup] Migration error:", err);

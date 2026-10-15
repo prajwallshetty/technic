@@ -63,7 +63,7 @@ export function isSameState(sellerState: string | null | undefined, placeOfSuppl
 
 export function computeTaxSummary(
   lines: TaxLineInput[],
-  options: { mode: TaxMode; sameState: boolean },
+  options: { mode: TaxMode; sameState: boolean; manualRoundOff?: number | null },
 ): TaxSummary {
   const results: TaxLineResult[] = [];
   let subtotal = 0;
@@ -109,10 +109,11 @@ export function computeTaxSummary(
   }
 
   const totalBeforeRound = round2(taxableAmount + cgstTotal + sgstTotal + igstTotal);
-  // Round the grand total to the nearest rupee and record the difference —
-  // the printed document must show exactly what was charged.
-  const totalAmount = Math.round(totalBeforeRound);
-  const roundOff = round2(totalAmount - totalBeforeRound);
+  const roundOff =
+    typeof options.manualRoundOff === "number" && !isNaN(options.manualRoundOff)
+      ? round2(options.manualRoundOff)
+      : round2(Math.round(totalBeforeRound) - totalBeforeRound);
+  const totalAmount = round2(totalBeforeRound + roundOff);
 
   return {
     lines: results,

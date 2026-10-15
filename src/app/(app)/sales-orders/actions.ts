@@ -16,6 +16,7 @@ export async function createSalesOrderAction(input: {
     variantId?: string | null;
     quantity: number;
     unitPrice: number;
+    discountPercent?: number;
     gstRate?: number;
   }[];
 }) {

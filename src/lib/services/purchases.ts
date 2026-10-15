@@ -75,7 +75,7 @@ export async function createPurchaseOrder(input: PurchaseHeaderInput & { lines: 
   validateLines(input.lines);
   const firm = await prisma.firm.findUnique({ where: { id: input.firmId }, select: { state: true } });
   const summary = await computePurchaseSummary(input.lines, input.taxMode, firm?.state ?? null);
-  const poNumber = await nextDocumentNumber(input.firmId, DOCUMENT_TYPES.PURCHASE_ORDER, "NON_GST");
+  const poNumber = await nextDocumentNumber(input.firmId, DOCUMENT_TYPES.PURCHASE_ORDER, input.taxMode);
 
   const productIds = [...new Set(input.lines.map((l) => l.productId))];
   const products = await prisma.product.findMany({ where: { id: { in: productIds } }, include: { variants: true } });

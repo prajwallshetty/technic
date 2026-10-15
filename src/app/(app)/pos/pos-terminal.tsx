@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { Barcode, Minus, PackagePlus, Plus, ScanLine, Search, Trash2, UserPlus } from "lucide-react";
+import { Barcode, Minus, PackagePlus, Plus, ScanLine, Search, Tag, Trash2, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { QuickAddCustomerDialog, QuickAddProductDialog, type QuickCustomer, type
 import { checkoutAction } from "./actions";
 import { formatCurrency } from "@/lib/money";
 import { parseNumericInput, tidyAmountOnBlur, tidyQuantityOnBlur } from "@/lib/numeric-input";
+import { computeDiscountSummary, tidyDiscountOnBlur, type DiscountType } from "@/lib/discounts";
 import { cn } from "@/lib/utils";
 
 interface PosProduct {
@@ -51,8 +52,6 @@ interface CartLine {
   quantity: string;
   /** Raw input text — kept as a string so the field can be cleared while editing. */
   unitPrice: string;
-  /** Raw input text — line discount percentage. */
-  discount: string;
   gstRate: number;
   trackSerials: boolean;
   serials: string[];
@@ -64,6 +63,7 @@ export function PosTerminal({
   customers: initialCustomers,
   canCollectPayment,
   canSwitchMode,
+  canCreateCustomer,
 }: {
   mode: "GST" | "NON_GST";
   branchId: string;
@@ -71,6 +71,7 @@ export function PosTerminal({
   customers: PosCustomer[];
   canCollectPayment: boolean;
   canSwitchMode: boolean;
+  canCreateCustomer: boolean;
 }) {
   const router = useRouter();
   const [mode, setMode] = useState<"GST" | "NON_GST">(initialMode);
@@ -81,6 +82,11 @@ export function PosTerminal({
   const [query, setQuery] = useState("");
   const [cart, setCart] = useState<CartLine[]>([]);
   const [customerId, setCustomerId] = useState<string>("");
+  const [billDiscount, setBillDiscount] = useState("");
+  const [billDiscountType, setBillDiscountType] = useState<DiscountType>("%");
+  const [discountRemarks, setDiscountRemarks] = useState("");
+  const [roundOff, setRoundOff] = useState("");
+  const [isManualRoundOff, setIsManualRoundOff] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [pending, startTransition] = useTransition();
@@ -120,7 +126,6 @@ export function PosTerminal({
           name: [variant ? `${product.name} — ${variant.name}` : product.name, product.subName].filter(Boolean).join(" · "),
           quantity: "1",
           unitPrice: String(variant?.sellingPrice ?? product.sellingPrice),
-          discount: "0",
           gstRate: product.gstRate,
           trackSerials: product.trackSerials,
           serials: Array.from({ length: 1 }, () => ""),
@@ -164,34 +169,24 @@ export function PosTerminal({
   }));
 
   const totals = useMemo(() => {
-    let subtotal = 0;
-    let taxable = 0;
-    let cgst = 0;
-    let sgst = 0;
-    for (const line of cart) {
-      const gross =
-        parseNumericInput(line.unitPrice) *
-        parseNumericInput(line.quantity) *
-        (1 - Math.min(100, parseNumericInput(line.discount) || 0) / 100);
-      subtotal += gross;
-      const lineTaxable = mode === "GST" ? gross / (1 + line.gstRate / 100) : gross;
-      taxable += lineTaxable;
-      if (mode === "GST") {
-        const tax = gross - lineTaxable;
-        cgst += tax / 2;
-        sgst += tax / 2;
-      }
-    }
-    const total = Math.round(subtotal);
-    return {
-      subtotal,
-      taxable,
-      cgst,
-      sgst,
-      roundOff: total - subtotal,
-      total,
-    };
-  }, [cart, mode]);
+    return computeDiscountSummary({
+      lines: cart.map((line) => ({
+        quantity: parseNumericInput(line.quantity),
+        unitPrice: parseNumericInput(line.unitPrice),
+        discountValue: 0,
+        gstRate: mode === "GST" ? line.gstRate : 0,
+      })),
+      billDiscount:
+        parseNumericInput(billDiscount) > 0
+          ? {
+              type: billDiscountType,
+              value: parseNumericInput(billDiscount),
+            }
+          : null,
+      mode,
+      manualRoundOff: isManualRoundOff ? parseNumericInput(roundOff) : undefined,
+    });
+  }, [cart, billDiscount, billDiscountType, mode, isManualRoundOff, roundOff]);
 
   const checkout = () => {
     if (!customerId) {
@@ -210,22 +205,26 @@ export function PosTerminal({
     startTransition(async () => {
       const result = await checkoutAction({
         customerId,
-        lines: cart.map((line) => ({
+        lines: cart.map((line, index) => ({
           productId: line.productId,
           variantId: line.variantId,
           quantity: parseNumericInput(line.quantity),
           unitPrice: parseNumericInput(line.unitPrice),
-          discountPercent: parseNumericInput(line.discount) || 0,
+          discountPercent: totals.lines[index]?.effectiveDiscountPercent ?? 0,
           gstRate: mode === "GST" ? line.gstRate : 0,
           serialNumbers: line.trackSerials ? line.serials.map((s) => s.trim()).filter(Boolean) : undefined,
         })),
+        manualRoundOff: totals.roundOff,
         paymentAmount: canCollectPayment ? Number(paymentAmount) || undefined : undefined,
         paymentMethod: paymentMethod as never,
+        discountRemarks: discountRemarks || undefined,
         taxMode: mode,
       });
       if (result.ok) {
         toast.success(`Invoice ${result.data.invoiceNumber} created`);
         setCart([]);
+        setBillDiscount("");
+        setDiscountRemarks("");
         setPaymentAmount("");
         router.push(`/invoices/${result.data.invoiceId}`);
       } else {
@@ -308,9 +307,11 @@ export function PosTerminal({
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">Current sale</CardTitle>
-            <Button size="sm" variant="outline" onClick={() => setAddCustomerOpen(true)}>
-              <UserPlus /> Add Customer
-            </Button>
+            {canCreateCustomer ? (
+              <Button size="sm" variant="outline" onClick={() => setAddCustomerOpen(true)}>
+                <UserPlus /> Add Customer
+              </Button>
+            ) : null}
           </div>
           <SearchableSelect
             ariaLabel="Customer"
@@ -328,7 +329,9 @@ export function PosTerminal({
               <p className="text-sm">Cart is empty — add products from the catalogue.</p>
             </div>
           ) : (
-            cart.map((line) => (
+            cart.map((line, index) => {
+              const lineComputed = totals.lines[index];
+              return (
               <div key={line.key} className="space-y-2 rounded-lg border border-border p-3">
                 <div className="flex items-center justify-between gap-2">
                   <p className="min-w-0 truncate text-sm font-medium">{line.name}</p>
@@ -422,28 +425,11 @@ export function PosTerminal({
                     }
                     aria-label="Unit price"
                   />
-                  <Input
-                    className="h-8 w-20 numeric"
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    placeholder="Disc %"
-                    value={line.discount}
-                    onChange={(event) =>
-                      setCart((current) =>
-                        current.map((l) => (l.key === line.key ? { ...l, discount: event.target.value } : l)),
-                      )
-                    }
-                    aria-label="Discount percent"
-                  />
-                  <span className="numeric ml-auto text-sm font-semibold">
-                    {formatCurrency(
-                      parseNumericInput(line.unitPrice) *
-                        parseNumericInput(line.quantity) *
-                        (1 - Math.min(100, parseNumericInput(line.discount) || 0) / 100),
-                    )}
-                  </span>
+                  <div className="ml-auto flex items-baseline gap-1.5">
+                    <span className="numeric text-sm font-semibold">
+                      {formatCurrency(lineComputed?.netTotal ?? 0)}
+                    </span>
+                  </div>
                 </div>
                 {line.trackSerials ? (
                   <div className="space-y-1.5">
@@ -469,11 +455,76 @@ export function PosTerminal({
                   </div>
                 ) : null}
               </div>
-            ))
+            );})
           )}
 
           {cart.length > 0 ? (
             <>
+              <div className="space-y-2 rounded-lg border border-border bg-muted/20 p-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                    <Tag className="size-3.5 text-primary" />
+                    <span>Bill Discount</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-0.5 bg-muted p-0.5 rounded border border-input">
+                      <button
+                        type="button"
+                        className={cn(
+                          "px-2 py-0.5 text-xs font-semibold rounded transition-colors",
+                          billDiscountType === "%"
+                            ? "bg-background text-foreground shadow-xs"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        onClick={() => setBillDiscountType("%")}
+                      >
+                        %
+                      </button>
+                      <button
+                        type="button"
+                        className={cn(
+                          "px-2 py-0.5 text-xs font-semibold rounded transition-colors",
+                          billDiscountType === "₹"
+                            ? "bg-background text-foreground shadow-xs"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        onClick={() => setBillDiscountType("₹")}
+                      >
+                        ₹
+                      </button>
+                    </div>
+                    <Input
+                      className="h-8 w-24 text-right numeric text-xs"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder={billDiscountType === "%" ? "0 %" : "₹ 0"}
+                      value={billDiscount}
+                      onChange={(event) => setBillDiscount(event.target.value)}
+                      onBlur={(event) =>
+                        setBillDiscount(
+                          tidyDiscountOnBlur(event.target.value, billDiscountType, totals.grossSubtotal),
+                        )
+                      }
+                      aria-label="Overall bill discount"
+                    />
+                  </div>
+                </div>
+                {parseNumericInput(billDiscount) > 0 ? (
+                  <div className="space-y-1 border-t border-border/40 pt-1.5">
+                    <label className="text-[11px] text-muted-foreground">
+                      Discount remarks / reason (why discount is given)
+                    </label>
+                    <Input
+                      className="h-8 text-xs"
+                      placeholder="e.g. Festival offer, clearance, loyal customer..."
+                      value={discountRemarks}
+                      onChange={(event) => setDiscountRemarks(event.target.value)}
+                    />
+                  </div>
+                ) : null}
+              </div>
+
               {canSwitchMode && (
                 <div className="flex items-center justify-between py-2">
                   <span className="text-sm text-muted-foreground">Invoice type</span>
@@ -490,21 +541,71 @@ export function PosTerminal({
               )}
               <Separator />
               <div className="space-y-1 text-sm">
-                <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span className="numeric">{formatCurrency(totals.subtotal)}</span></div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Items subtotal</span>
+                  <span className="numeric">{formatCurrency(totals.grossSubtotal)}</span>
+                </div>
+                {totals.billDiscountTotal > 0 ? (
+                  <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                    <span>Bill discount ({billDiscountType === "%" ? `${parseNumericInput(billDiscount)}%` : "flat"})</span>
+                    <span className="numeric">-{formatCurrency(totals.billDiscountTotal)}</span>
+                  </div>
+                ) : null}
                 {mode === "GST" ? (
                   <>
-                    <div className="flex justify-between"><span className="text-muted-foreground">Taxable value</span><span className="numeric">{formatCurrency(totals.taxable)}</span></div>
-                    <div className="flex justify-between"><span className="text-muted-foreground">CGST</span><span className="numeric">{formatCurrency(totals.cgst)}</span></div>
-                    <div className="flex justify-between"><span className="text-muted-foreground">SGST</span><span className="numeric">{formatCurrency(totals.sgst)}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Taxable value</span><span className="numeric">{formatCurrency(totals.taxableTotal)}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">CGST</span><span className="numeric">{formatCurrency(totals.cgstTotal)}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">SGST</span><span className="numeric">{formatCurrency(totals.sgstTotal)}</span></div>
                   </>
                 ) : (
                   <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span className="numeric">Non-Tax</span></div>
                 )}
-                {totals.roundOff !== 0 ? (
-                  <div className="flex justify-between"><span className="text-muted-foreground">Round off</span><span className="numeric">{formatCurrency(totals.roundOff)}</span></div>
-                ) : null}
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-border/60">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <span>Round off</span>
+                    {isManualRoundOff ? (
+                      <span className="rounded bg-amber-500/10 px-1 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400">
+                        Manual
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {isManualRoundOff ? (
+                      <button
+                        type="button"
+                        className="text-[11px] font-medium text-primary hover:underline cursor-pointer"
+                        onClick={() => {
+                          setIsManualRoundOff(false);
+                          setRoundOff("");
+                        }}
+                      >
+                        Reset auto
+                      </button>
+                    ) : null}
+                    <Input
+                      className="h-7 w-24 text-right numeric text-xs font-mono"
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      value={
+                        isManualRoundOff
+                          ? roundOff
+                          : totals.roundOff !== 0
+                          ? totals.roundOff > 0
+                            ? `+${totals.roundOff.toFixed(2)}`
+                            : totals.roundOff.toFixed(2)
+                          : "0.00"
+                      }
+                      onChange={(e) => {
+                        setIsManualRoundOff(true);
+                        setRoundOff(e.target.value);
+                      }}
+                      aria-label="Manual round figure"
+                    />
+                  </div>
+                </div>
                 <div className="flex justify-between border-t border-border pt-2 text-base font-semibold">
-                  <span>Total</span><span className="numeric">{formatCurrency(totals.total)}</span>
+                  <span>Total</span><span className="numeric">{formatCurrency(totals.totalAmount)}</span>
                 </div>
               </div>
 
@@ -537,7 +638,7 @@ export function PosTerminal({
                 onClick={checkout}
                 disabled={pending || !customerId}
               >
-                {pending ? "Billing…" : `Charge ${formatCurrency(totals.total)}`}
+                {pending ? "Billing…" : `Charge ${formatCurrency(totals.totalAmount)}`}
               </Button>
               <p className="text-center text-xs text-muted-foreground">
                 Invoice will be a {mode === "GST" ? "Tax Invoice" : "Non-Tax Invoice"}

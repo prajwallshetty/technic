@@ -271,6 +271,7 @@ export async function generateInvoicePDF(invoiceId: string): Promise<{ buffer: B
       bankDetails: company.bankDetails || undefined,
       terms: invoice.terms || company.termsConditions,
       notes: invoice.notes,
+      discountRemarks: invoice.discountRemarks,
       signatoryFor: company.name,
       cancelledReason: invoice.status === "CANCELLED" ? invoice.cancellationReason || "Cancelled" : null,
     },
@@ -305,7 +306,7 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
     lines,
     taxable,
     { cgst: num(quotation.cgstAmount), sgst: num(quotation.sgstAmount), igst: num(quotation.igstAmount) },
-    0,
+    num(quotation.roundOff),
     num(quotation.totalAmount),
   );
 
@@ -336,6 +337,7 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
       bankDetails: company.bankDetails || undefined,
       terms: quotation.terms || company.termsConditions,
       notes: quotation.notes,
+      discountRemarks: quotation.discountRemarks,
       signatoryFor: company.name,
     },
     `Quotation ${quotation.quotationNumber}`,

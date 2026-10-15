@@ -76,10 +76,66 @@ function formatNumber(prefix: string, value: number, width = 4): string {
   return `${prefix}${String(value).padStart(width, "0")}`;
 }
 
+/** Checks if a document number is already used in the database to prevent P2002 collisions. */
+async function isDocumentNumberUsed(
+  documentType: string,
+  docNumber: string,
+  db: Db,
+): Promise<boolean> {
+  try {
+    switch (documentType) {
+      case DOCUMENT_TYPES.INVOICE: {
+        const found = await db.invoice.findFirst({ where: { invoiceNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.QUOTATION: {
+        const found = await db.quotation.findFirst({ where: { quotationNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.SALES_ORDER: {
+        const found = await db.salesOrder.findFirst({ where: { orderNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.PURCHASE_ORDER: {
+        const found = await db.purchaseOrder.findFirst({ where: { poNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.PURCHASE_INVOICE: {
+        const found = await db.purchaseInvoice.findFirst({ where: { invoiceNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.SALES_RETURN: {
+        const found = await db.salesReturn.findFirst({ where: { returnNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.PURCHASE_RETURN: {
+        const found = await db.purchaseReturn.findFirst({ where: { returnNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.PAYMENT: {
+        const found = await db.payment.findFirst({ where: { paymentNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.EXPENSE: {
+        const found = await db.expense.findFirst({ where: { expenseNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.STOCK_TRANSFER: {
+        const found = await db.stockTransfer.findFirst({ where: { transferNumber: docNumber }, select: { id: true } });
+        return Boolean(found);
+      }
+      default:
+        return false;
+    }
+  } catch {
+    return false;
+  }
+}
+
 /**
- * Allocates the next document number for a firm. The default prefixes follow
- * the handover examples — GST: TT/GST/26-27/0001, non-GST: TT/NG/26-27/0001 —
- * and every prefix is overridable per firm in settings.
+ * Allocates the next document number for a firm. The prefixes follow
+ * firm configuration or defaults — GST: TT/GST/26-27/0001, non-GST: TT/NG/26-27/0001.
+ * Automatically checks uniqueness to prevent duplicate collisions.
  */
 export async function nextDocumentNumber(
   firmId: string,
@@ -90,11 +146,20 @@ export async function nextDocumentNumber(
 ): Promise<string> {
   const fy = financialYearFor(date);
 
-  const settings = await prisma.setting.findMany({
-    where: { firmId, key: { in: [`sequence_${documentType}_${accessMode.toLowerCase()}`, `sequence_${documentType}`] } },
-  });
+  const [firm, settings] = await Promise.all([
+    db.firm.findUnique({
+      where: { id: firmId },
+      select: { code: true, invoicePrefix: true, quotationPrefix: true, purchasePrefix: true },
+    }),
+    db.setting.findMany({
+      where: { firmId, key: { in: [`sequence_${documentType}_${accessMode.toLowerCase()}`, `sequence_${documentType}`] } },
+    }),
+  ]);
+
   const map = new Map(settings.map((s) => [s.key, s.value]));
   const custom = map.get(`sequence_${documentType}_${accessMode.toLowerCase()}`) ?? map.get(`sequence_${documentType}`);
+
+  const firmCode = firm?.code ?? "TT";
 
   let prefix: string;
   if (custom) {
@@ -103,48 +168,50 @@ export async function nextDocumentNumber(
       .replace("{MODE}", accessMode === "GST" ? "GST" : "NG")
       .replace("{TYPE}", documentType.toUpperCase());
   } else if (documentType === DOCUMENT_TYPES.INVOICE) {
-    prefix = accessMode === "GST" ? `TT/GST/${fy}/` : `TT/NG/${fy}/`;
+    const invPre = firm?.invoicePrefix || firmCode;
+    prefix = accessMode === "GST" ? `${invPre}/GST/${fy}/` : `${invPre}/NG/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.QUOTATION) {
-    prefix = `TT/QT/${fy}/`;
+    const qtPre = firm?.quotationPrefix || firmCode;
+    prefix = `${qtPre}/QT/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.SALES_ORDER) {
-    prefix = `TT/SO/${fy}/`;
+    prefix = `${firmCode}/SO/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.PURCHASE_ORDER) {
-    prefix = `TT/PO/${fy}/`;
+    const poPre = firm?.purchasePrefix || firmCode;
+    prefix = `${poPre}/PO/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.PURCHASE_INVOICE) {
-    prefix = `TT/PI/${fy}/`;
+    const poPre = firm?.purchasePrefix || firmCode;
+    prefix = `${poPre}/PI/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.SALES_RETURN) {
-    prefix = `TT/SR/${fy}/`;
+    prefix = `${firmCode}/SR/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.PURCHASE_RETURN) {
-    prefix = `TT/PR/${fy}/`;
+    prefix = `${firmCode}/PR/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.PAYMENT) {
-    prefix = `TT/PAY/${fy}/`;
+    prefix = `${firmCode}/PAY/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.CREDIT_NOTE) {
-    prefix = `TT/CN/${fy}/`;
+    prefix = `${firmCode}/CN/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.DEBIT_NOTE) {
-    prefix = `TT/DN/${fy}/`;
+    prefix = `${firmCode}/DN/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.STOCK_TRANSFER) {
-    prefix = `TT/ST/${fy}/`;
+    prefix = `${firmCode}/ST/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.EXPENSE) {
-    prefix = `TT/EXP/${fy}/`;
+    prefix = `${firmCode}/EXP/${fy}/`;
   } else if (documentType === DOCUMENT_TYPES.CUSTOMER) {
     prefix = "CUS";
   } else if (documentType === DOCUMENT_TYPES.SUPPLIER) {
     prefix = "SUP";
   } else {
-    prefix = `TT/${documentType.toUpperCase()}/${fy}/`;
+    prefix = `${firmCode}/${documentType.toUpperCase()}/${fy}/`;
   }
 
-  const plain = /^[A-Za-z0-9/-]+$/.test(prefix);
-  if (!plain) {
-    // The padded number is still unique per firm+type+mode+FY even with a
-    // slashed prefix; uniqueness of the final string is enforced by callers.
-    return formatNumber(prefix, await nextDocumentSequence(firmId, documentType, accessMode, fy, db));
-  }
-  return formatNumber(prefix, await nextDocumentSequence(firmId, documentType, accessMode, fy, db));
-}
+  let seq = await nextDocumentSequence(firmId, documentType, accessMode, fy, db);
 
-function pad(value: number, width: number): string {
-  return value.toString().padStart(width, "0");
+  // Guarantee uniqueness: loop until a free number is found
+  while (true) {
+    const candidate = formatNumber(prefix, seq);
+    const used = await isDocumentNumberUsed(documentType, candidate, db);
+    if (!used) return candidate;
+    seq = await nextDocumentSequence(firmId, documentType, accessMode, fy, db);
+  }
 }
 
 /** Short customer/supplier codes: CUS00001. */

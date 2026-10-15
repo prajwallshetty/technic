@@ -272,7 +272,6 @@ export async function createSalesReturn(input: {
         where: { id: line.id },
         data: { returnedQty: { increment: quantity } },
       });
-      await tx.salesReturn.update({ where: { id: salesReturn.id }, data: {} });
 
       // Stock returns only when the return is approved.
       if (line.serialNumbers && serials.length > 0) {

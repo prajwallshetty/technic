@@ -1,16 +1,31 @@
+import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 import { getPGlitePool } from "@/lib/db-setup";
 
 const createPrismaClient = (): PrismaClient => {
   const connectionString = process.env.DATABASE_URL;
-  const adapter = connectionString
-    ? new PrismaPg({ connectionString })
-    : new PrismaPg(getPGlitePool() as any);
+  let adapter;
+  if (connectionString) {
+    const pool = new Pool({
+      connectionString,
+      ssl: { rejectUnauthorized: false },
+      max: 10,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 15000,
+      keepAlive: true,
+    });
+    pool.on("error", (err) => {
+      console.warn("Postgres pool client warning:", err.message);
+    });
+    adapter = new PrismaPg(pool);
+  } else {
+    adapter = new PrismaPg(getPGlitePool() as any);
+  }
 
   return new PrismaClient({
     adapter,
-    transactionOptions: { maxWait: 5_000, timeout: 30_000 },
+    transactionOptions: { maxWait: 10_000, timeout: 60_000 },
     log:
       process.env.NODE_ENV === "development"
         ? ["warn", "error"]

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Edit } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,6 +26,7 @@ interface EditFirmButtonProps {
 }
 
 export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [formData, setFormData] = useState({
@@ -41,6 +43,7 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
     phone: "",
     email: "",
     website: "",
+    logo: "",
     invoicePrefix: "INV",
     quotationPrefix: "QT",
     purchasePrefix: "PO",
@@ -50,7 +53,6 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
 
   const handleOpenChange = async (newOpen: boolean) => {
     if (newOpen && !open) {
-      // Load firm data when opening
       setPending(true);
       try {
         const response = await fetch(`/api/firms/${firmId}`);
@@ -70,6 +72,7 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
             phone: firm.phone || "",
             email: firm.email || "",
             website: firm.website || "",
+            logo: firm.logoUrl || "",
             invoicePrefix: firm.invoicePrefix || "INV",
             quotationPrefix: firm.quotationPrefix || "QT",
             purchasePrefix: firm.purchasePrefix || "PO",
@@ -77,7 +80,7 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
             status: firm.status || "ACTIVE",
           });
         } else {
-          toast.error("Failed to load firm data");
+          toast.error("Failed to load firm details");
         }
       } finally {
         setPending(false);
@@ -93,8 +96,9 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
     try {
       const result = await editFirmAction({ firmId, ...formData });
       if (result.ok) {
-        toast.success("Firm updated successfully");
+        toast.success("Firm details updated successfully");
         setOpen(false);
+        router.refresh();
       } else {
         toast.error(result.error);
       }
@@ -112,11 +116,11 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit firm</DialogTitle>
-          <DialogDescription>Update firm details. Firm code cannot be changed.</DialogDescription>
+          <DialogTitle>Edit Firm · {firmName}</DialogTitle>
+          <DialogDescription>Update firm details, contact info, and billing settings.</DialogDescription>
         </DialogHeader>
         <Link href={`/firms/${firmId}/settings`} className="text-sm text-primary underline-offset-4 hover:underline">
-          Firm settings and deletion
+          Advanced firm settings &amp; administration
         </Link>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -183,6 +187,15 @@ export function EditFirmButton({ firmId, firmName }: EditFirmButtonProps) {
                 value={formData.website}
                 onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                 placeholder="www.technic.example"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="logo">Logo URL</Label>
+              <Input
+                id="logo"
+                value={formData.logo}
+                onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
+                placeholder="https://example.com/logo.png"
               />
             </div>
             <div className="space-y-2">

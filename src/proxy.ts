@@ -35,6 +35,9 @@ export default auth(function proxy(request) {
 export const config = {
   matcher: [
     // Everything except Next internals, the auth endpoints and static assets.
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)",
+    // `_next/*` paths other than the static/image subfolders are HMR and
+    // RSC runtime machinery — the proxy must not touch them, or the dev
+    // HMR websocket handshake gets mangled and client pages never hydrate.
+    "/((?!api/auth|_next|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)",
   ],
 };

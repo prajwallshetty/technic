@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { createCustomerAction } from "./actions";
 
-const STATES = [
+export const STATES = [
   "Andhra Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat",
   "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
   "Madhya Pradesh", "Maharashtra", "Odisha", "Punjab", "Rajasthan", "Tamil Nadu",

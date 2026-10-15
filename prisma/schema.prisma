@@ -253,9 +253,11 @@ enum AuditAction {
   SALE_RETURNED
   INVOICE_CREATED
   INVOICE_CANCELLED
+  INVOICE_DELETED
   PAYMENT_CREATED
   QUOTATION_CREATED
   QUOTATION_CONVERTED
+  QUOTATION_DELETED
   CUSTOMER_CREATED
   SUPPLIER_CREATED
   USER_CREATED
@@ -307,6 +309,9 @@ model Firm {
   /// e.g. "26-27" — drives document numbering reset rules.
   financialYear   String     @default("26-27")
   status          FirmStatus @default(ACTIVE)
+  /// Soft-delete marker: set when the firm is moved to the trash. The firm is
+  /// hidden from every query and purged for good 100 days later.
+  deletedAt       DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1069,10 +1074,12 @@ model Quotation {
 
   subtotal       Decimal @default(0) @db.Decimal(12, 2)
   discountAmount Decimal @default(0) @db.Decimal(12, 2)
+  discountRemarks String?
   taxableAmount  Decimal @default(0) @db.Decimal(12, 2)
   cgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   sgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   igstAmount     Decimal @default(0) @db.Decimal(12, 2)
+  roundOff       Decimal @default(0) @db.Decimal(12, 2)
   totalAmount    Decimal @default(0) @db.Decimal(12, 2)
 
   notes String?
@@ -1137,6 +1144,7 @@ model SalesOrder {
 
   subtotal       Decimal @default(0) @db.Decimal(12, 2)
   discountAmount Decimal @default(0) @db.Decimal(12, 2)
+  discountRemarks String?
   taxableAmount  Decimal @default(0) @db.Decimal(12, 2)
   cgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   sgstAmount     Decimal @default(0) @db.Decimal(12, 2)
@@ -1218,6 +1226,7 @@ model Invoice {
 
   subtotal       Decimal @default(0) @db.Decimal(12, 2)
   discountAmount Decimal @default(0) @db.Decimal(12, 2)
+  discountRemarks String?
   taxableAmount  Decimal @default(0) @db.Decimal(12, 2)
   cgstAmount     Decimal @default(0) @db.Decimal(12, 2)
   sgstAmount     Decimal @default(0) @db.Decimal(12, 2)

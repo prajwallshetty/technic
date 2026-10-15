@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown, Search } from "lucide-react";
+import { Check, ChevronDown, Plus, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,14 @@ interface SearchableSelectProps {
   className?: string;
   disabled?: boolean;
   ariaLabel?: string;
+  /**
+   * Optional "create" row rendered under the list, for when the record being
+   * searched for does not exist yet. Receives the current filter text so the
+   * new record can be pre-filled with what was typed.
+   */
+  onCreate?: (query: string) => void;
+  /** Label for that row, e.g. "Add customer". Defaults to "Add new". */
+  createLabel?: string;
 }
 
 /**
@@ -39,6 +47,8 @@ export function SearchableSelect({
   className,
   disabled,
   ariaLabel,
+  onCreate,
+  createLabel = "Add new",
 }: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -112,7 +122,6 @@ export function SearchableSelect({
 
       {open ? (
         <div
-          role="listbox"
           className="absolute z-50 mt-1 w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-lg"
         >
           <div className="border-b border-border p-2">
@@ -135,7 +144,13 @@ export function SearchableSelect({
                   } else if (event.key === "Enter") {
                     event.preventDefault();
                     const option = filtered[activeIndex];
-                    if (option) commit(option.value);
+                    if (option) {
+                      commit(option.value);
+                    } else if (onCreate && query.trim()) {
+                      // Nothing matches this search — create it instead.
+                      setOpen(false);
+                      onCreate(query.trim());
+                    }
                   }
                 }}
                 placeholder="Type to filter…"
@@ -144,7 +159,7 @@ export function SearchableSelect({
               />
             </div>
           </div>
-          <div className="max-h-60 overflow-y-auto scrollbar-thin p-1">
+          <div role="listbox" aria-label={ariaLabel} className="max-h-60 overflow-y-auto scrollbar-thin p-1">
             {filtered.length === 0 ? (
               <p className="px-3 py-6 text-center text-sm text-muted-foreground">{emptyMessage}</p>
             ) : (
@@ -169,9 +184,26 @@ export function SearchableSelect({
                   </span>
                   {option.value === value ? <Check className="size-4 shrink-0" aria-hidden /> : null}
                 </button>
-              ))
+              )              )
             )}
           </div>
+          {onCreate ? (
+            <div className="border-t border-border p-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  onCreate(query.trim());
+                }}
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm text-primary outline-none hover:bg-accent focus-visible:bg-accent"
+              >
+                <Plus className="size-4 shrink-0" aria-hidden />
+                <span className="truncate">
+                  {query.trim() ? `${createLabel} “${query.trim()}”` : createLabel}
+                </span>
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>

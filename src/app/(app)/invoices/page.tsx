@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { listInvoices } from "@/lib/services/invoice-list";
+import { DeleteInvoiceButton } from "./delete-invoice-button";
 import { requirePermissionInFirm } from "@/lib/session";
 import { formatCurrency } from "@/lib/money";
 import { formatDate } from "@/lib/dates";
@@ -95,7 +96,40 @@ export default async function InvoicesPage({
         <StatusBadge status={row.status} label={INVOICE_STATUS_LABELS[row.status] ?? row.status} dot />
       ),
     },
+    {
+      key: "actions",
+      header: "",
+      headerClassName: "text-right",
+      className: "text-right",
+      cell: (row) => (
+        <div className="flex items-center justify-end gap-1.5">
+          {row.status !== "CANCELLED" && canEdit ? (
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/invoices/${row.id}?edit=true`}>Edit</Link>
+            </Button>
+          ) : null}
+          {canDelete ? (
+            <DeleteInvoiceButton
+              invoiceId={row.id}
+              invoiceNumber={row.invoiceNumber}
+              isCancelled={row.status === "CANCELLED"}
+              size="sm"
+              variant="outline"
+            />
+          ) : null}
+        </div>
+      ),
+    },
   ];
+
+  const canEdit =
+    user.permissions.includes("invoice.create") ||
+    user.permissions.includes("sales.edit") ||
+    user.permissions.includes("invoice.edit");
+  const canDelete =
+    user.permissions.includes("invoice.delete") ||
+    user.permissions.includes("sales.edit") ||
+    user.permissions.includes("invoice.edit");
 
   return (
     <div className="space-y-4">
@@ -163,17 +197,24 @@ export default async function InvoicesPage({
           />
         }
         renderMobileCard={(row) => (
-          <Link href={`/invoices/${row.id}`} className="block space-y-1.5">
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-medium">{row.invoiceNumber}</span>
-              <StatusBadge status={row.status} label={INVOICE_STATUS_LABELS[row.status] ?? row.status} />
-            </div>
-            <p className="text-sm text-muted-foreground">{row.customerName}</p>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{formatDate(row.invoiceDate)}</span>
-              <span className="numeric font-semibold">{formatCurrency(row.total)}</span>
-            </div>
-          </Link>
+          <div className="space-y-1.5">
+            <Link href={`/invoices/${row.id}`} className="block space-y-1.5">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium">{row.invoiceNumber}</span>
+                <StatusBadge status={row.status} label={INVOICE_STATUS_LABELS[row.status] ?? row.status} />
+              </div>
+              <p className="text-sm text-muted-foreground">{row.customerName}</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">{formatDate(row.invoiceDate)}</span>
+                <span className="numeric font-semibold">{formatCurrency(row.total)}</span>
+              </div>
+            </Link>
+            {row.status !== "CANCELLED" && canEdit ? (
+              <Button asChild size="sm" variant="outline" className="w-full">
+                <Link href={`/invoices/${row.id}?edit=true`}>Edit invoice</Link>
+              </Button>
+            ) : null}
+          </div>
         )}
       />
 

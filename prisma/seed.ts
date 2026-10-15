@@ -28,14 +28,10 @@ if (!process.env.DATABASE_URL) {
   }
 }
 
-import { getPGlitePool } from "../src/lib/db-setup";
-
 const connectionString = process.env.DATABASE_URL;
-const prisma = new PrismaClient({
-  adapter: connectionString
-    ? new PrismaPg({ connectionString })
-    : new PrismaPg(getPGlitePool() as any),
-});
+if (!connectionString) throw new Error("DATABASE_URL is not set");
+
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 
 const FIRM_ID = "firm_technic_main";
 const FY = "26-27";
@@ -732,6 +728,7 @@ async function main() {
     documentType: string,
     taxMode: "GST" | "NON_GST",
     value: number,
+    financialYear: string = FY,
   ) => {
     await prisma.documentSequence.upsert({
       where: {
@@ -739,10 +736,10 @@ async function main() {
           firmId: FIRM_ID,
           documentType,
           taxMode,
-          financialYear: FY,
+          financialYear,
         },
       },
-      create: { firmId: FIRM_ID, documentType, taxMode, financialYear: FY, value },
+      create: { firmId: FIRM_ID, documentType, taxMode, financialYear, value },
       update: { value },
     });
   };
@@ -786,37 +783,28 @@ async function main() {
     await setCounter("payment", "NON_GST", payMax);
   }
 
-  const customerCount = await prisma.customer.count({ where: { firmId: FIRM_ID } });
-  if (customerCount > 0) {
-    await prisma.documentSequence.upsert({
-      where: {
-        firmId_documentType_taxMode_financialYear: {
-          firmId: FIRM_ID,
-          documentType: "customer",
-          taxMode: "NON_GST",
-          financialYear: "ALL",
-        },
-      },
-      create: { firmId: FIRM_ID, documentType: "customer", taxMode: "NON_GST", financialYear: "ALL", value: customerCount },
-      update: { value: customerCount },
-    });
-  }
+  // Customer/supplier codes are CUS00001/SUP00001 on a financialYear-independent
+  // sequence ("ALL"). Sync those counters too, otherwise the first record
+  // created after seeding collides with a hand-created seed code.
+  const seedCustomersForSync = await prisma.customer.findMany({
+    where: { firmId: FIRM_ID },
+    select: { code: true },
+  });
+  const customerMax = Math.max(
+    0,
+    ...seedCustomersForSync.map((c) => Number(c.code.replace(/^CUS/, ""))),
+  );
+  if (customerMax > 0) await setCounter("customer", "NON_GST", customerMax, "ALL");
 
-  const supplierCount = await prisma.supplier.count({ where: { firmId: FIRM_ID } });
-  if (supplierCount > 0) {
-    await prisma.documentSequence.upsert({
-      where: {
-        firmId_documentType_taxMode_financialYear: {
-          firmId: FIRM_ID,
-          documentType: "supplier",
-          taxMode: "NON_GST",
-          financialYear: "ALL",
-        },
-      },
-      create: { firmId: FIRM_ID, documentType: "supplier", taxMode: "NON_GST", financialYear: "ALL", value: supplierCount },
-      update: { value: supplierCount },
-    });
-  }
+  const seedSuppliersForSync = await prisma.supplier.findMany({
+    where: { firmId: FIRM_ID },
+    select: { code: true },
+  });
+  const supplierMax = Math.max(
+    0,
+    ...seedSuppliersForSync.map((s) => Number(s.code.replace(/^SUP/, ""))),
+  );
+  if (supplierMax > 0) await setCounter("supplier", "NON_GST", supplierMax, "ALL");
 
   console.log("Seed complete.");
 }

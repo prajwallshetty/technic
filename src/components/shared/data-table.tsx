@@ -67,8 +67,46 @@ export function DataTable<T>({
   hiddenColumns = [],
   renderMobileCard,
 }: DataTableProps<T>) {
-  if (rows.length === 0 && empty) {
-    return <>{empty}</>;
+  if (rows.length === 0) {
+    if (empty) return <>{empty}</>;
+    const hidden = new Set(hiddenColumns);
+    const visible = columns.filter((column) => !hidden.has(column.key));
+    return (
+      <div className={cn("overflow-x-auto rounded-xl border border-border bg-card", className)}>
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              {visible.map((column) => (
+                <TableHead
+                  key={column.key}
+                  className={cn(
+                    column.hideOnMobile && "hidden sm:table-cell",
+                    column.headerClassName,
+                  )}
+                >
+                  {column.sortKey ? (
+                    <SortHeader
+                      sortKey={column.sortKey}
+                      label={column.header}
+                      align={column.headerClassName?.includes("text-right") ? "right" : "left"}
+                    />
+                  ) : (
+                    column.header
+                  )}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={visible.length || 1} className="h-32 text-center text-muted-foreground text-sm">
+                No records found.
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
   }
 
   const hidden = new Set(hiddenColumns);

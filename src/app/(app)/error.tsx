@@ -26,11 +26,11 @@ export default function AppError({
         <div className="space-y-1">
           <p className="font-medium">Something went wrong</p>
           <p className="max-w-md text-sm text-muted-foreground">
-            This screen failed to load. Try again — if the problem continues, note
-            the reference below and contact support.
+            {error?.message ||
+              "This screen failed to load. Try again — if the problem continues, note the reference below and contact support."}
           </p>
-          {error.digest ? (
-            <p className="font-mono text-xs text-muted-foreground">{error.digest}</p>
+          {error?.digest ? (
+            <p className="font-mono text-xs text-muted-foreground">Reference: {error.digest}</p>
           ) : null}
         </div>
         <Button onClick={reset}>Try again</Button>

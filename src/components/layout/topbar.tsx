@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlobalSearch } from "@/components/layout/global-search";
 import { UserMenu } from "@/components/layout/user-menu";
+import { BranchSwitcher } from "@/components/layout/branch-switcher";
 import { TechnicLogo } from "@/components/shared/technic-logo";
 import type { UserRole } from "@/generated/prisma/enums";
 
@@ -37,9 +38,9 @@ export function Topbar({ name, email, role, branchName, firmName, onOpenSidebar 
         </Link>
       </div>
 
-      <div className="hidden min-w-0 flex-col lg:flex">
+      <div className="hidden min-w-0 flex-col gap-0.5 lg:flex">
         <span className="truncate text-sm font-semibold leading-tight">{firmName ?? "Technic Technologies"}</span>
-        <span className="text-xs leading-tight text-muted-foreground">{branchName ?? "All branches"}</span>
+        <BranchSwitcher currentBranchName={branchName} />
       </div>
 
       <div className="min-w-0 flex-1">
