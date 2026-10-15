@@ -21,9 +21,11 @@ import type { CompanyProfile } from "./types";
  * record. The same renderer prints Quotations.
  */
 
-const FONT = "Helvetica";
-const FONT_BOLD = "Helvetica-Bold";
-// Helvetica has no ₹ glyph; this bundled font is used for the symbol only.
+// Only bundled TTFs (public/fonts) are used: PDFKit's built-in Helvetica reads
+// .afm files from disk at runtime, which breaks in a bundled production build.
+// DejaVu also carries the ₹ glyph.
+const FONT = "DejaVuSans";
+const FONT_BOLD = "DejaVuSans-Bold";
 const FONT_SYMBOL = "DejaVuSans-Bold";
 
 const INK = "#000000";
@@ -387,7 +389,8 @@ export async function renderSalesDocument(d: SalesDocData, title: string): Promi
     bufferPages: true,
     info: { Title: title, Author: d.company.name, Creator: "Technic Technologies ERP" },
   });
-  doc.registerFont(FONT_SYMBOL, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
+  doc.registerFont(FONT, path.join(process.cwd(), "public", "fonts", "DejaVuSans.ttf"));
+  doc.registerFont(FONT_BOLD, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
 
   const cols = columns(d.isGst);
   const descIdx = cols.findIndex((c) => c.id === "desc");
