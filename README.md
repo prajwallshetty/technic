@@ -2,7 +2,7 @@
 
 A production-ready, multi-branch electronics retail ERP built for Technic Technologies: point-of-sale billing, serial/IMEI tracking, GST & non-GST invoicing, purchases, inventory, warranty and role-based administration — in one web app.
 
-## Feature Overview
+## Feature Overvie
 
 - **6-digit access-code login** (no passwords) with per-role permissions and full audit trail
 - **Firm selection & dual access modes** — GST mode (Tax Invoices) and Non-GST mode (retail bills), each unlocked with its own secure access code; document numbering is per firm + mode + financial year
