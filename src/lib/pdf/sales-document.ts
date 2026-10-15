@@ -9,30 +9,26 @@ import type { BranchProfile } from "./pdf-builder";
 import type { CompanyProfile } from "./types";
 
 /**
- * Technic Technologies sales-document layout — the bordered, form-style
- * A4 Tax Invoice / Invoice / Quotation. One renderer for all three so the
- * documents look identical. Nothing is hardcoded: every value comes from
- * the `SalesDocData` the caller builds from the saved record.
+ * Technic Technology sales-document layout — a faithful reproduction of the
+ * firm's existing printed Tax Invoice: one bordered A4 sheet, monochrome,
+ * logo left / company details right, "To" block beside a label-value grid
+ * (Invoice No., Date, Type, Despatched Through, E-Way No.), an items table
+ * (Sl No · Description · Hsn · Quantity · Gst% · Rate · Amount), a GST slab
+ * summary, bank details, amount in words, terms, and the totals panel with
+ * "For <company> / Authorised Signatory".
  *
- * Page structure (top to bottom):
- *   title bar → company + invoice details → To / dispatch & e-way →
- *   items table → [amount in words + HSN tax summary | totals] →
- *   [bank details + terms | authorised signatory]
+ * Nothing is hardcoded: every value is supplied by the caller from the saved
+ * record. The same renderer prints Quotations.
  */
 
-const FONT = "DejaVuSans";
-const FONT_BOLD = "DejaVuSans-Bold";
+const FONT = "Helvetica";
+const FONT_BOLD = "Helvetica-Bold";
+// Helvetica has no ₹ glyph; this bundled font is used for the symbol only.
+const FONT_SYMBOL = "DejaVuSans-Bold";
 
-const C = {
-  ink: "#111111",
-  muted: "#4a4a4a",
-  line: "#6b7280",
-  light: "#cfd4d9",
-  head: "#123524",
-  headText: "#ffffff",
-  tint: "#eef2ef",
-  accent: "#e31e2d",
-};
+const INK = "#000000";
+const LINE = "#333333";
+const ACCENT = "#c1121f";
 
 export interface SalesDocLine {
   name: string;
@@ -40,534 +36,451 @@ export interface SalesDocLine {
   serials?: string[];
   hsn?: string | null;
   quantity: number;
-  /** Unit rate shown in the table (ex-tax on GST documents). */
+  /** Unit rate, ex-tax on GST documents. */
   rate: number;
+  /** Line discount percent (applied in the totals panel, as on the printed form). */
   discountPercent: number;
+  /** Amount after discount, ex-tax — feeds the GST slab summary. */
   taxable: number;
   gstRate: number;
+  /** quantity × rate (before discount). */
   amount: number;
 }
 
 export interface SalesDocTotals {
   gross: number;
   discount: number;
+  /** Gross − discount. */
   taxable: number;
   cgst: number;
   sgst: number;
   igst: number;
   roundOff: number;
   total: number;
-  received?: number;
-  due?: number;
 }
 
 export interface SalesDocData {
   title: string;
-  /** Small caption under the title, e.g. "ORIGINAL FOR RECIPIENT". */
-  titleNote?: string;
   isGst: boolean;
   company: CompanyProfile & { state?: string | null };
   branch: BranchProfile;
+  /** Label/value rows of the grid beside the customer block. Labels carry their own colon. */
   meta: [string, string][];
   toHeading?: string;
   to: { name: string; lines: string[] };
-  sideHeading: string;
-  side: [string, string][];
   lines: SalesDocLine[];
   totals: SalesDocTotals;
-  totalLabel: string;
   bankDetails?: string;
   terms?: string;
-  signatoryFor: string;
-  preparedBy?: string | null;
   notes?: string | null;
+  signatoryFor: string;
   cancelledReason?: string | null;
 }
 
 const A4 = { w: 595.28, h: 841.89 };
-const M = 24; // page margin == outer border inset
+const M = 24;
 const W = A4.w - M * 2;
-const PAD = 5;
+const PANEL_W = 170; // right-hand panel (Gst% + Rate + Amount columns)
+const PAD = 4;
 
-const nf = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const money = (v: number) => nf.format(Math.round((v + Number.EPSILON) * 100) / 100);
-const rupees = (v: number) => `₹ ${money(v)}`;
+const grouped = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const r2 = (v: number) => Math.round((v + Number.EPSILON) * 100) / 100;
+const plain = (v: number) => r2(v).toFixed(2);
+const group = (v: number) => grouped.format(r2(v));
 
 type Doc = InstanceType<typeof PDFDocument>;
+interface T { w: number; size?: number; bold?: boolean; align?: "left" | "center" | "right"; color?: string }
 
-interface TextOpts {
-  w: number;
-  size?: number;
-  bold?: boolean;
-  color?: string;
-  align?: "left" | "center" | "right";
+const hOf = (doc: Doc, s: string, o: T) =>
+  doc.font(o.bold ? FONT_BOLD : FONT).fontSize(o.size ?? 8).heightOfString(s, { width: o.w, align: o.align });
+
+function put(doc: Doc, s: string, x: number, y: number, o: T): number {
+  doc.font(o.bold ? FONT_BOLD : FONT).fontSize(o.size ?? 8).fillColor(o.color ?? INK)
+    .text(s, x, y, { width: o.w, align: o.align, lineBreak: true });
+  return hOf(doc, s, o);
+}
+const hline = (doc: Doc, x1: number, x2: number, y: number, lw = 0.7) =>
+  void doc.lineWidth(lw).strokeColor(LINE).moveTo(x1, y).lineTo(x2, y).stroke();
+const vline = (doc: Doc, x: number, y1: number, y2: number, lw = 0.7) =>
+  void doc.lineWidth(lw).strokeColor(LINE).moveTo(x, y1).lineTo(x, y2).stroke();
+const box = (doc: Doc, x: number, y: number, w: number, h: number, lw = 0.7) =>
+  void doc.lineWidth(lw).strokeColor(LINE).rect(x, y, w, h).stroke();
+
+function rupeeSymbol(doc: Doc, x: number, y: number, size: number) {
+  doc.font(FONT_SYMBOL).fontSize(size).fillColor(INK).text("₹", x, y, { lineBreak: false });
 }
 
-function heightOf(doc: Doc, value: string, o: TextOpts): number {
-  return doc.font(o.bold ? FONT_BOLD : FONT).fontSize(o.size ?? 8.5).heightOfString(value, { width: o.w, align: o.align });
-}
-
-function put(doc: Doc, value: string, x: number, y: number, o: TextOpts): number {
-  doc
-    .font(o.bold ? FONT_BOLD : FONT)
-    .fontSize(o.size ?? 8.5)
-    .fillColor(o.color ?? C.ink)
-    .text(value, x, y, { width: o.w, align: o.align, lineBreak: true });
-  return heightOf(doc, value, o);
-}
-
-function rect(doc: Doc, x: number, y: number, w: number, h: number, color = C.line, lw = 0.7) {
-  doc.lineWidth(lw).strokeColor(color).rect(x, y, w, h).stroke();
-}
-
-function hline(doc: Doc, x1: number, x2: number, y: number, color = C.line, lw = 0.7) {
-  doc.lineWidth(lw).strokeColor(color).moveTo(x1, y).lineTo(x2, y).stroke();
-}
-
-function vline(doc: Doc, x: number, y1: number, y2: number, color = C.line, lw = 0.7) {
-  doc.lineWidth(lw).strokeColor(color).moveTo(x, y1).lineTo(x, y2).stroke();
+/** "Rupees Thirty Two Thousand … only", as printed on the firm's invoice. */
+function wordsLine(total: number): string {
+  const full = amountInWords(total); // "X Rupees Only" / "X Rupees And Y Paise Only"
+  const m = /^(.*?) Rupees?(?: And (.*) Paise)? Only$/.exec(full);
+  if (!m) return full;
+  return `Rupees ${m[1]}${m[2] ? ` and ${m[2]} Paise` : ""} only`;
 }
 
 // ---------------------------------------------------------------------------
-// Items table
+// Columns
 // ---------------------------------------------------------------------------
 
-interface Col {
-  id: string;
-  header: string;
-  frac: number;
-  align: "left" | "center" | "right";
-}
+interface Col { id: string; header: string; w: number; align: "left" | "center" | "right" }
 
-function columnsFor(isGst: boolean): Col[] {
+function columns(isGst: boolean): Col[] {
   return isGst
     ? [
-        { id: "sl", header: "Sl", frac: 0.045, align: "center" },
-        { id: "desc", header: "Description of Goods", frac: 0.295, align: "left" },
-        { id: "hsn", header: "HSN", frac: 0.09, align: "center" },
-        { id: "qty", header: "Qty", frac: 0.06, align: "center" },
-        { id: "rate", header: "Rate (₹)", frac: 0.115, align: "right" },
-        { id: "disc", header: "Disc %", frac: 0.06, align: "center" },
-        { id: "taxable", header: "Taxable Value (₹)", frac: 0.13, align: "right" },
-        { id: "gst", header: "GST %", frac: 0.055, align: "center" },
-        { id: "amount", header: "Amount (₹)", frac: 0.15, align: "right" },
+        { id: "sl", header: "Sl\nNo", w: 20, align: "center" },
+        { id: "desc", header: "Description of Goods", w: 242, align: "center" },
+        { id: "hsn", header: "Hsn", w: 49, align: "center" },
+        { id: "qty", header: "Quantity", w: 65, align: "center" },
+        { id: "gst", header: "Gst%", w: 30, align: "center" },
+        { id: "rate", header: "Rate", w: 65, align: "center" },
+        { id: "amount", header: "Amount", w: 75, align: "center" },
       ]
     : [
-        { id: "sl", header: "Sl", frac: 0.06, align: "center" },
-        { id: "desc", header: "Description of Goods", frac: 0.47, align: "left" },
-        { id: "qty", header: "Qty", frac: 0.09, align: "center" },
-        { id: "rate", header: "Rate (₹)", frac: 0.14, align: "right" },
-        { id: "disc", header: "Disc %", frac: 0.08, align: "center" },
-        { id: "amount", header: "Amount (₹)", frac: 0.16, align: "right" },
+        { id: "sl", header: "Sl\nNo", w: 20, align: "center" },
+        { id: "desc", header: "Description of Goods", w: 242, align: "center" },
+        { id: "hsn", header: "Hsn", w: 49, align: "center" },
+        { id: "qty", header: "Quantity", w: 65, align: "center" },
+        { id: "rate", header: "Rate", w: 95, align: "center" },
+        { id: "amount", header: "Amount", w: 75, align: "center" },
       ];
 }
 
-function cellValue(col: Col, line: SalesDocLine, index: number): string {
+function cell(col: Col, line: SalesDocLine, i: number): string {
   switch (col.id) {
-    case "sl": return String(index + 1);
-    case "hsn": return line.hsn || "—";
+    case "sl": return String(i + 1);
+    case "hsn": return line.hsn || "";
     case "qty": return String(line.quantity);
-    case "rate": return money(line.rate);
-    case "disc": return line.discountPercent ? `${line.discountPercent}%` : "—";
-    case "taxable": return money(line.taxable);
-    case "gst": return `${line.gstRate}%`;
-    case "amount": return money(line.amount);
+    case "gst": return plain(line.gstRate);
+    case "rate": return plain(line.rate);
+    case "amount": return plain(line.amount);
     default: return "";
   }
 }
 
-function descHeight(doc: Doc, line: SalesDocLine, w: number): number {
-  let h = heightOf(doc, line.name, { w, size: 8.5, bold: true });
-  if (line.subName) h += heightOf(doc, line.subName, { w, size: 7.5 });
-  if (line.serials?.length) h += heightOf(doc, `SN: ${line.serials.join(", ")}`, { w, size: 7 });
-  return h;
-}
-
 // ---------------------------------------------------------------------------
-// Footer blocks (measured first, then drawn)
+// Header: title bar, logo | company, To | grid
 // ---------------------------------------------------------------------------
 
-interface HsnRow { hsn: string; rate: number; taxable: number; cgst: number; sgst: number; igst: number }
-
-function hsnSummary(data: SalesDocData): HsnRow[] {
-  const map = new Map<string, HsnRow>();
-  const interState = data.totals.igst > 0;
-  for (const l of data.lines) {
-    const key = `${l.hsn ?? ""}|${l.gstRate}`;
-    const row = map.get(key) ?? { hsn: l.hsn || "—", rate: l.gstRate, taxable: 0, cgst: 0, sgst: 0, igst: 0 };
-    const tax = (l.taxable * l.gstRate) / 100;
-    row.taxable += l.taxable;
-    if (interState) row.igst += tax;
-    else {
-      row.cgst += tax / 2;
-      row.sgst += tax / 2;
-    }
-    map.set(key, row);
-  }
-  return [...map.values()];
-}
-
-/** Draws (or just measures, when `draw` is false) everything below the item table. */
-function footer(doc: Doc, data: SalesDocData, y: number, draw: boolean): number {
-  const t = data.totals;
-  const leftW = W * 0.6;
-  const rightW = W - leftW;
-  const rx = M + leftW;
-
-  // --- Row A: words + HSN summary | totals ----------------------------------
-  const words = amountInWords(t.total);
-  const wordsH = heightOf(doc, words, { w: leftW - PAD * 2, size: 8.5, bold: true });
-
-  const interState = t.igst > 0;
-  const hsnRows = data.isGst ? hsnSummary(data) : [];
-  const hsnCols = interState
-    ? ["HSN", "Taxable (₹)", "IGST %", "IGST (₹)", "Total Tax (₹)"]
-    : ["HSN", "Taxable (₹)", "CGST %", "CGST (₹)", "SGST %", "SGST (₹)", "Total Tax (₹)"];
-  const hsnRowH = 14;
-  const hsnH = data.isGst ? 12 + hsnRowH * (hsnRows.length + 2) + 4 : 0;
-  const leftA = 6 + 11 + wordsH + 8 + hsnH;
-
-  const lines: { label: string; value: string; strong?: boolean; head?: boolean }[] = [];
-  lines.push({ label: "Gross Amount", value: rupees(t.gross) });
-  if (t.discount > 0) lines.push({ label: "Less: Discount", value: `- ${rupees(t.discount)}` });
-  if (data.isGst) {
-    lines.push({ label: "Taxable Value", value: rupees(t.taxable) });
-    if (t.cgst > 0) lines.push({ label: "CGST", value: rupees(t.cgst) });
-    if (t.sgst > 0) lines.push({ label: "SGST", value: rupees(t.sgst) });
-    if (t.igst > 0) lines.push({ label: "IGST", value: rupees(t.igst) });
-  }
-  if (t.roundOff !== 0) lines.push({ label: "Round Off", value: `${t.roundOff < 0 ? "- " : ""}${rupees(Math.abs(t.roundOff))}` });
-  const lineH = 16;
-  const totalH = 24;
-  const extra: typeof lines = [];
-  if (t.received !== undefined) extra.push({ label: "Amount Received", value: rupees(t.received) });
-  if (t.due !== undefined) extra.push({ label: "Balance Due", value: rupees(t.due), strong: true });
-  const rightA = 4 + lines.length * lineH + totalH + extra.length * lineH + 4;
-  const hA = Math.max(leftA, rightA, 60);
-
-  // --- Row B: bank + terms | signatory --------------------------------------
-  const bank = data.bankDetails?.trim();
-  const terms = data.terms?.trim();
-  const bankH = bank ? 11 + heightOf(doc, bank, { w: leftW - PAD * 2, size: 8 }) + 8 : 0;
-  const termsH = terms ? 11 + heightOf(doc, terms, { w: leftW - PAD * 2, size: 7.5 }) + 8 : 0;
-  const notesH = data.notes?.trim() ? 11 + heightOf(doc, data.notes.trim(), { w: leftW - PAD * 2, size: 8 }) + 8 : 0;
-  const leftB = Math.max(bankH + termsH + notesH + 6, 70);
-  const hB = Math.max(leftB, 96);
-
-  if (!draw) return hA + hB;
-
-  // Row A
-  rect(doc, M, y, W, hA);
-  vline(doc, rx, y, y + hA);
-  let ly = y + 6;
-  put(doc, "Amount in Words", M + PAD, ly, { w: leftW - PAD * 2, size: 7.5, color: C.muted });
-  ly += 11;
-  ly += put(doc, words, M + PAD, ly, { w: leftW - PAD * 2, size: 8.5, bold: true }) + 8;
-
-  if (data.isGst) {
-    const gx = M + PAD;
-    const gw = leftW - PAD * 2;
-    put(doc, "Tax Summary", gx, ly, { w: gw, size: 7.5, color: C.muted });
-    ly += 12;
-    const widths = hsnCols.map((_, i) => (i === 0 ? 0.2 : (1 - 0.2) / (hsnCols.length - 1)) * gw);
-    doc.rect(gx, ly, gw, hsnRowH).fill(C.tint);
-    let cx = gx;
-    hsnCols.forEach((h, i) => {
-      put(doc, h, cx + 2, ly + 3, { w: widths[i] - 4, size: 6.5, bold: true, align: i === 0 ? "left" : "right" });
-      cx += widths[i];
-    });
-    ly += hsnRowH;
-    const writeRow = (cells: string[], bold = false) => {
-      let x = gx;
-      cells.forEach((c, i) => {
-        put(doc, c, x + 2, ly + 3, { w: widths[i] - 4, size: 6.5, bold, align: i === 0 ? "left" : "right" });
-        x += widths[i];
-      });
-      hline(doc, gx, gx + gw, ly + hsnRowH, C.light, 0.4);
-      ly += hsnRowH;
-    };
-    for (const r of hsnRows) {
-      writeRow(
-        interState
-          ? [r.hsn, money(r.taxable), `${r.rate}%`, money(r.igst), money(r.igst)]
-          : [r.hsn, money(r.taxable), `${r.rate / 2}%`, money(r.cgst), `${r.rate / 2}%`, money(r.sgst), money(r.cgst + r.sgst)],
-      );
-    }
-    const sumTaxable = hsnRows.reduce((s, r) => s + r.taxable, 0);
-    writeRow(
-      interState
-        ? ["Total", money(sumTaxable), "", money(t.igst), money(t.igst)]
-        : ["Total", money(sumTaxable), "", money(t.cgst), "", money(t.sgst), money(t.cgst + t.sgst)],
-      true,
-    );
-  }
-
-  let ry = y + 4;
-  const valX = rx + PAD;
-  const valW = rightW - PAD * 2;
-  for (const l of lines) {
-    put(doc, l.label, valX, ry + 3, { w: valW, size: 8.5 });
-    put(doc, l.value, valX, ry + 3, { w: valW, size: 8.5, align: "right" });
-    ry += lineH;
-  }
-  doc.rect(rx, ry, rightW, totalH).fill(C.head);
-  put(doc, data.totalLabel, valX, ry + 7, { w: valW, size: 8.5, bold: true, color: C.headText });
-  put(doc, rupees(t.total), valX, ry + 6, { w: valW, size: 10.5, bold: true, color: C.headText, align: "right" });
-  ry += totalH;
-  for (const l of extra) {
-    put(doc, l.label, valX, ry + 3, { w: valW, size: 8.5, bold: l.strong });
-    put(doc, l.value, valX, ry + 3, { w: valW, size: 8.5, bold: l.strong, align: "right" });
-    ry += lineH;
-  }
-
-  // Row B
-  const yb = y + hA;
-  rect(doc, M, yb, W, hB);
-  vline(doc, rx, yb, yb + hB);
-  let by = yb + 6;
-  if (bank) {
-    put(doc, "Bank Details", M + PAD, by, { w: leftW - PAD * 2, size: 7.5, bold: true });
-    by += 11;
-    by += put(doc, bank, M + PAD, by, { w: leftW - PAD * 2, size: 8 }) + 8;
-  }
-  if (terms) {
-    put(doc, "Terms & Conditions", M + PAD, by, { w: leftW - PAD * 2, size: 7.5, bold: true });
-    by += 11;
-    by += put(doc, terms, M + PAD, by, { w: leftW - PAD * 2, size: 7.5, color: C.muted }) + 8;
-  }
-  if (data.notes?.trim()) {
-    put(doc, "Notes", M + PAD, by, { w: leftW - PAD * 2, size: 7.5, bold: true });
-    by += 11;
-    put(doc, data.notes.trim(), M + PAD, by, { w: leftW - PAD * 2, size: 8 });
-  }
-
-  put(doc, `For ${data.signatoryFor}`, rx + PAD, yb + 6, { w: rightW - PAD * 2, size: 8.5, bold: true, align: "center" });
-  hline(doc, rx + 24, rx + rightW - 24, yb + hB - 26, C.line, 0.7);
-  put(doc, "Authorised Signatory", rx + PAD, yb + hB - 20, { w: rightW - PAD * 2, size: 8, bold: true, align: "center" });
-  if (data.preparedBy) {
-    put(doc, `Prepared by: ${data.preparedBy}`, rx + PAD, yb + hB - 10, { w: rightW - PAD * 2, size: 6.5, color: C.muted, align: "center" });
-  }
-  return hA + hB;
-}
-
-// ---------------------------------------------------------------------------
-// Header blocks
-// ---------------------------------------------------------------------------
-
-function kvBlock(doc: Doc, pairs: [string, string][], x: number, y: number, w: number, draw: boolean): number {
-  const labelW = w * 0.42;
-  let h = 0;
-  for (const [label, value] of pairs) {
-    const vh = heightOf(doc, value || "—", { w: w - labelW - 4, size: 8, bold: true });
-    if (draw) {
-      put(doc, label, x, y + h, { w: labelW, size: 8, color: C.muted });
-      put(doc, value || "—", x + labelW, y + h, { w: w - labelW - 4, size: 8, bold: true });
-    }
-    h += Math.max(vh, 10) + 3;
-  }
-  return h;
-}
-
-function drawFirstHeader(doc: Doc, data: SalesDocData): number {
+function drawHeader(doc: Doc, d: SalesDocData): number {
   let y = M;
-  const leftW = W * 0.6;
-  const rightW = W - leftW;
-  const rx = M + leftW;
-
-  // Title bar
-  const titleH = 24;
-  doc.rect(M, y, W, titleH).fill(C.head);
-  put(doc, data.title, M, y + 6, { w: W, size: 12.5, bold: true, color: C.headText, align: "center" });
-  if (data.titleNote) {
-    put(doc, data.titleNote, M + W - 150, y + 9, { w: 144, size: 6.5, color: "#c9d6cf", align: "right" });
-  }
+  const titleH = 17;
+  box(doc, M, y, W, titleH);
+  put(doc, d.title, M, y + 4.5, { w: W, size: 8.5, bold: true, align: "center" });
   y += titleH;
 
-  // Company | invoice details
-  const c = data.company;
-  const logoPath = ["logo-pdf.png", "logo.png"].map((f) => path.join(process.cwd(), "public", f)).find((p) => fs.existsSync(p));
-  const logoW = 92;
-  const hasLogo = Boolean(logoPath);
-  const textX = M + PAD + (hasLogo ? logoW + 8 : 0);
-  const textW = leftW - PAD * 2 - (hasLogo ? logoW + 8 : 0);
-
-  const addr = [c.address || [data.branch.addressLine, data.branch.city, data.branch.state, data.branch.pincode].filter(Boolean).join(", ")]
-    .filter(Boolean)
-    .join("");
-  const contact = [
-    data.branch.phone || c.phone ? `Ph: ${data.branch.phone || c.phone}` : "",
-    data.branch.email || c.email ? `Email: ${data.branch.email || c.email}` : "",
-  ].filter(Boolean).join("   ");
-  const reg = [c.gstin ? `GSTIN: ${c.gstin}` : "", c.state ? `State: ${c.state}` : "", c.pan ? `PAN: ${c.pan}` : ""].filter(Boolean).join("   ");
-
-  const nameH = heightOf(doc, c.name, { w: textW, size: 13, bold: true });
-  const leftH = 6 + nameH + 3 +
-    (addr ? heightOf(doc, addr, { w: textW, size: 8 }) + 2 : 0) +
-    (contact ? heightOf(doc, contact, { w: textW, size: 8 }) + 2 : 0) +
-    (reg ? heightOf(doc, reg, { w: textW, size: 8, bold: true }) + 2 : 0) + 6;
-  const metaH = 8 + kvBlock(doc, data.meta, 0, 0, rightW - PAD * 2, false) + 4;
-  const rowH = Math.max(leftH, metaH, 64);
-
-  rect(doc, M, y, W, rowH);
-  vline(doc, rx, y, y + rowH);
-  if (logoPath) {
-    try { doc.image(logoPath, M + PAD, y + 8, { fit: [logoW, 40] }); } catch { /* keep rendering without the logo */ }
+  // Logo | company
+  const logoW = 268;
+  const c = d.company;
+  const tx = M + logoW + 6;
+  const tw = W - logoW - 10;
+  const addr = c.address || [d.branch.addressLine, d.branch.city, d.branch.state, d.branch.pincode].filter(Boolean).join(", ");
+  const phone = d.branch.phone || c.phone;
+  const email = d.branch.email || c.email;
+  const parts: { s: string; bold?: boolean; size: number }[] = [
+    { s: c.name.toUpperCase(), bold: true, size: 10.5 },
+    ...(addr ? [{ s: addr, size: 8.5 }] : []),
+    ...(phone ? [{ s: `Phone No : ${phone}`, size: 8.5 }] : []),
+    ...(email ? [{ s: `Email : ${email}`, size: 8.5 }] : []),
+    ...(c.gstin ? [{ s: `GSTIN : ${c.gstin}`, bold: true, size: 8.5 }] : []),
+  ];
+  const textH = parts.reduce((s, p) => s + hOf(doc, p.s, { w: tw, size: p.size, bold: p.bold }) + 1.5, 0);
+  const rowH = Math.max(textH + 10, 70);
+  box(doc, M, y, W, rowH);
+  vline(doc, M + logoW, y, y + rowH);
+  const logo = ["logo-pdf.png", "logo.png"].map((f) => path.join(process.cwd(), "public", f)).find((p) => fs.existsSync(p));
+  if (logo) {
+    try { doc.image(logo, M + 8, y + 6, { fit: [logoW - 16, rowH - 12], align: "center", valign: "center" }); } catch { /* render without logo */ }
   }
-  let ty = y + 6;
-  ty += put(doc, c.name, textX, ty, { w: textW, size: 13, bold: true, color: C.head }) + 3;
-  if (addr) ty += put(doc, addr, textX, ty, { w: textW, size: 8, color: C.muted }) + 2;
-  if (contact) ty += put(doc, contact, textX, ty, { w: textW, size: 8, color: C.muted }) + 2;
-  if (reg) put(doc, reg, textX, ty, { w: textW, size: 8, bold: true });
-  kvBlock(doc, data.meta, rx + PAD, y + 8, rightW - PAD * 2, true);
+  let ty = y + 5;
+  for (const p of parts) ty += put(doc, p.s, tx, ty, { w: tw, size: p.size, bold: p.bold }) + 1.5;
   y += rowH;
 
-  // To | dispatch / e-way
-  const toLines = data.to.lines;
-  const toText = [data.to.name, ...toLines];
-  const toH = 6 + 11 +
-    heightOf(doc, data.to.name, { w: leftW - PAD * 2, size: 9.5, bold: true }) + 2 +
-    toLines.reduce((s, l) => s + heightOf(doc, l, { w: leftW - PAD * 2, size: 8 }) + 1, 0) + 6;
-  void toText;
-  const sideH = 6 + 11 + kvBlock(doc, data.side, 0, 0, rightW - PAD * 2, false) + 4;
-  const rowH2 = Math.max(toH, sideH, 56);
+  // To | label-value grid
+  const leftW = W - PANEL_W;
+  const labelW = 95;
+  const gridRow = 19;
+  const rows = d.meta;
+  const toLines = d.to.lines;
+  const toH = 6 + 10 + hOf(doc, d.to.name, { w: leftW - 12, size: 8.5, bold: true }) + 3 +
+    toLines.reduce((s, l) => s + hOf(doc, l, { w: leftW - 12, size: 8 }) + 2, 0) + 6;
+  const blockH = Math.max(toH, rows.length * gridRow, 90);
+  box(doc, M, y, W, blockH);
+  vline(doc, M + leftW, y, y + blockH);
+  put(doc, d.toHeading ?? "To", M + 8, y + 4, { w: leftW - 16, size: 7.5, bold: true });
+  let ly = y + 15;
+  ly += put(doc, d.to.name, M + 8, ly, { w: leftW - 16, size: 8.5, bold: true }) + 3;
+  for (const l of toLines) ly += put(doc, l, M + 8, ly, { w: leftW - 16, size: 8 }) + 2;
 
-  rect(doc, M, y, W, rowH2);
-  vline(doc, rx, y, y + rowH2);
-  put(doc, data.toHeading ?? "To", M + PAD, y + 6, { w: leftW - PAD * 2, size: 7.5, color: C.muted });
-  let toY = y + 17;
-  toY += put(doc, data.to.name, M + PAD, toY, { w: leftW - PAD * 2, size: 9.5, bold: true }) + 2;
-  for (const l of toLines) toY += put(doc, l, M + PAD, toY, { w: leftW - PAD * 2, size: 8 }) + 1;
-  put(doc, data.sideHeading, rx + PAD, y + 6, { w: rightW - PAD * 2, size: 7.5, color: C.muted });
-  kvBlock(doc, data.side, rx + PAD, y + 17, rightW - PAD * 2, true);
-  y += rowH2;
-
+  // Grid occupies its rows then the remaining height stays blank (as in the form).
+  const gx = M + leftW;
+  const gridH = blockH / Math.max(rows.length, 1) > gridRow * 1.4 ? gridRow : blockH / rows.length;
+  rows.forEach(([label, value], i) => {
+    const ry = y + i * gridH;
+    if (i > 0) hline(doc, gx, M + W, ry);
+    put(doc, label, gx + PAD, ry + (gridH - 8) / 2 - 0.5, { w: labelW - PAD, size: 7.5 });
+    put(doc, value || "", gx + labelW + PAD, ry + (gridH - 8) / 2 - 0.5, { w: PANEL_W - labelW - PAD * 2, size: 7.5, bold: i === 0 });
+  });
+  vline(doc, gx + labelW, y, y + Math.min(blockH, rows.length * gridH));
+  y += blockH;
   return y;
+}
+
+// ---------------------------------------------------------------------------
+// Footer: slab summary / bank / words / terms  |  totals panel + signatory
+// ---------------------------------------------------------------------------
+
+interface Slab { rate: number; taxable: number; tax: number }
+
+function slabs(d: SalesDocData): Slab[] {
+  const map = new Map<number, Slab>();
+  for (const l of d.lines) {
+    const s = map.get(l.gstRate) ?? { rate: l.gstRate, taxable: 0, tax: 0 };
+    s.taxable += l.taxable;
+    s.tax += (l.taxable * l.gstRate) / 100;
+    map.set(l.gstRate, s);
+  }
+  return [...map.values()].sort((a, b) => a.rate - b.rate);
+}
+
+function bankRows(raw: string): { k: string | null; v: string }[] {
+  return raw.split(/\r?\n/).map((s) => s.trim()).filter(Boolean).map((line) => {
+    const m = /^([^:]{2,30}?)\s*:\s*(.+)$/.exec(line);
+    return m ? { k: m[1], v: m[2] } : { k: null, v: line };
+  });
+}
+
+function footer(doc: Doc, d: SalesDocData, y: number, draw: boolean): number {
+  const t = d.totals;
+  const leftW = W - PANEL_W;
+  const px = M + leftW;
+  const inter = t.igst > 0;
+
+  // Left blocks --------------------------------------------------------------
+  const sl = d.isGst ? slabs(d) : [];
+  const sumHead = 14;
+  const sumRow = 13;
+  const sumH = d.isGst ? sumHead + sumRow * sl.length : 0;
+
+  const bank = d.bankDetails?.trim() ? bankRows(d.bankDetails.trim()) : [];
+  const bankH = bank.length ? 14 + bank.reduce((s, r) => s + hOf(doc, r.v, { w: leftW - 118, size: 8 }) + 1.5, 0) + 4 : 0;
+  const words = wordsLine(t.total);
+  const wordsH = Math.max(18, hOf(doc, words, { w: leftW - 100, size: 7.5, bold: true }) + 8);
+  const terms = d.terms?.trim();
+  const notes = d.notes?.trim();
+  const termsH = terms ? 14 + hOf(doc, terms, { w: leftW - 16, size: 7.5 }) + 6 : 0;
+  const notesH = notes ? 12 + hOf(doc, notes, { w: leftW - 16, size: 7.5 }) + 4 : 0;
+  const leftH = sumH + bankH + wordsH + termsH + notesH;
+
+  // Right panel --------------------------------------------------------------
+  const lines: [string, string][] = [["Gross Amount", group(t.gross)]];
+  if (t.discount > 0) {
+    const pcts = [...new Set(d.lines.map((l) => l.discountPercent))];
+    const pct = pcts.length === 1 && pcts[0] > 0 ? ` ${+pcts[0].toFixed(2)}%` : "";
+    lines.push([`Discount (-)${pct}`, group(t.discount)]);
+  }
+  lines.push(["", group(t.taxable)]);
+  if (d.isGst) {
+    if (t.cgst > 0) lines.push(["ADD CGST", group(t.cgst)]);
+    if (t.sgst > 0) lines.push(["ADD SGST", group(t.sgst)]);
+    if (t.igst > 0) lines.push(["ADD IGST", group(t.igst)]);
+  }
+  if (t.roundOff !== 0) lines.push(["Round Up", plain(t.roundOff)]);
+  const rowH = 17;
+  const billH = 22;
+  const sigH = 62;
+  const rightH = lines.length * rowH + billH + sigH;
+  const H = Math.max(leftH, rightH);
+  if (!draw) return H;
+
+  box(doc, M, y, W, H);
+  vline(doc, px, y, y + H);
+
+  // Left
+  let ly = y;
+  if (d.isGst) {
+    const cw = inter ? [0.2, 0.3, 0.2, 0.3] : [0.14, 0.22, 0.14, 0.18, 0.14, 0.18];
+    const heads = inter ? ["GST%", "Taxable Value", "IGST %", "IGST Amt"] : ["GST%", "Taxable Value", "SGST %", "SGST Amt", "CGST %", "CGST Amt"];
+    let x = M;
+    heads.forEach((h, i) => {
+      const w = cw[i] * leftW;
+      put(doc, h, x, ly + 3.5, { w, size: 7, bold: true, align: "center" });
+      x += w;
+    });
+    ly += sumHead;
+    for (const s of sl) {
+      const half = s.tax / 2;
+      const vals = inter
+        ? [`${s.rate.toFixed(1)}%`, plain(s.taxable), `${s.rate.toFixed(1)}%`, plain(s.tax)]
+        : [`${s.rate.toFixed(1)}%`, plain(s.taxable), `${(s.rate / 2).toFixed(1)}%`, plain(half), `${(s.rate / 2).toFixed(1)}%`, plain(half)];
+      x = M;
+      vals.forEach((v, i) => {
+        const w = cw[i] * leftW;
+        put(doc, v, x, ly + 2.5, { w, size: 7, align: "center" });
+        x += w;
+      });
+      ly += sumRow;
+    }
+    hline(doc, M, px, ly);
+  }
+  if (bank.length) {
+    put(doc, "BANK DETAILS", M + 4, ly + 3, { w: 120, size: 7.5, bold: true });
+    doc.lineWidth(0.6).strokeColor(INK).moveTo(M + 4, ly + 12).lineTo(M + 62, ly + 12).stroke();
+    let by = ly + 15;
+    for (const r of bank) {
+      if (r.k) {
+        put(doc, r.k, M + 4, by, { w: 108, size: 8 });
+        put(doc, `: ${r.v}`, M + 112, by, { w: leftW - 118, size: 8 });
+        by += hOf(doc, r.v, { w: leftW - 118, size: 8 }) + 1.5;
+      } else {
+        by += put(doc, r.v, M + 4, by, { w: leftW - 10, size: 8 }) + 1.5;
+      }
+    }
+    ly += bankH;
+    hline(doc, M, px, ly);
+  }
+  put(doc, "Amount in Words :", M + 4, ly + 5, { w: 80, size: 7.5 });
+  put(doc, words, M + 88, ly + 5, { w: leftW - 94, size: 7.5, bold: true });
+  ly += wordsH;
+  hline(doc, M, px, ly);
+  if (terms) {
+    put(doc, "Terms & Condition", M + 4, ly + 4, { w: leftW - 8, size: 8, bold: true });
+    ly += 14 + put(doc, terms, M + 8, ly + 14, { w: leftW - 16, size: 7.5 }) + 2;
+  }
+  if (notes) {
+    put(doc, "Notes", M + 4, ly + 2, { w: leftW - 8, size: 7.5, bold: true });
+    put(doc, notes, M + 8, ly + 12, { w: leftW - 16, size: 7.5 });
+  }
+
+  // Right
+  let ry = y;
+  const labelW = 95;
+  lines.forEach(([label, value]) => {
+    put(doc, label, px + PAD, ry + 5, { w: labelW - PAD, size: 7.5 });
+    vline(doc, px + labelW, ry, ry + rowH);
+    put(doc, value, px + labelW, ry + 5, { w: PANEL_W - labelW - PAD, size: 7.5, align: "right" });
+    ry += rowH;
+    hline(doc, px, M + W, ry);
+  });
+  // Bill Amount
+  put(doc, "Bill Amount", px + PAD, ry + 7, { w: 60, size: 8.5 });
+  rupeeSymbol(doc, px + 62, ry + 5.5, 10);
+  put(doc, group(t.total), px + 72, ry + 5.5, { w: PANEL_W - 72 - PAD, size: 10, bold: true, align: "right" });
+  ry += billH;
+  hline(doc, px, M + W, ry);
+  put(doc, `For ${d.signatoryFor}`, px, ry + 8, { w: PANEL_W, size: 8.5, bold: true, align: "center" });
+  put(doc, "Authorised Signatory", px, y + H - 12, { w: PANEL_W, size: 7, align: "center" });
+  return H;
 }
 
 // ---------------------------------------------------------------------------
 // Entry point
 // ---------------------------------------------------------------------------
 
-export async function renderSalesDocument(data: SalesDocData, title: string): Promise<Buffer> {
+export async function renderSalesDocument(d: SalesDocData, title: string): Promise<Buffer> {
   const doc = new PDFDocument({
     size: "A4",
-    margin: 0, // all positions are explicit; no implicit page breaks
+    margin: 0, // every position is explicit — no implicit page breaks
     bufferPages: true,
-    info: { Title: title, Author: data.company.name, Creator: "Technic Technologies ERP" },
+    info: { Title: title, Author: d.company.name, Creator: "Technic Technologies ERP" },
   });
-  doc.registerFont(FONT, path.join(process.cwd(), "public", "fonts", "DejaVuSans.ttf"));
-  doc.registerFont(FONT_BOLD, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
+  doc.registerFont(FONT_SYMBOL, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
 
-  const cols = columnsFor(data.isGst);
-  const widths = cols.map((c) => c.frac * W);
+  const cols = columns(d.isGst);
   const descIdx = cols.findIndex((c) => c.id === "desc");
-  const descW = widths[descIdx] - PAD * 2;
+  const maxY = A4.h - M;
   const headH = 24;
-  const maxY = A4.h - M - 14; // keeps room for the page-number line
 
-  const drawTableHeader = (y: number) => {
-    doc.rect(M, y, W, headH).fill(C.head);
+  const tableHeader = (y: number) => {
+    box(doc, M, y, W, headH);
     let x = M;
-    cols.forEach((col, i) => {
-      put(doc, col.header, x + 2, y + (col.header.length > 12 ? 4 : 8), { w: widths[i] - 4, size: 7, bold: true, color: C.headText, align: col.align === "left" ? "left" : "center" });
-      x += widths[i];
+    cols.forEach((c, i) => {
+      if (i > 0) vline(doc, x, y, y + headH);
+      const lines = c.header.split("\n").length;
+      put(doc, c.header, x, y + (headH - lines * 8.5) / 2 + (lines > 1 ? 0 : 0.5), { w: c.w, size: 7.5, align: "center" });
+      x += c.w;
     });
     return y + headH;
   };
-
-  const drawColumnRules = (from: number, to: number) => {
+  const rules = (from: number, to: number) => {
     let x = M;
-    for (let i = 0; i < cols.length - 1; i++) {
-      x += widths[i];
-      vline(doc, x, from, to, C.light, 0.5);
-    }
-    rect(doc, M, from, W, to - from);
-  };
-
-  let y = drawFirstHeader(doc, data);
-  const footerH = footer(doc, data, 0, false);
-
-  y = drawTableHeader(y);
-  let bodyStart = y;
-  const continuationHeader = () => {
-    drawColumnRules(bodyStart, y);
-    doc.addPage();
-    let ny = M;
-    put(doc, `${data.title} — ${data.meta[0]?.[1] ?? ""} (continued)`, M, ny + 2, { w: W, size: 9, bold: true });
-    ny += 18;
-    ny = drawTableHeader(ny);
-    bodyStart = ny;
-    return ny;
-  };
-
-  data.lines.forEach((line, index) => {
-    const h = Math.max(descHeight(doc, line, descW) + 8, 20);
-    if (y + h > maxY - 40) y = continuationHeader();
-
-    let x = M;
-    cols.forEach((col, i) => {
-      if (col.id === "desc") {
-        let dy = y + 4;
-        dy += put(doc, line.name, x + PAD, dy, { w: descW, size: 8.5, bold: true });
-        if (line.subName) dy += put(doc, line.subName, x + PAD, dy, { w: descW, size: 7.5, color: C.muted });
-        if (line.serials?.length) put(doc, `SN: ${line.serials.join(", ")}`, x + PAD, dy, { w: descW, size: 7, color: C.muted });
-      } else {
-        put(doc, cellValue(col, line, index), x + 2, y + 4, { w: widths[i] - 4 - (col.align === "right" ? 2 : 0), size: 8.5, align: col.align });
-      }
-      x += widths[i];
+    cols.forEach((c, i) => {
+      if (i > 0) vline(doc, x, from, to);
+      x += c.w;
     });
-    hline(doc, M, M + W, y + h, C.light, 0.4);
-    y += h;
+    vline(doc, M, from, to);
+    vline(doc, M + W, from, to);
+  };
+
+  let y = drawHeader(doc, d);
+  const footerH = footer(doc, d, 0, false);
+  y = tableHeader(y);
+  let bodyStart = y;
+
+  d.lines.forEach((line, i) => {
+    const dw = cols[descIdx].w - PAD * 2;
+    const h =
+      hOf(doc, line.name, { w: dw, size: 8, bold: true }) +
+      (line.subName ? hOf(doc, line.subName, { w: dw, size: 7.5 }) : 0) +
+      (line.serials?.length ? hOf(doc, `SN: ${line.serials.join(", ")}`, { w: dw, size: 7 }) : 0) +
+      8;
+    const rh = Math.max(h, 16);
+    if (y + rh > maxY - 30) {
+      rules(bodyStart, y);
+      hline(doc, M, M + W, y);
+      doc.addPage();
+      let ny = M;
+      put(doc, `${d.title} — ${d.meta[0]?.[1] ?? ""} (continued)`, M, ny + 2, { w: W, size: 8.5, bold: true });
+      ny += 16;
+      y = tableHeader(ny);
+      bodyStart = y;
+    }
+    let x = M;
+    cols.forEach((c) => {
+      if (c.id === "desc") {
+        let dy = y + 4;
+        dy += put(doc, line.name, x + PAD, dy, { w: dw, size: 8, bold: true });
+        if (line.subName) dy += put(doc, line.subName, x + PAD, dy, { w: dw, size: 7.5 });
+        if (line.serials?.length) put(doc, `SN: ${line.serials.join(", ")}`, x + PAD, dy, { w: dw, size: 7 });
+      } else {
+        const align = c.id === "rate" || c.id === "amount" ? "right" : "center";
+        put(doc, cell(c, line, i), x + 2, y + 4, { w: c.w - 4 - (align === "right" ? 2 : 0), size: 8, bold: c.id === "qty" || c.id === "sl" ? false : false, align });
+      }
+      x += c.w;
+    });
+    y += rh;
   });
 
-  // Fill the empty part of the item area so the form reads like a printed invoice.
-  const totalQty = data.lines.reduce((s, l) => s + l.quantity, 0);
-  const totalRowH = 18;
-  let tableEnd: number;
-  if (y + totalRowH + footerH <= maxY) {
-    tableEnd = Math.max(y, maxY - footerH - totalRowH);
-  } else {
-    tableEnd = y;
-  }
-  drawColumnRules(bodyStart, tableEnd);
-  y = tableEnd;
-
-  // Totals row
-  if (y + totalRowH + footerH > maxY) {
+  // Extend the blank item area so the footer sits at the foot of the sheet.
+  let bodyEnd = y;
+  if (y + footerH <= maxY) bodyEnd = maxY - footerH;
+  else {
+    rules(bodyStart, y);
+    hline(doc, M, M + W, y);
     doc.addPage();
+    bodyStart = M;
+    bodyEnd = M;
     y = M;
   }
-  doc.rect(M, y, W, totalRowH).fill(C.tint);
-  rect(doc, M, y, W, totalRowH);
-  let tx = M;
-  cols.forEach((col, i) => {
-    if (col.id === "desc") put(doc, "Total", tx + PAD, y + 5, { w: widths[i] - PAD * 2, size: 8.5, bold: true, align: "right" });
-    if (col.id === "qty") put(doc, String(totalQty), tx + 2, y + 5, { w: widths[i] - 4, size: 8.5, bold: true, align: "center" });
-    if (col.id === "taxable") put(doc, money(data.totals.taxable), tx + 2, y + 5, { w: widths[i] - 6, size: 8.5, bold: true, align: "right" });
-    if (col.id === "amount") put(doc, money(data.lines.reduce((s, l) => s + l.amount, 0)), tx + 2, y + 5, { w: widths[i] - 6, size: 8.5, bold: true, align: "right" });
-    tx += widths[i];
-  });
-  y += totalRowH;
+  if (bodyEnd > bodyStart) rules(bodyStart, bodyEnd);
+  y = bodyEnd;
+  hline(doc, M, M + W, y);
+  footer(doc, d, y, true);
 
-  footer(doc, data, y, true);
-
-  if (data.cancelledReason !== undefined && data.cancelledReason !== null) {
+  if (d.cancelledReason !== undefined && d.cancelledReason !== null) {
     doc.save();
-    doc.opacity(0.16).font(FONT_BOLD).fontSize(56).fillColor(C.accent);
+    doc.opacity(0.15).font(FONT_BOLD).fontSize(60).fillColor(ACCENT);
     doc.rotate(-30, { origin: [A4.w / 2, A4.h / 2] });
-    doc.text("CANCELLED", A4.w / 2 - 180, A4.h / 2 - 30, { width: 360, align: "center", lineBreak: false });
+    doc.text("CANCELLED", A4.w / 2 - 190, A4.h / 2 - 30, { width: 380, align: "center", lineBreak: false });
     doc.restore();
     doc.opacity(1);
   }
 
   const range = doc.bufferedPageRange();
-  for (let i = 0; i < range.count; i++) {
-    doc.switchToPage(i);
-    // Outer frame on every page + page numbers + footer line.
-    if (range.count > 1) {
-      put(doc, `Page ${i + 1} of ${range.count}`, M, A4.h - M - 8, { w: W, size: 7, color: C.muted, align: "right" });
+  if (range.count > 1) {
+    for (let i = 0; i < range.count; i++) {
+      doc.switchToPage(i);
+      put(doc, `Page ${i + 1} of ${range.count}`, M, A4.h - 18, { w: W, size: 7, align: "right" });
     }
-    put(doc, "This is a computer-generated document.", M, A4.h - M - 8, { w: W, size: 7, color: C.muted, align: "left" });
   }
 
   doc.end();
