@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { prisma } from "@/lib/prisma";
 import { generateInvoicePDF } from "@/lib/pdf/pdf-templates";
+import { DOCUMENT_TYPES, financialYearFor, syncDocumentSequenceFloor } from "@/lib/sequence";
 import { parseCsvFile } from "./csv-parser";
 import { CustomerMatcher } from "./customer-matcher";
 import { ProductMatcher } from "./product-matcher";
@@ -251,6 +252,29 @@ export class HistoricalImporter {
         }
       }
       console.log(`  • Import complete: ${invoicesActuallyImported} invoices, ${lineItemsImported} line items inserted.`);
+
+      // Synchronize document sequences with highest historical invoice number
+      let maxHistoricalNumber = 0;
+      for (const inv of validatedInvoices) {
+        if (inv.invoiceNumber) {
+          const match = inv.invoiceNumber.match(/(\d+)(?!.*\d)/);
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num > maxHistoricalNumber) {
+              maxHistoricalNumber = num;
+            }
+          }
+        }
+      }
+
+      if (maxHistoricalNumber > 0) {
+        const fy = financialYearFor(new Date());
+        await withRetry(async () => {
+          await syncDocumentSequenceFloor(this.options.firmId, DOCUMENT_TYPES.INVOICE, "GST", fy, maxHistoricalNumber);
+          await syncDocumentSequenceFloor(this.options.firmId, DOCUMENT_TYPES.INVOICE, "NON_GST", fy, maxHistoricalNumber);
+        });
+        console.log(`  • Synchronized invoice sequence: next invoice will continue from ${maxHistoricalNumber + 1}`);
+      }
     }
 
     // 8. Run sample verification test if requested

@@ -45,6 +45,30 @@ export async function nextDocumentSequence(
   return rows[0]?.value ?? 1;
 }
 
+/**
+ * Sets or advances a per-firm document counter to at least the given minimum value.
+ * Used when historical data is seeded or imported so that next generated document
+ * number seamlessly continues from the highest existing number.
+ */
+export async function syncDocumentSequenceFloor(
+  firmId: string,
+  documentType: string,
+  accessMode: TaxMode,
+  financialYear: string,
+  floorValue: number,
+  db: Db = prisma,
+): Promise<number> {
+  const rows = await db.$queryRaw<Array<{ value: number }>>`
+    INSERT INTO "document_sequences"
+      ("id", "firmId", "documentType", "accessMode", "financialYear", "value", "updatedAt")
+    VALUES (gen_random_uuid()::text, ${firmId}, ${documentType}, ${accessMode}::"TaxMode", ${financialYear}, ${floorValue}, NOW())
+    ON CONFLICT ("firmId", "documentType", "accessMode", "financialYear")
+    DO UPDATE SET "value" = GREATEST("document_sequences"."value", ${floorValue}), "updatedAt" = NOW()
+    RETURNING "value"
+  `;
+  return rows[0]?.value ?? floorValue;
+}
+
 /** 2026-27 → "26-27". April–March Indian financial year. */
 export function financialYearFor(date: Date = new Date()): string {
   const year = date.getFullYear();
@@ -201,6 +225,33 @@ export async function nextDocumentNumber(
     prefix = "SUP";
   } else {
     prefix = `${firmCode}/${documentType.toUpperCase()}/${fy}/`;
+  }
+
+  // For invoices, ensure the counter floor is synchronized with the highest existing invoice number in the DB
+  if (documentType === DOCUMENT_TYPES.INVOICE) {
+    try {
+      const existingInvoices = await db.invoice.findMany({
+        where: { firmId, financialYear: fy },
+        select: { invoiceNumber: true },
+      });
+      let maxNumber = 0;
+      for (const inv of existingInvoices) {
+        if (inv.invoiceNumber.toUpperCase().includes("SAMPLE")) continue;
+        if (inv.invoiceNumber.startsWith("HIST/")) continue;
+        const match = inv.invoiceNumber.match(/(\d+)(?!.*\d)/);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNumber && num < 1000000) {
+            maxNumber = num;
+          }
+        }
+      }
+      if (maxNumber > 0) {
+        await syncDocumentSequenceFloor(firmId, documentType, accessMode, fy, maxNumber, db);
+      }
+    } catch {
+      // Non-fatal fallback
+    }
   }
 
   let seq = await nextDocumentSequence(firmId, documentType, accessMode, fy, db);

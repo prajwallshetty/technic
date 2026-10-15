@@ -18,7 +18,7 @@ const createPrismaClient = (): PrismaClient => {
     pool.on("error", (err) => {
       console.warn("Postgres pool client warning:", err.message);
     });
-    adapter = new PrismaPg(pool);
+    adapter = new PrismaPg(pool as any);
   } else {
     adapter = new PrismaPg(getPGlitePool() as any);
   }
