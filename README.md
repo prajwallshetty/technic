@@ -22,7 +22,7 @@ A production-ready, multi-branch electronics retail ERP built for Technic Techno
 ## Tech Stack
 
 | Layer      | Technology |
-|------------|------------|
+|------------|------------
 | Framework  | Next.js 16 (App Router, Server Actions) + React 19 + TypeScript |
 | Styling    | Tailwind CSS 4 + shadcn/ui-style components |
 | Database   | PostgreSQL 14+ (Neon-compatible) via Prisma 7 |
