@@ -21,3 +21,9 @@ _IGNORE_session/
 .node-persist/
 .data/
 backups/
+
+# Confidential invoice documents and extraction outputs (bulk invoice import)
+/public/*.zip
+/data/invoice-import/
+/reports/invoice-import/
+.scratch/

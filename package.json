@@ -21,7 +21,12 @@
     "seed:historical": "tsx --env-file=.env --conditions=react-server scripts/seed-historical-invoices.ts",
     "rollback:historical": "tsx --env-file=.env --conditions=react-server scripts/rollback-historical-invoices.ts",
     "verify:audit": "tsx --env-file=.env --conditions=react-server scripts/verify-audit.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:invoice-import": "tsx --import ./scripts/support/allow-server-only.mjs --test tests/invoice-import/*.test.ts",
+    "invoice-import:report": "tsx scripts/invoice-import-report.ts",
+    "invoice-import:worker": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/invoice-import-worker.ts",
+    "invoice-import:post-sales": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/post-imported-sales-invoices.ts",
+    "test:numbering": "tsx --import ./scripts/support/allow-server-only.mjs --test tests/numbering/*.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

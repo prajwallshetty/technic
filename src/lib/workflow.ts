@@ -172,6 +172,15 @@ export const STATUS_TONES: Record<string, "default" | "success" | "warning" | "d
   ACTIVE: "success",
   CLAIMED: "warning",
   REPLACED: "success",
+  // invoice import
+  QUEUED: "default",
+  PROCESSING: "info",
+  NEEDS_REVIEW: "warning",
+  READY: "success",
+  FAILED: "danger",
+  DUPLICATE: "warning",
+  POSTED: "success",
+  COMPLETED: "success",
   // payments
   PARTIAL: "warning",
   PENDING: "warning",

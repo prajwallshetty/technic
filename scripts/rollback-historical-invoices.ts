@@ -2,9 +2,9 @@
 /**
  * CLI Command: Rollback Historical Seeded Data
  *
- * Removes all imported historical invoices, historical line items, and
- * auto-cataloged historical products created by the seeder, restoring
- * the database to its pre-seeded state.
+ * Removes all imported historical invoices, historical line items,
+ * associated stock transactions, auto-cataloged historical products,
+ * historical customers created during seeding, and resets sequences.
  */
 
 import fs from "node:fs";
@@ -34,7 +34,7 @@ if (typeof (process as any).loadEnvFile === "function") {
 
 import { prisma } from "../src/lib/prisma";
 
-async function withRetry<T>(fn: () => Promise<T>, attempts = 4, delayMs = 1500): Promise<T> {
+async function withRetry<T>(fn: () => Promise<T>, attempts = 6, delayMs = 2000): Promise<T> {
   let lastError: any;
   for (let i = 0; i < attempts; i++) {
     try {
@@ -52,27 +52,60 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 4, delayMs = 1500):
 
 async function rollback() {
   console.log("\n======================================================");
-  console.log("TECHNIC TECHNOLOGY ERP — HISTORICAL DATA ROLLBACK");
+  console.log("TECHNIC TECHNOLOGY ERP — FULL HISTORICAL DATA ROLLBACK");
   console.log("======================================================\n");
 
-  // 1. Find historical invoices
+  // 1. Identify historical invoices
   const historicalInvoices = await withRetry(() =>
     prisma.invoice.findMany({
-    where: {
-      OR: [
-        { notes: { startsWith: "Historical invoice imported from" } },
-        { notes: { contains: ".pdf" } },
-        { invoiceNumber: { startsWith: "HIST/" } },
-        { notes: { contains: "Sample historical test" } },
-      ],
-    },
-    select: { id: true, invoiceNumber: true },
-  }));
+      where: {
+        OR: [
+          { notes: { startsWith: "Historical invoice imported from" } },
+          { notes: { contains: ".pdf" } },
+          { invoiceNumber: { startsWith: "HIST/" } },
+          { notes: { contains: "Sample historical test" } },
+          { notes: { contains: "historical" } },
+        ],
+      },
+      select: { id: true, invoiceNumber: true },
+    })
+  );
 
   const invoiceIds = historicalInvoices.map((i) => i.id);
+  const invoiceNumbers = historicalInvoices.map((i) => i.invoiceNumber);
   console.log(`Found ${invoiceIds.length} historical invoices to delete.`);
 
-  // 2. Delete invoice lines and invoices
+  // 2. Identify auto-cataloged historical products
+  const historicalProducts = await withRetry(() =>
+    prisma.product.findMany({
+      where: {
+        OR: [
+          { sku: { startsWith: "HIST-" } },
+          { description: { contains: "historical" } },
+          { description: { contains: "Historical" } },
+        ],
+      },
+      select: { id: true, sku: true },
+    })
+  );
+  const productIds = historicalProducts.map((p) => p.id);
+  console.log(`Found ${productIds.length} historical auto-cataloged products.`);
+
+  // 3. Clean up associated stock transactions
+  const deletedStockTxns = await withRetry(() =>
+    prisma.stockTransaction.deleteMany({
+      where: {
+        OR: [
+          ...(invoiceIds.length > 0 ? [{ documentId: { in: invoiceIds } }] : []),
+          ...(invoiceNumbers.length > 0 ? [{ reference: { in: invoiceNumbers } }] : []),
+          ...(productIds.length > 0 ? [{ productId: { in: productIds } }] : []),
+        ],
+      },
+    })
+  );
+  console.log(`  • Deleted ${deletedStockTxns.count} associated stock transaction entries.`);
+
+  // 4. Delete invoice line items
   if (invoiceIds.length > 0) {
     const deletedLines = await withRetry(() =>
       prisma.invoiceLine.deleteMany({
@@ -81,57 +114,86 @@ async function rollback() {
     );
     console.log(`  • Deleted ${deletedLines.count} invoice line items.`);
 
+    // 5. Delete invoices
     const deletedInvoices = await withRetry(() =>
       prisma.invoice.deleteMany({
         where: { id: { in: invoiceIds } },
       })
     );
     console.log(`  • Deleted ${deletedInvoices.count} historical invoices.`);
-
-    const deletedSeqs = await withRetry(() =>
-      prisma.documentSequence.deleteMany({
-        where: { documentType: "invoice" },
-      })
-    );
-    console.log(`  • Reset ${deletedSeqs.count} invoice sequence records.`);
   }
 
-  // 3. Find and delete auto-cataloged historical products
-  const historicalProducts = await withRetry(() =>
-    prisma.product.findMany({
+  // 6. Delete auto-cataloged products (now safe since lines & stock txns are cleared)
+  if (productIds.length > 0) {
+    const deletedProducts = await withRetry(() =>
+      prisma.product.deleteMany({
+        where: { id: { in: productIds } },
+      })
+    );
+    console.log(`  • Deleted ${deletedProducts.count} auto-cataloged historical products.`);
+  }
+
+  // 7. Find and delete historical customers (created by historical seeder)
+  const historicalCustomers = await withRetry(() =>
+    prisma.customer.findMany({
       where: {
         OR: [
-          { sku: { startsWith: "HIST-" } },
-          { description: "Imported from historical invoice catalog" },
+          { notes: { contains: "historical" } },
+          { notes: { contains: "Historical" } },
         ],
       },
-      select: { id: true, sku: true },
+      select: { id: true, code: true, name: true },
     })
   );
 
-  const productIds = historicalProducts.map((p) => p.id);
-  console.log(`\nFound ${productIds.length} historical auto-cataloged products to delete.`);
+  const customerIds = historicalCustomers.map((c) => c.id);
+  console.log(`\nFound ${customerIds.length} historical customers.`);
 
-  if (productIds.length > 0) {
-    // Check if any product has remaining invoice lines before deletion
-    const remainingLines = await withRetry(() =>
-      prisma.invoiceLine.count({
-        where: { productId: { in: productIds } },
-      })
+  if (customerIds.length > 0) {
+    // Verify no remaining invoices, quotations, or sales orders link to these customers
+    const linkedInvoices = await withRetry(() =>
+      prisma.invoice.count({ where: { customerId: { in: customerIds } } })
     );
-    if (remainingLines > 0) {
-      console.warn(`  ⚠ Warning: ${remainingLines} invoice lines still reference these products. Product deletion skipped.`);
+    const linkedQuotations = await withRetry(() =>
+      prisma.quotation.count({ where: { customerId: { in: customerIds } } })
+    );
+    const linkedOrders = await withRetry(() =>
+      prisma.salesOrder.count({ where: { customerId: { in: customerIds } } })
+    );
+
+    if (linkedInvoices > 0 || linkedQuotations > 0 || linkedOrders > 0) {
+      console.warn(
+        `  ⚠ Warning: Some historical customers still referenced (Invoices: ${linkedInvoices}, Quotes: ${linkedQuotations}, Orders: ${linkedOrders}). Deletion skipped for safety.`
+      );
     } else {
-      const deletedProducts = await withRetry(() =>
-        prisma.product.deleteMany({
-          where: { id: { in: productIds } },
+      const deletedCustomers = await withRetry(() =>
+        prisma.customer.deleteMany({
+          where: { id: { in: customerIds } },
         })
       );
-      console.log(`  • Deleted ${deletedProducts.count} auto-cataloged products.`);
+      console.log(`  • Deleted ${deletedCustomers.count} historical customer records.`);
     }
   }
 
-  // 4. Verification of final counts
+  // 8. Reset document sequence counters
+  const deletedInvoiceSeqs = await withRetry(() =>
+    prisma.documentSequence.deleteMany({
+      where: { documentType: "invoice" },
+    })
+  );
+  console.log(`  • Reset ${deletedInvoiceSeqs.count} invoice sequence records.`);
+
+  // Reset customer sequence to number of remaining real customers (or 1)
+  const remainingCustCount = await withRetry(() => prisma.customer.count());
+  const resetCustomerSeq = await withRetry(() =>
+    prisma.documentSequence.updateMany({
+      where: { documentType: "customer" },
+      data: { value: Math.max(1, remainingCustCount) },
+    })
+  );
+  console.log(`  • Updated ${resetCustomerSeq.count} customer sequence records (floor set to ${Math.max(1, remainingCustCount)}).`);
+
+  // 9. Verification of final counts
   const remainingInvoices = await withRetry(() => prisma.invoice.count());
   const remainingProducts = await withRetry(() => prisma.product.count());
   const remainingCustomers = await withRetry(() => prisma.customer.count());

@@ -36,7 +36,13 @@ export type AuditActionName =
   | "FIRM_UPDATED"
   | "WARRANTY_CLAIMED"
   | "EXPENSE_CREATED"
-  | "SETTING_UPDATED";
+  | "SETTING_UPDATED"
+  | "INVOICE_IMPORT_UPLOADED"
+  | "INVOICE_IMPORT_PROCESSED"
+  | "INVOICE_IMPORT_EDITED"
+  | "INVOICE_IMPORT_APPROVED"
+  | "INVOICE_IMPORT_REJECTED"
+  | "INVOICE_IMPORT_POSTED";
 
 const AUDIT_ACTIONS: AuditActionName[] = [
   "LOGIN", "LOGIN_FAILED", "LOGOUT", "ACCESS_CODE_USED", "ACCESS_CODE_FAILED",
@@ -46,7 +52,8 @@ const AUDIT_ACTIONS: AuditActionName[] = [
   "INVOICE_CREATED", "INVOICE_CANCELLED", "INVOICE_DELETED", "PAYMENT_CREATED", "QUOTATION_CREATED",
   "QUOTATION_CONVERTED", "QUOTATION_DELETED", "CUSTOMER_CREATED", "SUPPLIER_CREATED", "USER_CREATED",
   "USER_UPDATED", "USER_PERMISSION_CHANGED", "FIRM_UPDATED", "WARRANTY_CLAIMED",
-  "EXPENSE_CREATED", "SETTING_UPDATED",
+  "EXPENSE_CREATED", "SETTING_UPDATED", "INVOICE_IMPORT_UPLOADED", "INVOICE_IMPORT_PROCESSED",
+  "INVOICE_IMPORT_EDITED", "INVOICE_IMPORT_APPROVED", "INVOICE_IMPORT_REJECTED", "INVOICE_IMPORT_POSTED",
 ];
 
 /** Human-readable label for the activity log. */
@@ -84,6 +91,12 @@ export const AUDIT_ACTION_LABELS: Record<AuditActionName, string> = {
   WARRANTY_CLAIMED: "Warranty claimed",
   EXPENSE_CREATED: "Expense recorded",
   SETTING_UPDATED: "Settings updated",
+  INVOICE_IMPORT_UPLOADED: "Invoices uploaded for import",
+  INVOICE_IMPORT_PROCESSED: "Imported invoice extracted",
+  INVOICE_IMPORT_EDITED: "Imported invoice corrected",
+  INVOICE_IMPORT_APPROVED: "Imported invoice approved",
+  INVOICE_IMPORT_REJECTED: "Imported invoice rejected",
+  INVOICE_IMPORT_POSTED: "Draft created from imported invoice",
 };
 
 /** The mode label appended to summaries so the audit trail shows the context. */

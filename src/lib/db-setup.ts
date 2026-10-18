@@ -3,6 +3,23 @@ import path from "path";
 import pg from "pg";
 import { PGlite } from "@electric-sql/pglite";
 
+const PG_JSON = 114;
+const PG_JSONB = 3802;
+const PG_BYTEA = 17;
+
+/**
+ * Shapes PGlite values the way node-postgres returns them, which is what the
+ * Prisma pg adapter expects: json/jsonb as text (arrays included) and bytea
+ * as Buffer.
+ */
+function normalizeValue(val: any, dataTypeID: number) {
+  if (val === null || val === undefined) return val;
+  if (dataTypeID === PG_JSON || dataTypeID === PG_JSONB) return typeof val === "string" ? val : JSON.stringify(val);
+  if (dataTypeID === PG_BYTEA || val instanceof Uint8Array) return Buffer.isBuffer(val) ? val : Buffer.from(val);
+  if (typeof val === "object" && !(val instanceof Date) && !Array.isArray(val)) return JSON.stringify(val);
+  return val;
+}
+
 class PGliteClient {
   constructor(private pglite: PGlite) {}
 
@@ -11,13 +28,7 @@ class PGliteClient {
     const res = await this.pglite.query(text, values || []);
     if (rowMode === "array") {
       const rows = res.rows.map((row: any) =>
-        res.fields.map((f: any) => {
-          const val = row[f.name];
-          if (val !== null && typeof val === "object" && !(val instanceof Date) && !Buffer.isBuffer(val) && !Array.isArray(val)) {
-            return JSON.stringify(val);
-          }
-          return val;
-        })
+        res.fields.map((f: any) => normalizeValue(row[f.name], f.dataTypeID))
       );
       return {
         rows,
@@ -28,12 +39,7 @@ class PGliteClient {
     const rows = res.rows.map((row: any) => {
       const normalized: Record<string, any> = {};
       for (const f of res.fields) {
-        const val = row[f.name];
-        if (val !== null && typeof val === "object" && !(val instanceof Date) && !Buffer.isBuffer(val) && !Array.isArray(val)) {
-          normalized[f.name] = JSON.stringify(val);
-        } else {
-          normalized[f.name] = val;
-        }
+        normalized[f.name] = normalizeValue(row[f.name], f.dataTypeID);
       }
       return normalized;
     });
@@ -77,7 +83,8 @@ const globalForPGlite = globalThis as unknown as {
 };
 
 export function getPGlitePool(): PGlitePool {
-  const dbDir = path.join(process.cwd(), ".data", "pglite");
+  // PGLITE_DIR lets tests run against a throwaway database.
+  const dbDir = process.env.PGLITE_DIR || path.join(process.cwd(), ".data", "pglite");
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
   }
@@ -108,8 +115,10 @@ export function getPGlitePool(): PGlitePool {
             }
           }
           console.log("[DB Setup] Schema initialized successfully!");
-        } else {
-          // Automatically apply incremental migrations
+        }
+        {
+          // Apply incremental migrations — also right after a fresh init,
+          // because full_schema.sql can lag behind the migrations folder.
           const migrationsDir = path.join(process.cwd(), "prisma", "migrations");
           if (fs.existsSync(migrationsDir)) {
             const dirs = fs.readdirSync(migrationsDir, { withFileTypes: true })

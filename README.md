@@ -104,6 +104,23 @@ npm run db:studio      # Prisma Studio data browser
 npx tsc --noEmit       # typecheck
 ```
 
+## Bulk Invoice Import
+
+**Purchasing → Invoice Import** takes invoice PDFs, scans or ZIP archives (nested archives are opened; identical files are imported once). Each document is read from its PDF text layer, or by OCR when there is none (requires the Tesseract and Poppler `pdftoppm` binaries; set `OCR_TESSERACT_CMD` / `OCR_PDFTOPPM_CMD` if they are not on `PATH`). It is then parsed, reconciled against an independent recalculation of its totals, matched to the catalogue and queued for review.
+
+- Nothing is guessed: unreadable values stay empty and are flagged; fuzzy product matches are suggestions that a reviewer must confirm (confirmed matches are remembered per supplier).
+- Approval never moves stock or posts money. Supplier invoices become **draft purchase orders** (stock moves only when goods are received). Sales invoices issued by the firm are kept as approved records.
+- Every correction, acknowledgement, approval and rejection is in the audit log.
+- Permissions: `invoice_import.view`, `invoice_import.manage`, `invoice_import.approve` — run `npm run db:sync-permissions` after deploying.
+
+```bash
+npm run invoice-import:report -- --source path/to/invoices.zip   # offline extraction report (CSV/JSON) — no DB writes
+npm run invoice-import:worker                                     # drain the processing queue from the CLI
+npm run test:invoice-import                                       # unit + real-invoice + PGlite integration tests
+```
+
+Uploaded documents and reports contain customer data: they are stored in the database and `reports/invoice-import/` (git-ignored) and are never served from `public/`.
+
 ## Project Layout
 
 ```

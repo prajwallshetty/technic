@@ -16,6 +16,13 @@ const PUBLIC_PATHS = ["/login", "/forbidden"];
  */
 export default auth(function proxy(request) {
   const { pathname } = request.nextUrl;
+
+  // Archives dropped into /public (e.g. invoice bundles) must never be
+  // downloadable, signed in or not.
+  if (/\.(zip|rar|7z|tar|gz)$/i.test(pathname)) {
+    return new NextResponse("Not found", { status: 404 });
+  }
+
   const isLoggedIn = Boolean(request.auth?.user);
   const isPublic = PUBLIC_PATHS.some((path) => pathname.startsWith(path));
 
@@ -34,10 +41,12 @@ export default auth(function proxy(request) {
 
 export const config = {
   matcher: [
-    // Everything except Next internals, the auth endpoints and static assets.
+    // Everything except Next internals, the auth endpoints, static assets and
+    // the invoice-import upload (archives exceed the proxy's 10 MB body
+    // buffer; that route authenticates and authorises every request itself).
     // `_next/*` paths other than the static/image subfolders are HMR and
     // RSC runtime machinery — the proxy must not touch them, or the dev
     // HMR websocket handshake gets mangled and client pages never hydrate.
-    "/((?!api/auth|_next|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)",
+    "/((?!api/auth|api/invoice-imports/upload|_next|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)",
   ],
 };

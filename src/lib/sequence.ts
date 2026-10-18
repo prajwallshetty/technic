@@ -256,9 +256,13 @@ export async function nextDocumentNumber(
 
   let seq = await nextDocumentSequence(firmId, documentType, accessMode, fy, db);
 
+  // A template containing {N} is used as-is with the plain, unpadded counter
+  // (e.g. "{N}" → "217"); any other template keeps the "prefix + 4 digits" form.
+  const format = (value: number) => (custom?.includes("{N}") ? prefix.replace("{N}", String(value)) : formatNumber(prefix, value));
+
   // Guarantee uniqueness: loop until a free number is found
   while (true) {
-    const candidate = formatNumber(prefix, seq);
+    const candidate = format(seq);
     const used = await isDocumentNumberUsed(documentType, candidate, db);
     if (!used) return candidate;
     seq = await nextDocumentSequence(firmId, documentType, accessMode, fy, db);

@@ -267,6 +267,12 @@ enum AuditAction {
   WARRANTY_CLAIMED
   EXPENSE_CREATED
   SETTING_UPDATED
+  INVOICE_IMPORT_UPLOADED
+  INVOICE_IMPORT_PROCESSED
+  INVOICE_IMPORT_EDITED
+  INVOICE_IMPORT_APPROVED
+  INVOICE_IMPORT_REJECTED
+  INVOICE_IMPORT_POSTED
 }
 
 enum WhatsAppMessageType {
@@ -346,6 +352,9 @@ model Firm {
   whatsappLogs      WhatsAppLog[]
   whatsappTemplates WhatsAppTemplate[]
   journalEntries    JournalEntry[]
+  invoiceImportBatches   InvoiceImportBatch[]
+  invoiceImportDocuments InvoiceImportDocument[]
+  invoiceImportAliases   InvoiceImportProductAlias[]
 
   @@index([status])
   @@map("firms")
@@ -719,6 +728,7 @@ model Product {
   goodsReceiptLines    GoodsReceiptLine[]
   purchaseInvoiceLines PurchaseInvoiceLine[]
   purchaseReturnLines  PurchaseReturnLine[]
+  importAliases        InvoiceImportProductAlias[]
 
   @@unique([firmId, sku])
   @@index([categoryId])
@@ -1819,4 +1829,165 @@ model WhatsAppLog {
   @@index([status])
   @@index([firmId, sentAt])
   @@map("whatsapp_logs")
+}
+
+// ============================================================================
+// BULK INVOICE IMPORT — upload → extract → review → approve → draft
+// ============================================================================
+// Staging area only. Nothing here moves stock or posts money: an approved
+// supplier invoice becomes a DRAFT purchase order through the purchases
+// service, and goods still have to be received through the normal workflow.
+
+enum InvoiceImportBatchStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+enum InvoiceImportStatus {
+  QUEUED
+  PROCESSING
+  NEEDS_REVIEW
+  READY
+  FAILED
+  DUPLICATE
+  APPROVED
+  POSTED
+  REJECTED
+}
+
+enum InvoiceImportDirection {
+  SALES
+  PURCHASE
+  UNKNOWN
+}
+
+model InvoiceImportBatch {
+  id           String                   @id @default(cuid())
+  firmId       String
+  firm         Firm                     @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  branchId     String?
+  name         String
+  status       InvoiceImportBatchStatus @default(QUEUED)
+  totalFiles   Int                      @default(0)
+  /// Archive entries that were not imported, with the reason ([{path, reason}]).
+  skippedFiles Json?
+  createdById  String?
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  completedAt  DateTime?
+
+  documents InvoiceImportDocument[]
+
+  @@index([firmId, createdAt])
+  @@map("invoice_import_batches")
+}
+
+model InvoiceImportDocument {
+  id               String                 @id @default(cuid())
+  firmId           String
+  firm             Firm                   @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  batchId          String
+  batch            InvoiceImportBatch     @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  sourceFilename   String
+  /// Path inside the uploaded archive ("technic/186.zip!/186.pdf").
+  sourcePath       String
+  sha256           String
+  mimeType         String
+  fileSize         Int
+  pageCount        Int?
+  status           InvoiceImportStatus    @default(QUEUED)
+  direction        InvoiceImportDirection @default(UNKNOWN)
+  extractionMethod String?
+  layoutId         String?
+
+  // Background processing
+  attempts    Int       @default(0)
+  lastError   String?
+  lockedAt    DateTime?
+  processedAt DateTime?
+
+  /// Text in reading order, verbatim.
+  rawText    String? @db.Text
+  /// The original extraction. Written once per processing run, never edited.
+  extraction Json?
+  /// The reviewed values (DraftInvoice). Edited on the review screen.
+  draft      Json?
+  /// Latest validation + product-matching result for `draft`.
+  evaluation Json?
+  /// Reviewer-confirmed products: { [lineNo]: productId }.
+  assignments Json?
+  /// Discrepancies a reviewer accepted, with reasons: [{code, field, reason, userId, at}].
+  acknowledgements Json?
+
+  // Denormalised for lists, search and duplicate detection.
+  invoiceNumber   String?
+  invoiceDate     DateTime?
+  partyName       String?
+  partyGstin      String?
+  grandTotal      Decimal?  @db.Decimal(14, 2)
+  calculatedTotal Decimal?  @db.Decimal(14, 2)
+  confidence      Decimal?  @db.Decimal(4, 3)
+  errorCount      Int       @default(0)
+  warningCount    Int       @default(0)
+  duplicateOfId   String?
+  duplicateReason String?
+
+  /// "direction|party|invoice number", set when approved. Unique per firm, so
+  /// the same invoice can never be approved (and drafted) twice.
+  importKey String?
+
+  reviewedById    String?
+  reviewedAt      DateTime?
+  approvedById    String?
+  approvedAt      DateTime?
+  rejectedById    String?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  postedEntity    String?
+  postedEntityId  String?
+  postedAt        DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  file InvoiceImportFile?
+
+  @@unique([firmId, importKey])
+  @@index([firmId, status])
+  @@index([batchId])
+  @@index([firmId, sha256])
+  @@index([firmId, invoiceNumber])
+  @@map("invoice_import_documents")
+}
+
+/// Source file bytes, kept apart so list queries never load them. Served only
+/// through an authenticated route — never from /public.
+model InvoiceImportFile {
+  documentId String                @id
+  document   InvoiceImportDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  data       Bytes
+
+  @@map("invoice_import_files")
+}
+
+/// Reviewer-confirmed mapping from invoice text to a catalogue product.
+/// partyKey "" = firm-wide; otherwise "GSTIN:<gstin>" or "NAME:<name>" so a
+/// supplier's own product codes map only for that supplier.
+model InvoiceImportProductAlias {
+  id          String   @id @default(cuid())
+  firmId      String
+  firm        Firm     @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  partyKey    String   @default("")
+  aliasKey    String
+  rawText     String
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  @@unique([firmId, partyKey, aliasKey])
+  @@index([productId])
+  @@map("invoice_import_product_aliases")
 }
