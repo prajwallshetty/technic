@@ -23,6 +23,7 @@ export async function createQuotationAction(input: {
     gstRate?: number;
     serialNumbers?: string[];
   }[];
+  billDiscount?: { type: "%" | "₹"; value: number } | null;
   manualRoundOff?: number | null;
 }) {
   return runAction(async () => {
@@ -46,6 +47,7 @@ export async function createQuotationAction(input: {
       lines: input.lines,
       userId: user.id,
       manualRoundOff: input.manualRoundOff,
+      billDiscount: input.billDiscount,
     });
 
     revalidatePath("/quotations");
@@ -75,6 +77,7 @@ export async function updateQuotationAction(input: {
     gstRate?: number;
     serialNumbers?: string[];
   }[];
+  billDiscount?: { type: "%" | "₹"; value: number } | null;
   manualRoundOff?: number | null;
 }) {
   return runAction(async () => {
@@ -103,6 +106,7 @@ export async function updateQuotationAction(input: {
       lines: input.lines,
       userId: user.id,
       manualRoundOff: input.manualRoundOff,
+      billDiscount: input.billDiscount,
     });
 
     revalidatePath("/quotations");

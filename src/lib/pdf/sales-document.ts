@@ -44,6 +44,8 @@ export interface SalesDocLine {
   discountPercent: number;
   /** Amount after discount, ex-tax — feeds the GST slab summary. */
   taxable: number;
+  /** Tax on this line after discount, when known exactly (saved documents). */
+  tax?: number;
   gstRate: number;
   /** quantity × rate (before discount). */
   amount: number;
@@ -235,14 +237,16 @@ function drawHeader(doc: Doc, d: SalesDocData): number {
 // Footer: slab summary / bank / words / terms  |  totals panel + signatory
 // ---------------------------------------------------------------------------
 
-interface Slab { rate: number; taxable: number; tax: number }
+interface Slab { rate: number; taxable: number; tax: number; half: number }
 
 function slabs(d: SalesDocData): Slab[] {
   const map = new Map<number, Slab>();
   for (const l of d.lines) {
-    const s = map.get(l.gstRate) ?? { rate: l.gstRate, taxable: 0, tax: 0 };
+    const s = map.get(l.gstRate) ?? { rate: l.gstRate, taxable: 0, tax: 0, half: 0 };
     s.taxable += l.taxable;
-    s.tax += (l.taxable * l.gstRate) / 100;
+    const lineTax = l.tax ?? (l.taxable * l.gstRate) / 100;
+    s.tax += lineTax;
+    s.half += r2(lineTax / 2); // same per-line halving as the saved CGST/SGST
     map.set(l.gstRate, s);
   }
   return [...map.values()].sort((a, b) => a.rate - b.rate);
@@ -281,7 +285,9 @@ function footer(doc: Doc, d: SalesDocData, y: number, draw: boolean): number {
   const lines: [string, string][] = [["Gross Amount", group(t.gross)]];
   if (t.discount > 0) {
     const pcts = [...new Set(d.lines.map((l) => l.discountPercent))];
-    const pct = pcts.length === 1 && pcts[0] > 0 ? ` ${+pcts[0].toFixed(2)}%` : "";
+    // Show a % only when it really is the uniform rate that produced the discount (not a flat amount).
+    const uniform = pcts.length === 1 && pcts[0] > 0 && Math.abs((t.gross * pcts[0]) / 100 - t.discount) <= 0.05;
+    const pct = uniform ? ` ${+pcts[0].toFixed(2)}%` : "";
     lines.push([`Discount (-)${pct}`, group(t.discount)]);
   }
   lines.push(["", group(t.taxable)]);
@@ -314,7 +320,7 @@ function footer(doc: Doc, d: SalesDocData, y: number, draw: boolean): number {
     });
     ly += sumHead;
     for (const s of sl) {
-      const half = s.tax / 2;
+      const half = s.half;
       const vals = inter
         ? [`${s.rate.toFixed(1)}%`, plain(s.taxable), `${s.rate.toFixed(1)}%`, plain(s.tax)]
         : [`${s.rate.toFixed(1)}%`, plain(s.taxable), `${(s.rate / 2).toFixed(1)}%`, plain(half), `${(s.rate / 2).toFixed(1)}%`, plain(half)];

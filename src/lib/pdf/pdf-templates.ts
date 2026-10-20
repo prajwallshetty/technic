@@ -176,8 +176,31 @@ interface SalesLineSource {
  * taken once in the totals panel, and `taxable` (after discount) feeds the
  * GST slab summary.
  */
-function salesDocLines(lines: SalesLineSource[], isGst: boolean) {
+function salesDocLines(lines: SalesLineSource[], isGst: boolean, asSaved = false) {
   return lines.map((line) => {
+    if (asSaved) {
+      // Quotations print exactly what was saved from the form: the entered
+      // rate, qty x rate as the amount, and the line's own tax. Nothing is
+      // re-derived (no ex-tax rate, no second discount).
+      const gst = isGst ? num(line.gstRate as number) : 0;
+      const unit = num(line.unitPrice as number);
+      const net = num(line.lineTotal as number); // after discount, incl. GST
+      const taxable = gst > 0 ? Math.round((net / (1 + gst / 100) + Number.EPSILON) * 100) / 100 : net;
+      const serials = Array.isArray(line.serialNumbers) ? line.serialNumbers : (line.serialNumbers ?? "").split("\n");
+      return {
+        name: line.product?.name ?? line.description,
+        subName: line.product?.subName ?? null,
+        serials: serials.filter(Boolean),
+        hsn: line.hsnCode,
+        quantity: line.quantity,
+        rate: unit,
+        discountPercent: num(line.discountPercent as number),
+        taxable,
+        tax: Math.round((net - taxable + Number.EPSILON) * 100) / 100,
+        gstRate: gst,
+        amount: Math.round((unit * line.quantity + Number.EPSILON) * 100) / 100,
+      };
+    }
     const gst = isGst ? num(line.gstRate as number) : 0;
     const unit = num(line.unitPrice as number);
     const lineTotal = num(line.lineTotal as number);
@@ -300,15 +323,19 @@ export async function generateQuotationPDF(quotationId: string): Promise<{ buffe
 
   const isGst = quotation.taxMode === "GST";
   const company = await getCompanyProfile(quotation.firmId);
-  const lines = salesDocLines(quotation.lines, isGst);
-  const taxable = isGst ? lines.reduce((sum, line) => sum + line.taxable, 0) : num(quotation.totalAmount);
-  const totals = salesTotals(
-    lines,
-    taxable,
-    { cgst: num(quotation.cgstAmount), sgst: num(quotation.sgstAmount), igst: num(quotation.igstAmount) },
-    num(quotation.roundOff),
-    num(quotation.totalAmount),
-  );
+  const lines = salesDocLines(quotation.lines, isGst, true);
+  // Saved header values, as the form showed them: subtotal, bill discount,
+  // taxable value, CGST/SGST/IGST, round-off and total.
+  const totals = {
+    gross: num(quotation.subtotal),
+    discount: num(quotation.discountAmount),
+    taxable: isGst ? num(quotation.taxableAmount) : num(quotation.subtotal) - num(quotation.discountAmount),
+    cgst: num(quotation.cgstAmount),
+    sgst: num(quotation.sgstAmount),
+    igst: num(quotation.igstAmount),
+    roundOff: num(quotation.roundOff),
+    total: num(quotation.totalAmount),
+  };
 
   const customer = quotation.customer;
   const buffer = await renderSalesDocument(

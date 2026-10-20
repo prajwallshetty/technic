@@ -192,13 +192,17 @@ export function NewQuotationButton({
         notes: notes || null,
         discountRemarks: discountRemarks || null,
         manualRoundOff: isManualRoundOff ? parseNumericInput(roundOff) : null,
+        billDiscount:
+          parseNumericInput(billDiscount) > 0
+            ? { type: billDiscountType, value: parseNumericInput(billDiscount) }
+            : null,
         lines: validLines.map((line, index) => {
           const product = productById.get(line.productId);
           return {
             productId: line.productId,
             quantity: parseNumericInput(line.quantity),
             unitPrice: parseNumericInput(line.unitPrice),
-            discountPercent: totals.lines[index]?.effectiveDiscountPercent ?? 0,
+            discountPercent: 0, // the bill discount is applied once, server-side, by the same function as the form
             gstRate: product?.gstRate ?? 18,
             serialNumbers: line.trackSerials ? line.serials : undefined,
           };
