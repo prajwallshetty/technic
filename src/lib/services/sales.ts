@@ -15,6 +15,7 @@ import {
   writeStockTransaction,
 } from "@/lib/services/inventory";
 import { round2 } from "@/lib/money";
+import { computeDiscountSummary, type BillDiscountInput } from "@/lib/discounts";
 
 /**
  * Sales service: quotations → sales orders → invoices. Invoice creation follows
@@ -47,6 +48,8 @@ export interface QuotationInput {
   lines: SaleLineInput[];
   userId?: string | null;
   manualRoundOff?: number | null;
+  /** Overall bill discount as entered on the form; lines then carry no discount of their own. */
+  billDiscount?: BillDiscountInput | null;
 }
 
 const round = round2;
@@ -56,6 +59,61 @@ function lineDescription(
   variant: { name: string } | null | undefined,
 ): string {
   return variant ? `${product.name} — ${variant.name}` : product.name;
+}
+
+/**
+ * Quotation totals. When the caller supplies `billDiscount` the numbers come
+ * from the SAME function the quotation form uses (computeDiscountSummary), so
+ * what is saved is exactly what the form showed: no re-derivation from rounded
+ * per-line percentages. Each line then stores its effective discount percent.
+ */
+function applyFormSummary<T extends { summary: ReturnType<typeof computeTaxSummary>; enriched: { line: SaleLineInput }[] }>(
+  built: T,
+  mode: TaxMode,
+  sameState: boolean,
+  manualRoundOff: number | null | undefined,
+  billDiscount: BillDiscountInput | null | undefined,
+): T {
+  if (billDiscount === undefined) return built; // legacy callers keep the old path
+  const ds = computeDiscountSummary({
+    lines: built.enriched.map(({ line }) => ({
+      quantity: line.quantity,
+      unitPrice: line.unitPrice,
+      discountType: "%" as const,
+      discountValue: line.discountPercent ?? 0,
+      gstRate: mode === "GST" ? (line.gstRate ?? 0) : 0,
+    })),
+    billDiscount,
+    mode,
+    manualRoundOff,
+  });
+  built.enriched.forEach(({ line }, i) => {
+    line.discountPercent = ds.lines[i].effectiveDiscountPercent;
+  });
+  const tax = round(ds.cgstTotal + ds.sgstTotal);
+  return {
+    ...built,
+    summary: {
+      lines: ds.lines.map((l) => ({
+        gross: l.gross,
+        discount: l.totalDiscountAmount,
+        taxableValue: l.taxableValue,
+        cgst: sameState ? l.cgst : 0,
+        sgst: sameState ? l.sgst : 0,
+        igst: sameState ? 0 : round(l.cgst + l.sgst),
+        lineTotal: l.netTotal,
+      })),
+      subtotal: ds.grossSubtotal,
+      discountAmount: ds.totalDiscount,
+      taxableAmount: ds.taxableTotal,
+      cgstAmount: sameState ? ds.cgstTotal : 0,
+      sgstAmount: sameState ? ds.sgstTotal : 0,
+      igstAmount: sameState ? 0 : tax,
+      totalBeforeRound: round(ds.totalAmount - ds.roundOff),
+      roundOff: ds.roundOff,
+      totalAmount: ds.totalAmount,
+    },
+  };
 }
 
 async function buildLinesWithTax(
@@ -109,7 +167,13 @@ export async function createQuotation(input: QuotationInput) {
   const sellerState = await sellerStateFor(input.firmId, input.branchId);
   const supplyState = input.taxMode === "GST" ? (customer?.state ?? customer?.city ?? null) : null;
   const sameState = isSameState(sellerState, supplyState);
-  const { enriched, summary } = await buildLinesWithTax(input.lines, input.taxMode, sameState, input.manualRoundOff);
+  const { enriched, summary } = applyFormSummary(
+    await buildLinesWithTax(input.lines, input.taxMode, sameState, input.manualRoundOff),
+    input.taxMode,
+    sameState,
+    input.manualRoundOff,
+    input.billDiscount,
+  );
 
   const quotationNumber = await nextDocumentNumber(
     input.firmId,
@@ -205,6 +269,8 @@ export interface UpdateQuotationInput {
   lines?: SaleLineInput[];
   userId?: string | null;
   manualRoundOff?: number | null;
+  /** Overall bill discount as entered on the form; lines then carry no discount of their own. */
+  billDiscount?: BillDiscountInput | null;
 }
 
 export async function updateQuotation(input: UpdateQuotationInput) {
@@ -237,7 +303,13 @@ export async function updateQuotation(input: UpdateQuotationInput) {
     descriptionOverride: l.description,
   }));
 
-  const { enriched, summary } = await buildLinesWithTax(linesToUse, targetTaxMode, sameState, input.manualRoundOff);
+  const { enriched, summary } = applyFormSummary(
+    await buildLinesWithTax(linesToUse, targetTaxMode, sameState, input.manualRoundOff),
+    targetTaxMode,
+    sameState,
+    input.manualRoundOff,
+    input.billDiscount,
+  );
 
   return prisma.$transaction(async (tx) => {
     await tx.quotationLine.deleteMany({

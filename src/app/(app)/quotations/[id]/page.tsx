@@ -135,10 +135,11 @@ export default async function QuotationDetailPage({
                 </TableHeader>
                 <TableBody>
                   {quotation.lines.map((line, index) => {
-                    const gross = Math.round((line.quantity * Number(line.unitPrice) + Number.EPSILON) * 100) / 100;
                     const discPct = Number(line.discountPercent || 0);
-                    const discAmount = Math.round(((gross * discPct) / 100 + Number.EPSILON) * 100) / 100;
-                    const netGross = Math.round((gross - discAmount + Number.EPSILON) * 100) / 100;
+                    // The saved line amount (after discount, incl. GST) is the source of truth — the
+                    // same value the form showed — so taxable/GST are split from it, never re-derived
+                    // from the rounded percentage.
+                    const netGross = Number(line.lineTotal);
                     const gstRate = Number(line.gstRate || 0);
                     const taxableValue = isGst && gstRate > 0
                       ? Math.round((netGross / (1 + gstRate / 100) + Number.EPSILON) * 100) / 100
