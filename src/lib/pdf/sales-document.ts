@@ -79,6 +79,8 @@ export interface SalesDocData {
   notes?: string | null;
   /** Reason for the discount, printed under the Discount row. */
   discountRemarks?: string | null;
+  /** Adds a per-line Disc % column (Amount is then the discounted line amount). */
+  showDiscountColumn?: boolean;
   signatoryFor: string;
   cancelledReason?: string | null;
 }
@@ -132,7 +134,19 @@ function wordsLine(total: number): string {
 
 interface Col { id: string; header: string; w: number; align: "left" | "center" | "right" }
 
-function columns(isGst: boolean): Col[] {
+function columns(isGst: boolean, showDisc = false): Col[] {
+  if (showDisc) {
+    return [
+      { id: "sl", header: "Sl\nNo", w: 20, align: "center" },
+      { id: "desc", header: "Description of Goods", w: 222, align: "center" },
+      { id: "hsn", header: "Hsn", w: 49, align: "center" },
+      { id: "qty", header: "Quantity", w: 55, align: "center" },
+      { id: "disc", header: "Disc %", w: 30, align: "center" },
+      ...(isGst ? [{ id: "gst", header: "Gst%", w: 30, align: "center" as const }] : []),
+      { id: "rate", header: "Rate", w: isGst ? 65 : 95, align: "center" },
+      { id: "amount", header: "Amount", w: 75, align: "center" },
+    ];
+  }
   return isGst
     ? [
         { id: "sl", header: "Sl\nNo", w: 20, align: "center" },
@@ -159,6 +173,7 @@ function cell(col: Col, line: SalesDocLine, i: number): string {
     case "hsn": return line.hsn || "";
     case "qty": return String(line.quantity);
     case "gst": return plain(line.gstRate);
+    case "disc": return line.discountPercent > 0 ? `${+line.discountPercent.toFixed(2)}%` : "";
     case "rate": return plain(line.rate);
     case "amount": return plain(line.amount);
     default: return "";
@@ -398,7 +413,7 @@ export async function renderSalesDocument(d: SalesDocData, title: string): Promi
   doc.registerFont(FONT, path.join(process.cwd(), "public", "fonts", "DejaVuSans.ttf"));
   doc.registerFont(FONT_BOLD, path.join(process.cwd(), "public", "fonts", "DejaVuSans-Bold.ttf"));
 
-  const cols = columns(d.isGst);
+  const cols = columns(d.isGst, d.showDiscountColumn ?? false);
   const descIdx = cols.findIndex((c) => c.id === "desc");
   const maxY = A4.h - M;
   const headH = 24;
