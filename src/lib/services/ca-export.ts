@@ -224,7 +224,8 @@ export async function previewCaPackage(user: Actor, req: CaRequest): Promise<CaP
   if (req.items.length !== items.length) warnings.push("Some selected items were skipped because your role cannot export them.");
   if (user.accessView === "GST_ONLY") warnings.push("GST view: only GST documents are included; expenses are not available.");
   const dataItems = list.filter((i) => i.count !== null);
-  const empty = dataItems.length > 0 && dataItems.every((i) => i.count === 0) && !items.includes("summaryReport");
+  const anyRecords = data.invoices.length + data.bills.length + data.salesReturns.length + data.purchaseReturns.length + data.expenses.length > 0;
+  const empty = dataItems.length > 0 ? dataItems.every((i) => i.count === 0) : !anyRecords;
   return { from: toInputDate(req.from), to: toInputDate(req.to), empty, items: list, warnings, pdfCount };
 }
 
@@ -385,7 +386,9 @@ export async function buildCaPackage(user: Actor, req: CaRequest): Promise<CaPac
     (items.includes("creditNotes") && data.salesReturns.length > 0) ||
     (items.includes("debitNotes") && data.purchaseReturns.length > 0) ||
     (items.includes("expenses") && data.expenses.length > 0);
-  if (!hasData && !items.includes("summaryReport")) {
+  const onlySummary = items.every((i) => i === "summaryReport");
+  const anyRecords = data.invoices.length + data.bills.length + data.salesReturns.length + data.purchaseReturns.length + data.expenses.length > 0;
+  if (onlySummary ? !anyRecords : !hasData) {
     throw new BusinessRuleError(`No records found between ${formatDate(req.from)} and ${formatDate(req.to)} for the selected items.`);
   }
 
