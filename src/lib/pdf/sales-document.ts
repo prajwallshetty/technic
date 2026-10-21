@@ -73,8 +73,6 @@ export interface SalesDocData {
   notes?: string | null;
   /** Reason for the discount, printed under the Discount row. */
   discountRemarks?: string | null;
-  /** Adds a per-line Disc % column (Amount is then the discounted line amount). */
-  showDiscountColumn?: boolean;
   signatoryFor: string;
   cancelledReason?: string | null;
 }
@@ -150,14 +148,14 @@ function slabs(d: SalesDocData): Slab[] {
 interface Table { head: string; widths: { desc: number } }
 
 function tableLayout(d: SalesDocData) {
-  const disc = d.showDiscountColumn ?? false;
+  // SLNO | DESCRIPTION | HSN | QUANTITY | GST% | RATE | AMOUNT  (GST% only on GST documents)
   const cols: { id: string; h: string; w: number; right: boolean }[] = [
     { id: "sl", h: "SLNO", w: 4, right: true },
     { id: "desc", h: "DESCRIPTION", w: 0, right: false },
-    { id: "qty", h: "QTY.", w: 5, right: true },
-    { id: "rate", h: "RATE", w: 11, right: true },
-    ...(disc ? [{ id: "disc", h: "DISC%", w: 6, right: true }] : []),
+    { id: "hsn", h: "HSN", w: 8, right: false },
+    { id: "qty", h: "QUANTITY", w: 8, right: true },
     ...(d.isGst ? [{ id: "gst", h: "GST%", w: 6, right: true }] : []),
+    { id: "rate", h: "RATE", w: 11, right: true },
     { id: "amount", h: "AMOUNT", w: 13, right: true },
   ];
   const fixed = cols.reduce((s, c) => s + c.w, 0) + (cols.length - 1);
@@ -199,7 +197,7 @@ function rowLines(d: SalesDocData, cols: ReturnType<typeof tableLayout>["cols"])
   const descW = cols.find((c) => c.id === "desc")!.w;
   const out: Ln[] = [];
   d.lines.forEach((line, i) => {
-    const desc = wrap(line.hsn ? `${line.name} [HSN:${line.hsn}]` : line.name, descW);
+    const desc = wrap(line.name, descW);
     const extra: string[] = [];
     if (line.subName) extra.push(...wrap(line.subName, descW - 2).map((x) => "  " + x));
     if (line.serials?.length) extra.push(...wrap(`SN: ${line.serials.join(", ")}`, descW - 2).map((x) => "  " + x));
@@ -207,9 +205,9 @@ function rowLines(d: SalesDocData, cols: ReturnType<typeof tableLayout>["cols"])
     const cell = (id: string): string => {
       switch (id) {
         case "sl": return String(i + 1);
+        case "hsn": return line.hsn ?? "";
         case "qty": return String(line.quantity);
         case "rate": return plain(line.rate);
-        case "disc": return line.discountPercent > 0 ? `${+line.discountPercent.toFixed(2)}%` : "";
         case "gst": return plain(line.gstRate);
         case "amount": return plain(line.amount);
         default: return "";
@@ -257,15 +255,15 @@ function footerLines(d: SalesDocData): Ln[] {
   if (t.discount > 0) row(`Discount (-)${uniform ? ` ${+pcts[0].toFixed(2)}%` : ""}`, padL(money(t.discount), 14));
   if (d.isGst) {
     row("Taxable Value", padL(money(t.taxable), 14));
-    if (t.cgst > 0) row("CGST", padL(money(t.cgst), 14));
-    if (t.sgst > 0) row("SGST", padL(money(t.sgst), 14));
-    if (t.igst > 0) row("IGST", padL(money(t.igst), 14));
+    if (t.cgst > 0) row("Add CGST", padL(money(t.cgst), 14));
+    if (t.sgst > 0) row("Add SGST", padL(money(t.sgst), 14));
+    if (t.igst > 0) row("Add IGST", padL(money(t.igst), 14));
   } else {
     row("Net of Discount", padL(money(t.taxable), 14));
   }
   if (t.roundOff !== 0) row("Round Off", padL(`${t.roundOff < 0 ? "-" : "+"}${money(Math.abs(t.roundOff))}`, 14));
   right.push(L("=".repeat(RIGHT)));
-  row(/QUOTATION/i.test(d.title) ? "QUOTATION TOTAL" : "NET AMOUNT", padL(money(t.total), 14), true);
+  row("BILL AMOUNT", padL(money(t.total), 14), true);
   right.push(L("=".repeat(RIGHT)));
 
   const rows = Math.max(left.length, right.length);
