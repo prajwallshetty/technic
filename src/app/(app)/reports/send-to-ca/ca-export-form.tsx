@@ -63,7 +63,7 @@ export function CaExportForm({ items, financialYears, gstView }: { items: Item[]
 
   // Live preview of what the package will contain (read-only counts).
   useEffect(() => {
-    if (!query) { setPreview(null); setError(range ? "Select at least one document or report" : "Choose a period"); return; }
+    if (!query) { setLoading(false); setPreview(null); setError(range ? "Select at least one document or report" : "Choose a period"); return; }
     let cancelled = false;
     setLoading(true);
     const t = setTimeout(async () => {
