@@ -26,7 +26,10 @@
     "invoice-import:report": "tsx scripts/invoice-import-report.ts",
     "invoice-import:worker": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/invoice-import-worker.ts",
     "invoice-import:post-sales": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/post-imported-sales-invoices.ts",
-    "test:numbering": "tsx --import ./scripts/support/allow-server-only.mjs --test tests/numbering/*.test.ts"
+    "test:numbering": "tsx --import ./scripts/support/allow-server-only.mjs --test tests/numbering/*.test.ts",
+    "test-data:quotations": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/create-test-quotations.ts",
+    "gstr1": "tsx --env-file=.env --import ./scripts/support/allow-server-only.mjs scripts/gstr1-report.ts",
+    "test:gst": "tsx --import ./scripts/support/allow-server-only.mjs --test tests/gst/*.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -46,10 +49,12 @@
     "@radix-ui/react-slot": "^1.3.3",
     "@radix-ui/react-tooltip": "^1.2.16",
     "@types/pdfkit": "^0.17.6",
+    "ajv": "^8.17.1",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
+    "exceljs": "^4.4.0",
     "lucide-react": "^1.45.0",
     "next": "^16.3.4",
     "next-auth": "^5.0.0-beta.32",

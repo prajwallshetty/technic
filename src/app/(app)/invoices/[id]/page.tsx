@@ -13,6 +13,8 @@ import { CancelInvoiceButton } from "./cancel-invoice-button";
 import { RecordInvoicePaymentButton } from "./record-payment-button";
 import { SalesReturnButton } from "./sales-return-button";
 import { DispatchDetailsButton } from "./dispatch-details-button";
+import { GstDetailsButton } from "./gst-details-button";
+import { STATES } from "@/lib/gst/gstr1/masters";
 import { getInvoiceForView } from "@/lib/services/sales";
 import { requirePermissionInFirm, taxModeWhere } from "@/lib/session";
 import { formatCurrency } from "@/lib/money";
@@ -115,6 +117,22 @@ export default async function InvoiceDetailPage({
                   vehicleNumber: invoice.vehicleNumber ?? "",
                   ewayBillNumber: invoice.ewayBillNumber ?? "",
                   buyerOrderNo: invoice.buyerOrderNo ?? "",
+                }}
+              />
+            ) : null}
+            {invoice.status !== "CANCELLED" && invoice.kind === "TAX_INVOICE" && user.permissions.includes("invoice.edit") ? (
+              <GstDetailsButton
+                invoiceId={invoice.id}
+                states={Object.entries(STATES).map(([code, name]) => ({ code, name }))}
+                initial={{
+                  placeOfSupplyCode: invoice.placeOfSupplyCode ?? "",
+                  supplyType: invoice.supplyType,
+                  reverseCharge: invoice.reverseCharge,
+                  ecommerceGstin: invoice.ecommerceGstin ?? "",
+                  billToGstin: invoice.billToGstin ?? "",
+                  portCode: invoice.portCode ?? "",
+                  shippingBillNumber: invoice.shippingBillNumber ?? "",
+                  shippingBillDate: invoice.shippingBillDate ? invoice.shippingBillDate.toISOString().slice(0, 10) : "",
                 }}
               />
             ) : null}

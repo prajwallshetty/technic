@@ -42,7 +42,13 @@ export type AuditActionName =
   | "INVOICE_IMPORT_EDITED"
   | "INVOICE_IMPORT_APPROVED"
   | "INVOICE_IMPORT_REJECTED"
-  | "INVOICE_IMPORT_POSTED";
+  | "INVOICE_IMPORT_POSTED"
+  | "CREDIT_NOTE_CREATED"
+  | "DEBIT_NOTE_CREATED"
+  | "NOTE_CANCELLED"
+  | "ADVANCE_RECEIPT_CREATED"
+  | "INVOICE_GST_UPDATED"
+  | "GSTR1_EXPORTED";
 
 const AUDIT_ACTIONS: AuditActionName[] = [
   "LOGIN", "LOGIN_FAILED", "LOGOUT", "ACCESS_CODE_USED", "ACCESS_CODE_FAILED",
@@ -54,6 +60,7 @@ const AUDIT_ACTIONS: AuditActionName[] = [
   "USER_UPDATED", "USER_PERMISSION_CHANGED", "FIRM_UPDATED", "WARRANTY_CLAIMED",
   "EXPENSE_CREATED", "SETTING_UPDATED", "INVOICE_IMPORT_UPLOADED", "INVOICE_IMPORT_PROCESSED",
   "INVOICE_IMPORT_EDITED", "INVOICE_IMPORT_APPROVED", "INVOICE_IMPORT_REJECTED", "INVOICE_IMPORT_POSTED",
+  "CREDIT_NOTE_CREATED", "DEBIT_NOTE_CREATED", "NOTE_CANCELLED", "ADVANCE_RECEIPT_CREATED", "INVOICE_GST_UPDATED", "GSTR1_EXPORTED",
 ];
 
 /** Human-readable label for the activity log. */
@@ -97,6 +104,12 @@ export const AUDIT_ACTION_LABELS: Record<AuditActionName, string> = {
   INVOICE_IMPORT_APPROVED: "Imported invoice approved",
   INVOICE_IMPORT_REJECTED: "Imported invoice rejected",
   INVOICE_IMPORT_POSTED: "Draft created from imported invoice",
+  CREDIT_NOTE_CREATED: "Credit note issued",
+  DEBIT_NOTE_CREATED: "Debit note issued",
+  NOTE_CANCELLED: "Credit/debit note cancelled",
+  ADVANCE_RECEIPT_CREATED: "Advance receipt recorded",
+  INVOICE_GST_UPDATED: "GST details corrected",
+  GSTR1_EXPORTED: "GSTR-1 exported",
 };
 
 /** The mode label appended to summaries so the audit trail shows the context. */

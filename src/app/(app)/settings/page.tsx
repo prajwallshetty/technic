@@ -40,6 +40,10 @@ export default async function SettingsPage() {
               document_footer_text: map.get("document_footer_text") ?? "",
               sequence_invoice_gst: map.get("sequence_invoice_gst") ?? "TT/GST/{FY}/",
               sequence_invoice_non_gst: map.get("sequence_invoice_non_gst") ?? "TT/NG/{FY}/",
+              gst_trade_name: map.get("gst_trade_name") ?? "",
+              gst_aato_band: map.get("gst_aato_band") ?? "",
+              gst_turnover_prev_fy: map.get("gst_turnover_prev_fy") ?? "",
+              gst_turnover_cur_fy: map.get("gst_turnover_cur_fy") ?? "",
             }}
           />
         </CardContent>

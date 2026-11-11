@@ -51,6 +51,11 @@ export default async function ReportsPage({
         description={`${formatDate(sales.range.from)} → ${formatDate(sales.range.to)}`}
         actions={
           <>
+            {user.permissions.includes("gst_reports.view") ? (
+              <Button asChild variant="outline">
+                <Link href="/reports/gstr1">GSTR-1</Link>
+              </Button>
+            ) : null}
             {user.permissions.includes("reports.export") ? (
               <Button asChild variant="outline">
                 <Link href="/reports/send-to-ca">Send to CA</Link>

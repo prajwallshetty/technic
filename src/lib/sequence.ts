@@ -136,6 +136,14 @@ async function isDocumentNumberUsed(
         const found = await db.purchaseReturn.findFirst({ where: { returnNumber: docNumber }, select: { id: true } });
         return Boolean(found);
       }
+      case DOCUMENT_TYPES.CREDIT_NOTE: {
+        const found = await db.creditDebitNote.findFirst({ where: { noteNumber: docNumber, noteType: "CREDIT" }, select: { id: true } });
+        return Boolean(found);
+      }
+      case DOCUMENT_TYPES.DEBIT_NOTE: {
+        const found = await db.creditDebitNote.findFirst({ where: { noteNumber: docNumber, noteType: "DEBIT" }, select: { id: true } });
+        return Boolean(found);
+      }
       case DOCUMENT_TYPES.PAYMENT: {
         const found = await db.payment.findFirst({ where: { paymentNumber: docNumber }, select: { id: true } });
         return Boolean(found);

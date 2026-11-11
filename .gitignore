@@ -27,3 +27,10 @@ backups/
 /data/invoice-import/
 /reports/invoice-import/
 .scratch/
+
+# Generated test-quotation PDFs and verification output
+/reports/test-quotations/
+
+# GST reference workbook / generated GSTR-1 exports (company data)
+/data/gstr1-reference/
+/reports/gstr1/

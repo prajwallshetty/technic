@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { saveSettingsAction } from "./actions";
 
-const FIELDS: { key: string; label: string; textarea?: boolean }[] = [
+const FIELDS: { key: string; label: string; textarea?: boolean; select?: { value: string; label: string }[]; hint?: string }[] = [
   { key: "company_phone", label: "Phone" },
   { key: "company_email", label: "Email" },
   { key: "company_website", label: "Website" },
@@ -19,6 +19,18 @@ const FIELDS: { key: string; label: string; textarea?: boolean }[] = [
   { key: "company_bank_details", label: "Bank details (printed on invoices)", textarea: true },
   { key: "document_terms", label: "Default terms & conditions", textarea: true },
   { key: "document_footer_text", label: "Document footer", textarea: true },
+  { key: "gst_trade_name", label: "GST return: trade name (if any)" },
+  {
+    key: "gst_aato_band",
+    label: "GST return: aggregate annual turnover",
+    select: [
+      { value: "", label: "Not set" },
+      { value: "UPTO_5CR", label: "Up to ₹5 crore (4-digit HSN)" },
+      { value: "ABOVE_5CR", label: "Above ₹5 crore (6-digit HSN)" },
+    ],
+  },
+  { key: "gst_turnover_prev_fy", label: "GST return: turnover of the preceding financial year (₹)", hint: "GSTR-1 table 3.a. Leave blank if unknown — it is never guessed." },
+  { key: "gst_turnover_cur_fy", label: "GST return: cumulative turnover of the current financial year (₹)", hint: "Needed only for the portal JSON (cur_gt)." },
 ];
 
 export function SettingsForm({
@@ -70,6 +82,19 @@ export function SettingsForm({
                 value={values[field.key] ?? ""}
                 onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))}
               />
+            ) : field.select ? (
+              <select
+                id={`set-${field.key}`}
+                className="h-9 w-full rounded-md border border-input bg-card px-2 text-sm"
+                value={values[field.key] ?? ""}
+                onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))}
+              >
+                {field.select.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             ) : (
               <Input
                 id={`set-${field.key}`}
@@ -77,6 +102,7 @@ export function SettingsForm({
                 onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))}
               />
             )}
+            {field.hint ? <p className="text-xs text-muted-foreground">{field.hint}</p> : null}
           </div>
         ))}
       </div>

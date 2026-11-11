@@ -15,6 +15,8 @@ import { formatCurrency } from "@/lib/money";
 import { formatDate } from "@/lib/dates";
 import { SALES_RETURN_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/workflow";
 import { NotFoundError } from "@/lib/action-result";
+import { prisma } from "@/lib/prisma";
+import { CreateCreditNoteButton } from "./create-credit-note-button";
 
 export const metadata = { title: "Sales Return — Technic Technologies" };
 
@@ -33,6 +35,7 @@ export default async function SalesReturnDetailPage({ params }: { params: Promis
   if (salesReturn.firmId !== user.activeFirmId) notFound();
 
   const isGst = salesReturn.taxMode === "GST";
+  const creditNote = await prisma.creditDebitNote.findFirst({ where: { salesReturnId: salesReturn.id }, select: { id: true, noteNumber: true } });
   const canApprove = salesReturn.status === "PENDING" && (user.permissions.includes("sales.cancel") || user.permissions.includes("invoice.cancel"));
 
   return (
@@ -47,6 +50,13 @@ export default async function SalesReturnDetailPage({ params }: { params: Promis
               <Button asChild>
                 <Link href={`/sales-returns`}>Approve Return</Link>
               </Button>
+            ) : null}
+            {salesReturn.status === "APPROVED" && isGst && user.permissions.includes("invoice.create") ? (
+              creditNote ? (
+                <Button asChild variant="outline"><Link href={`/credit-notes/${creditNote.id}`}>Credit note {creditNote.noteNumber}</Link></Button>
+              ) : (
+                <CreateCreditNoteButton salesReturnId={salesReturn.id} />
+              )
             ) : null}
           </>
         }

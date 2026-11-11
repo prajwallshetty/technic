@@ -16,6 +16,11 @@ const ALLOWED_KEYS = new Set([
   "document_footer_text",
   "sequence_invoice_gst",
   "sequence_invoice_non_gst",
+  // GST return (GSTR-1) details
+  "gst_trade_name",
+  "gst_aato_band",
+  "gst_turnover_prev_fy",
+  "gst_turnover_cur_fy",
 ]);
 
 export async function saveSettingsAction(input: { values: Record<string, string> }) {
@@ -32,7 +37,7 @@ export async function saveSettingsAction(input: { values: Record<string, string>
           firmId,
           key,
           value,
-          category: key.startsWith("sequence_") ? "documents" : key === "company_bank_details" ? "company" : "documents",
+          category: key.startsWith("sequence_") ? "documents" : key.startsWith("gst_") ? "gst" : key === "company_bank_details" ? "company" : "documents",
         },
         update: { value },
       });

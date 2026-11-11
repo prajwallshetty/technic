@@ -6,6 +6,7 @@ import {
   Building2,
   ClipboardList,
   FileBarChart,
+  FileMinus,
   FileScan,
   FileText,
   LayoutDashboard,
@@ -88,6 +89,12 @@ export const NAV_SECTIONS: NavSection[] = [
         href: "/sales-returns",
         icon: Undo2,
         permissions: [PERMISSIONS.SALES_VIEW],
+      },
+      {
+        label: "Credit & Debit Notes",
+        href: "/credit-notes",
+        icon: FileMinus,
+        permissions: [PERMISSIONS.INVOICE_VIEW],
       },
       {
         label: "Payments",
